@@ -1,0 +1,84 @@
+html {
+  scrollbar-gutter: stable;
+}
+
+/*=======================================
+for alpine
+========================================*/
+[x-cloak] {
+  display: none !important;
+}
+
+/*=======================================
+Hide scrollbar
+========================================*/
+.scrollbar-none::-webkit-scrollbar {
+  inline-size: 0px;
+  background-color: transparent;
+  display: none;
+}
+
+.scrollbar-none::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-none::-webkit-scrollbar-thumb {
+  border: 0 none transparent;
+  background-color: transparent;
+}
+
+@media (hover: hover) {
+  .scrollbar-none::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+}
+
+
+@layer utilities {
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/*=======================================
+Hide default close button in search input
+========================================*/
+.search-cancel-none::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  display: none;
+}
+.search-cancel-none::-moz-search-cancel-button {
+  display: none;
+}
+
+
+
+/*=======================================
+Modal
+========================================*/
+/* Modal animations */
+[data-modal]:not(.hidden),
+[data-modal-dynamic]:not(.hidden) {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+[data-modal]:not(.hidden) [role="dialog"],
+[data-modal-dynamic]:not(.hidden) [role="dialog"]{
+  opacity: 0;
+  transform: scale(0.95) translateY(0.65rem);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+.modal-overlay-visible {
+  opacity: 1 !important;
+}
+
+.modal-dialog-visible {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
+}

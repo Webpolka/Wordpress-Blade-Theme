@@ -1,0 +1,127 @@
+{
+  // ==========================================
+  // РАБОТА С ФАЙЛАМИ И СОХРАНЕНИЕ
+  // ==========================================
+  "files.associations": {
+    "*.blade.php": "blade",
+    "*.php": "php"
+  },
+  "editor.formatOnSave": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // ==========================================
+  // BLADE ФОРМАТИРОВАНИЕ
+  // ==========================================
+  // Говорим Prettier не трогать Blade (он их ломает), используем Blade Formatter
+  "[blade]": {
+    "editor.defaultFormatter": "shufo.vscode-blade-formatter"
+  },
+  "blade.format.enable": true,
+
+  // ==========================================
+  // TAILWIND CSS МАГИЯ
+  // ==========================================
+  // Чтобы Tailwind подсказывал классы внутри функции cn()
+  "tailwindCSS.experimental.classRegex": [
+    ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+  // Включаем поддержку внутри Blade
+  "tailwindCSS.includeLanguages": {
+    "blade": "html",
+    "php": "html"
+  },
+
+  "tailwindCSS.experimental.classRegex": [
+    "=>\\s*['\"]([^'\"]*)['\"]",
+    "['\"`]([^'\"`]*)['\"`]"
+  ],
+
+  // Чтобы подсказки не валились из-за атрибутов @apply
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+
+  // ==========================================
+  // PHP (INTELEPHENSE)
+  // ==========================================
+  // Указываем версию PHP (как в Laragon)
+  "intelephense.environment.phpVersion": "8.2",
+  // Не линтить ядро WP (оно не по PSR-12), только нашу тему
+  "intelephense.files.associations": ["*.php"],
+  "php.suggest.basic": false, // Отключаем базовый тупой линтер PHP, оставляем Intelephense
+
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "intelephense.stubs": [
+    "apache",
+    "bcmath",
+    "bz2",
+    "calendar",
+    "com_dotnet",
+    "Core",
+    "ctype",
+    "curl",
+    "date",
+    "dba",
+    "dom",
+    "enchant",
+    "exif",
+    "fileinfo",
+    "filter",
+    "gd",
+    "gettext",
+    "hash",
+    "iconv",
+    "imap",
+    "intl",
+    "json",
+    "ldap",
+    "libxml",
+    "mbstring",
+    "mcrypt",
+    "mysqlnd",
+    "mysqli",
+    "odbc",
+    "openssl",
+    "pcntl",
+    "pcre",
+    "PDO",
+    "pdo_mysql",
+    "pdo_pgsql",
+    "pdo_sqlite",
+    "pgsql",
+    "Phar",
+    "posix",
+    "pspell",
+    "readline",
+    "Reflection",
+    "session",
+    "shmop",
+    "SimpleXML",
+    "snmp",
+    "soap",
+    "sockets",
+    "sodium",
+    "SPL",
+    "standard",
+    "superglobals",
+    "sysvmsg",
+    "sysvsem",
+    "sysvshm",
+    "tidy",
+    "tokenizer",
+    "wddx",
+    "xml",
+    "xmlreader",
+    "xmlwriter",
+    "zip",
+    "zlib",
+    "wordpress"
+  ],
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  }
+}

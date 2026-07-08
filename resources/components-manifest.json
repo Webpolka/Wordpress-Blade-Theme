@@ -1,0 +1,81 @@
+{
+  "components": [
+    {
+      "name": "alert",
+      "type": "file"
+    },
+    {
+      "name": "badge",
+      "type": "file"
+    },
+    {
+      "name": "button",
+      "type": "file"
+    },
+    {
+      "name": "checkbox-pill",
+      "type": "file"
+    },
+    {
+      "name": "checkbox",
+      "type": "file"
+    },
+    {
+      "name": "container",
+      "type": "file"
+    },
+    {
+      "name": "radio-pill",
+      "type": "file"
+    },
+    {
+      "name": "radio",
+      "type": "file"
+    },
+    {
+      "name": "spinner",
+      "type": "file"
+    },
+    {
+      "name": "switch",
+      "type": "file"
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "dir"
+    },
+    {
+      "name": "input",
+      "type": "dir"
+    },
+    {
+      "name": "mobile-drawer",
+      "type": "dir"
+    },
+    {
+      "name": "modal",
+      "type": "dir"
+    },
+    {
+      "name": "modal-dynamic",
+      "type": "dir"
+    },
+    {
+      "name": "select",
+      "type": "dir"
+    },
+    {
+      "name": "textarea",
+      "type": "dir"
+    },
+    {
+      "name": "toast",
+      "type": "dir"
+    },
+    {
+      "name": "tooltip",
+      "type": "dir"
+    }
+  ],
+  "version": "ce55750c"
+}

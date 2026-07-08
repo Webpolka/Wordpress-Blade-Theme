@@ -1,0 +1,29 @@
+<svg
+    viewBox="0 0 21 19"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+>
+    <rect
+        class="line line-top"
+        width="21"
+        height="3"
+        rx="1.21212"
+        fill="currentColor"
+    />
+    <rect
+        class="line line-middle"
+        y="8"
+        width="21"
+        height="3"
+        rx="1.21212"
+        fill="currentColor"
+    />
+    <rect
+        class="line line-bottom"
+        y="16"
+        width="21"
+        height="3"
+        rx="1.21212"
+        fill="currentColor"
+    />
+</svg>
