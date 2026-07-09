@@ -1,77 +1,65 @@
 // dropdown-menu/script.js
 
 /**
- * Компонент dropdown-меню для Alpine.js.
- * Поддерживает многоуровневую вложенность, автопозиционирование fixed-меню,
- * блокировку скролла body и плавный скролл к открытому пункту.
+ * Компонент dropdown-меню для Alpine.js (Refactored)
+ * Без блокировки body, с правильной очисткой слушателей и кэшированием rem.
  */
 class DropdownMenu {
   constructor(config) {
     this.level = config.level || 0;
-    this.delay = config.delay || 500;
+    this.delay = config.delay || 300;
     this.hasChildren = config.hasChildren || false;
 
     // Состояние
     this.hover = false;
     this.isOpen = false;
     this.closeTimeout = null;
-    this.openRight = true;
     this.fixedPos = { left: 0, top: 0, maxHeight: 0 };
 
-    // Константы в rem (для независимости от zoom/шрифтов)
-    this.GAP = 0.125; // отступ между триггером и меню
-    this.EDGE_PADDING = 0.625; // отступ от краёв viewport
-    this.SCROLL_OFFSET = 3.125; // отступ при скролле к пункту
+    // Константы в rem
+    this.GAP = 0.125;
+    this.EDGE_PADDING = 0.625;
+
+    // Кэшируем размер шрифта для оптимизации rem-математики
+    this.rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+    // Биндим методы для возможности их снять позже
+    this._updatePosition = this.updatePosition.bind(this);
   }
 
-  /** px → rem (относительно root font-size) */
   pxToRem(px) {
-    const fontSize = parseFloat(
-      getComputedStyle(document.documentElement).fontSize,
-    );
-    return px / fontSize;
+    return px / this.rootFontSize;
   }
 
-  /** rem → px */
   remToPx(rem) {
-    const fontSize = parseFloat(
-      getComputedStyle(document.documentElement).fontSize,
-    );
-    return rem * fontSize;
+    return rem * this.rootFontSize;
   }
 
   /**
-   * Измерение ширины меню (даже если оно скрыто через display: none).
-   * Временно показывает меню через visibility: hidden, измеряет, возвращает обратно.
+   * Безопасное измерение ширины скрытого меню
    */
   measureMenuWidth() {
     const menuEl = this.$el.querySelector(':scope > div:last-child');
-    if (!menuEl) return this.remToPx(11.25); // fallback: w-45 = 11.25rem
+    if (!menuEl) return 180; // fallback ~ 11.25rem
 
-    // Сохраняем текущие стили
+    // Alpine использует x-show (display: none). 
+    // Временно убираем его, не трогая position, чтобы измерить.
     const originalDisplay = menuEl.style.display;
-    const originalVisibility = menuEl.style.visibility;
-    const originalPosition = menuEl.style.position;
-
-    // Временно показываем (невидимо)
-    menuEl.style.display = 'block';
     menuEl.style.visibility = 'hidden';
-    menuEl.style.position = 'fixed';
+    menuEl.style.display = 'block';
 
-    // Измеряем
     const width = menuEl.offsetWidth;
 
-    // Возвращаем стили
+    // Возвращаем как было
     menuEl.style.display = originalDisplay;
-    menuEl.style.visibility = originalVisibility;
-    menuEl.style.position = originalPosition;
+    menuEl.style.visibility = '';
 
     return width;
   }
 
-  /** Расчёт позиции fixed-меню относительно триггера (.dropdown-li-full) */
+  /** Расчёт позиции fixed-меню относительно триггера */
   calcPosition() {
-    if (this.level === 0) return;
+    if (this.level !== 1) return; // Позиционируем только Level 1
 
     const trigger = this.$el.querySelector(':scope > .dropdown-li-full');
     if (!trigger) return;
@@ -83,20 +71,16 @@ class DropdownMenu {
     const viewportWidth = this.pxToRem(window.innerWidth);
     const viewportHeight = this.pxToRem(window.innerHeight);
 
-    // ИЗМЕНЕНО: измеряем реальную ширину меню (даже если скрыто)
-    const menuWidthPx = this.measureMenuWidth();
-    const menuWidth = this.pxToRem(menuWidthPx);
+    const menuWidth = this.pxToRem(this.measureMenuWidth());
 
-    // Определяем сторону открытия (вправо/влево)
     const spaceRight = viewportWidth - triggerRight;
-    this.openRight = spaceRight > menuWidth + this.EDGE_PADDING;
+    const openRight = spaceRight > menuWidth + this.EDGE_PADDING;
 
-    let left = this.openRight
+    let left = openRight
       ? triggerRight + this.GAP
       : triggerLeft - menuWidth - this.GAP;
     let top = triggerTop;
 
-    // Ограничиваем позицию в пределах viewport
     if (left + menuWidth > viewportWidth - this.EDGE_PADDING) {
       left = viewportWidth - menuWidth - this.EDGE_PADDING;
     }
@@ -113,46 +97,19 @@ class DropdownMenu {
 
   /** Обновление позиции при скролле/ресайзе */
   updatePosition() {
-    if (this.hover && this.level > 0) {
+    if (this.hover && this.level === 1) {
       this.calcPosition();
     }
   }
 
-  /** Блокировка скролла body (с подсчётом вложенных меню) */
-  lockScroll() {
-    if (typeof window.__dropdownLockCount === 'undefined') {
-      window.__dropdownLockCount = 0;
-    }
-    window.__dropdownLockCount++;
-    if (window.__dropdownLockCount === 1) {
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-    }
-  }
-
-  /** Разблокировка скролла body */
-  unlockScroll() {
-    if (
-      typeof window.__dropdownLockCount === 'undefined' ||
-      window.__dropdownLockCount === 0
-    ) {
-      window.__dropdownLockCount = 0;
-      return;
-    }
-    window.__dropdownLockCount--;
-    if (window.__dropdownLockCount === 0) {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-    }
-  }
-
-  /** Обработчик mouseenter: открытие + блокировка скролла для top-level */
+  /** Обработчик mouseenter */
   onMouseEnter() {
     clearTimeout(this.closeTimeout);
     this.hover = true;
-    this.calcPosition();
+    
     if (this.hasChildren && this.level <= 1) {
-      this.lockScroll();
+      // Считаем позицию сразу при наведении
+      this.calcPosition();
     }
   }
 
@@ -161,13 +118,10 @@ class DropdownMenu {
     clearTimeout(this.closeTimeout);
     this.closeTimeout = setTimeout(() => {
       this.hover = false;
-      if (this.hasChildren && this.level <= 1) {
-        this.unlockScroll();
-      }
     }, this.delay);
   }
 
-  /** Клик по пункту level > 1: toggle + авто-скролл к пункту */
+  /** Клик по пункту level > 1: toggle + авто-скролл */
   toggleOpen(e) {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
@@ -178,41 +132,43 @@ class DropdownMenu {
         const containerRect = container.getBoundingClientRect();
         const elRect = this.$el.getBoundingClientRect();
 
-        const containerTopRem = this.pxToRem(containerRect.top);
-        const elTopRem = this.pxToRem(elRect.top);
-        const scrollTopRem =
-          this.pxToRem(container.scrollTop) +
-          (elTopRem - containerTopRem) -
-          this.SCROLL_OFFSET;
+        // Простая и надежная математика скролла
+        const scrollOffset = elRect.top - containerRect.top + container.scrollTop - 50; // 50px отступ сверху
 
         container.scrollTo({
-          top: this.remToPx(scrollTopRem),
+          top: scrollOffset,
           behavior: 'smooth',
         });
       });
     }
   }
 
-  /** Alpine lifecycle: подписка на scroll/resize для пересчёта позиции */
+  /**
+   * Alpine lifecycle: вызывается при инициализации
+   */
   init() {
     if (this.level > 0) {
-      window.addEventListener('scroll', this.updatePosition.bind(this), {
-        passive: true,
-      });
-      window.addEventListener('resize', this.updatePosition.bind(this), {
-        passive: true,
-      });
+      window.addEventListener('scroll', this._updatePosition, { passive: true });
+      window.addEventListener('resize', this._updatePosition, { passive: true });
     }
-    if (typeof window.__dropdownLockCount === 'undefined') {
-      window.__dropdownLockCount = 0;
+  }
+
+  /**
+   * ВАЖНО: Alpine lifecycle: вызывается при удалении элемента из DOM
+   * Чистим память и таймеры, чтобы не было багов и зависаний
+   */
+  destroy() {
+    clearTimeout(this.closeTimeout);
+    if (this.level > 0) {
+      window.removeEventListener('scroll', this._updatePosition);
+      window.removeEventListener('resize', this._updatePosition);
     }
   }
 }
 
-/** Регистрация компонента dropdown в Alpine */
 export function registerDropdown() {
   if (typeof window.Alpine === 'undefined') {
-    console.warn('⚠️ Alpine не загружен');
+    console.warn('⚠️ Alpine не загружен, компонент Dropdown не зарегистрирован');
     return;
   }
 
@@ -220,7 +176,6 @@ export function registerDropdown() {
   console.log('✅ Dropdown компонент зарегистрирован');
 }
 
-// Авто-регистрация: сразу или после alpine:init
 if (typeof window.Alpine !== 'undefined') {
   registerDropdown();
 } else {

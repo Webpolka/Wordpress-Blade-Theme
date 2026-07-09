@@ -151,12 +151,14 @@
                 • Level 2+: relative, в потоке родителя (pl-4 для отступа)
             --}}
             @if ($hasChildren)
-                <div x-show="{{ $level <= 1 ? 'hover' : 'isOpen' }}" x-cloak
-                    @if ($level <= 1) @mouseenter="clearTimeout(closeTimeout)"
-                         @mouseleave="scheduleClose()" @endif
-                    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
-                    x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-150"
-                    x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                <div x-show="{{ $level <= 1 ? 'hover' : 'isOpen' }}" x-cloak                    
+                    @if ($level <= 1) @mouseenter="clearTimeout(closeTimeout)" @mouseleave="scheduleClose()" @endif
+                    x-transition:enter="transition ease-out duration-150"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-100"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
                     class="{{ $level > 1 ? 'pl-4' : '' }} w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 max-h-[calc(100vh-4rem)] scrollbar-none overflow-y-auto"
                     :class="{
                         'absolute left-0 top-full': {{ $isTopLevel ? 'true' : 'false' }},

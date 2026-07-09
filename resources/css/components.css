@@ -82,3 +82,44 @@ Modal
   opacity: 1 !important;
   transform: scale(1) translateY(0) !important;
 }
+
+
+
+/*=======================================
+Slider swiper
+========================================*/
+
+/* Точки пагинации */
+.wp-swiper .swiper-pagination-bullet {
+    background-color: #94a3b8;
+    opacity: 1;
+}
+.wp-swiper .swiper-pagination-bullet-active {
+    background-color: #3b82f6;
+}
+
+/* ФИКС: Сбрасываем абсолютное позиционирование для пагинации в потоке */
+.wp-swiper-controls-inline .swiper-pagination {
+    position: relative !important;
+    width: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+}
+
+/* Стрелки навигации */
+.wp-swiper .swiper-button-next,
+.wp-swiper .swiper-button-prev {
+    color: #3b82f6; /* blue-500 */
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 9999px;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.wp-swiper .swiper-button-next::after,
+.wp-swiper .swiper-button-prev::after {
+    font-size: 14px;
+    font-weight: bold;
+}

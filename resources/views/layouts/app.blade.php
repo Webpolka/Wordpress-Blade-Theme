@@ -22,19 +22,7 @@
 </script>
 
 <body @php(body_class('relative'))>
-    @php(wp_body_open())
-
-    <!-- Фоновое изображение на весь экран -->
-    <div class="absolute inset-0 -z-10 min-h-[42.5rem]">
-        <picture>
-            <!-- Десктоп: md и выше (≥40rem) -->
-            <source media="(min-width: 40rem)" srcset="{{ Vite::asset('resources/images/webp/bg.webp') }}"
-                type="image/webp" />
-            <!-- Мобильная версия: по умолчанию -->
-            <img class="w-full h-full object-cover object-top" src="{{ Vite::asset('resources/images/webp/bg.webp') }}"
-                alt="bg" fetchpriority="high" />
-        </picture>
-    </div>
+    @php(wp_body_open())  
 
     <x-toast />
     <x-modal-dynamic />

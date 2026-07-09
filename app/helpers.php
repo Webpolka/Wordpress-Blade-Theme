@@ -11,35 +11,53 @@ if (! function_exists('cn')) {
      * @return string
      */
     function cn(...$classes)
-    {
-        static $tw = null;
+{
+    static $tw = null;
 
-        if ($tw === null) {
-            try {
-                $tw = TailwindMerge::instance();
-            } catch (Throwable $e) {
-                // Fallback если библиотека упала — просто склеиваем как есть
-                $filtered = array_filter($classes, fn($c) => ! empty($c) && is_string($c));
-                return implode(' ', $filtered);
-            }
+    if ($tw === null) {
+        try {
+            $tw = \TailwindMerge\TailwindMerge::instance();
+        } catch (\Throwable $e) {
+            $tw = null; // Fallback
         }
-
-        // Рекурсивно разбираем массивы и фильтруем пустоту
-        $filtered = [];
-        foreach ($classes as $class) {
-            if (is_array($class)) {
-                // Если передан массив, проваливаемся в него
-                $filtered[] = cn(...$class);
-            } elseif (is_string($class) && trim($class) !== '') {
-                $filtered[] = $class;
-            }
-        }
-
-        if (empty($filtered)) {
-            return '';
-        }
-
-        // Схлопываем конфликты Tailwind (px-4 + px-8 = px-8)
-        return $tw->merge(implode(' ', $filtered));
     }
+
+    $filtered = [];
+    
+    foreach ($classes as $class) {
+        if (is_array($class)) {
+            foreach ($class as $key => $value) {
+                // Если ключ строка — это условный класс: ['bg-red' => $isError]
+                if (is_string($key)) {
+                    if ($value) {
+                        $filtered[] = $key;
+                    }
+                } 
+                // Если ключ числовой — это обычный список: ['p-4', 'bg-red']
+                else {
+                    if (is_string($value) && trim($value) !== '') {
+                        $filtered[] = $value;
+                    } elseif (is_array($value)) {
+                        // Рекурсивно обрабатываем вложенные массивы
+                        $filtered[] = cn($value);
+                    }
+                }
+            }
+        } elseif (is_string($class) && trim($class) !== '') {
+            $filtered[] = $class;
+        }
+    }
+
+    if (empty($filtered)) {
+        return '';
+    }
+
+    $result = implode(' ', $filtered);
+
+    if ($tw) {
+        return $tw->merge($result);
+    }
+
+    return $result; // Fallback если tailwind-merge не установлен
+}
 }

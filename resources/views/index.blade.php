@@ -16,27 +16,60 @@
 
 
 
-    <div class="p-6 rounded-md bg-white space-y-6 max-w-md">
+    <div class="p-6 rounded-md bg-white space-y-6 max-w-3xl mx-auto">
 
-        <div class="flex gap-4">
+        <x-accordion-faq :multiple="true">
+            <x-accordion-faq.item question="Сколько стоит доставка?">
+                Доставка бесплатна при заказе от 5000 руб.
+            </x-accordion-faq.item>
+            <x-accordion-faq.item question="Как вернуть товар?">
+                Вернуть товар можно в течение 14 дней.
+                <x-accordion-faq>
+                    <x-accordion-faq.item>
+                        <x-slot:question>
+                            <span class="text-blue-600">Важно:</span> Как вернуть товар?
+                        </x-slot:question>
+                        Ответ здесь...
+                    </x-accordion-faq.item>
+                </x-accordion-faq>
+            </x-accordion-faq.item>
+        </x-accordion-faq>
 
-            <x-tooltip text="Синий" color="bg-blue-500 text-white">
-                <x-button>Blue</x-button>
-            </x-tooltip>
 
-            <x-tooltip text="Зелёный" color="bg-green-500 text-white">
-                <x-button>Green</x-button>
-            </x-tooltip>
+        <x-tabs default="account">
+            <x-tabs.list>
+                <x-tabs.trigger value="account">Аккаунт</x-tabs.trigger>
+                <x-tabs.trigger value="password">Пароль</x-tabs.trigger>
+            </x-tabs.list>
 
-            <x-tooltip text="Градиент" color="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                <x-button>Gradient</x-button>
-            </x-tooltip>
+            <x-tabs.content value="account">
+                Настройки аккаунта...
+            </x-tabs.content>
+            <x-tabs.content value="password">
+                Смена пароля...<br>
+                Смена пароля...<br>
+                <br>
+                Смена пароля...
+                Смена пароля...
+            </x-tabs.content>
+        </x-tabs>
 
-            <x-tooltip text="Без стрелки" :arrow="false">
-                <x-button>Hover me</x-button>
-            </x-tooltip>
 
-        </div>
+
+     <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-2xl font-bold">Наши проекты</h2>
+      <div data-swiper-pagination="projects-slider" class="inline-flex justify-center gap-2 !w-[initial]"></div>
+  </div>
+  
+  <x-slider 
+      id="projects-slider"
+      pagination-position="external"
+      :slides-per-view="2"
+  >
+      <x-slider.slide>Проект 1</x-slider.slide>
+      <x-slider.slide>Проект 2</x-slider.slide>
+      <x-slider.slide>Проект 3</x-slider.slide>
+  </x-slider>
     </div>
 
 

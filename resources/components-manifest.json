@@ -41,10 +41,6 @@
       "type": "file"
     },
     {
-      "name": "dropdown-menu",
-      "type": "dir"
-    },
-    {
       "name": "input",
       "type": "dir"
     },
@@ -75,7 +71,31 @@
     {
       "name": "tooltip",
       "type": "dir"
+    },
+    {
+      "name": "tooltip-fixed",
+      "type": "dir"
+    },
+    {
+      "name": "accordion-menu",
+      "type": "dir"
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "dir"
+    },
+    {
+      "name": "accordion-faq",
+      "type": "dir"
+    },
+    {
+      "name": "tabs",
+      "type": "dir"
+    },
+    {
+      "name": "slider",
+      "type": "dir"
     }
   ],
-  "version": "ce55750c"
+  "version": "f111d3a6"
 }

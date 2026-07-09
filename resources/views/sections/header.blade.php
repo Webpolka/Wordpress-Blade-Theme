@@ -1,4 +1,4 @@
-<header class="banner" x-data>
+<header class="h-16 sticky top-0 bg-white flex items-center shadow-md" x-data>
     <x-container>
         <div class="flex justify-between items-center">
 
@@ -14,30 +14,47 @@
                     $primaryMenu = build_tree_menu('primary_navigation');
 
                 @endphp
-                <x-dropdown-menu :items="$primaryMenu" />
+                <x-dropdown-menu :items="[
+                    ['label' => 'Главная', 'url' => '/'],
+                    [
+                        'label' => 'Каталог',
+                        'url' => '/catalog',
+                        'children' => [
+                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                
+                            [
+                                'label' => 'Категории',
+                                'url' => '/catalog/categories',
+                                'children' => [
+                                    ['label' => 'Электроника', 'url' => '/catalog/electronics'],
+                                    ['label' => 'Одежда', 'url' => '/catalog/clothing'],
+                                    ['label' => 'Товары', 'url' => '/catalog/products'],
+                                    ['label' => 'Товары', 'url' => '/catalog/products'],
+                                    ['label' => 'Товары', 'url' => '/catalog/products'],
+                                    ['label' => 'Товары', 'url' => '/catalog/products'],
+                                    ['label' => 'Товары', 'url' => '/catalog/products',],
+                                ],
+                            ],
+                        ],
+                    ],
+                    ['label' => 'Контакты', 'url' => '/contacts'],
+                ]" />
             </div>
-
-
 
             {{-- Мобильный дравер --}}
             <x-mobile-drawer position="right" title="Меню">
-        <nav class="flex flex-col gap-1">
-            <a href="/">Главная</a>
-            <a href="/about">О нас</a>
-        </nav>
-        
-        <x-slot:footer>
-            <div class="flex gap-3">
-                <a href="#" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
-                    <svg class="w-5 h-5"><use href="#icon-facebook"></use></svg>
-                </a>
-                <a href="#" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
-                    <svg class="w-5 h-5"><use href="#icon-instagram"></use></svg>
-                </a>
-            </div>
-        </x-slot:footer>
-    </x-mobile-drawer>
-  
+                <x-accordion-menu :hover="false">
+                    <x-accordion-menu.submenu label="Каталог">
+                        <x-accordion-menu.item href="#">Главная</x-accordion-menu.item>
+                        <x-accordion-menu.item href="#">О нас</x-accordion-menu.item>
+                        <x-accordion-menu.item href="#">Контакты</x-accordion-menu.item>
+                        <x-accordion-menu.item href="#">Социальные сети</x-accordion-menu.item>
+                    </x-accordion-menu.submenu>
+                </x-accordion-menu>
+
+            </x-mobile-drawer>
+
 
         </div>
         {{-- @if (has_nav_menu('primary_navigation'))
