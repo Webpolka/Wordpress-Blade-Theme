@@ -12,6 +12,7 @@
     - label         : string – текст лейбла
     - placeholder   : string – плейсхолдер
     - error         : string – текст ошибки (серверная)
+    - showError     : bool - резервировать место для вывода ошибок валидации
     - required      : bool – обязательно ли поле
     - disabled      : bool – отключено
     - autofocus     : bool – автоматический фокус
@@ -151,6 +152,16 @@
   С автофокусом при загрузке
    <x-input name="focus" label="С автофокусом" autofocus />
 
+
+  Пример без зарезервированного места для вывода ошибки валидации
+
+         <form class="p-4 flex flex-col gap-1">
+             <x-input type="email" showError="false" placeholder="Email" 
+                :validation="['required' => true, 'minlength' => 4]" class="border p-2 rounded"/>
+             <x-input type="password" showError="false" placeholder="Пароль" class="border p-2 rounded"/>
+             <x-button type="submit" class="bg-blue-600 text-white p-2 rounded">Войти</x-button>
+         </form>
+
   ============================================================
   ПОДКЛЮЧЕНИЕ IMASK (для масок)
   ============================================================
@@ -185,6 +196,7 @@
     'label'          => null,
     'placeholder'    => null,
     'error'          => null,
+    'showError'      => true,
     'required'       => false,
     'disabled'       => false,
     'autofocus'      => false,
@@ -215,6 +227,14 @@
     $maxLengthAttr = $validation['maxlength'] ?? null;
     $hasMask = !empty($mask);
 
+    // Нормализация булевых пропсов (защита от строковых значений)
+    $showError = filter_var($showError, FILTER_VALIDATE_BOOLEAN);
+    $required = filter_var($required, FILTER_VALIDATE_BOOLEAN);
+    $disabled = filter_var($disabled, FILTER_VALIDATE_BOOLEAN);
+    $autofocus = filter_var($autofocus, FILTER_VALIDATE_BOOLEAN);
+    $clearable = filter_var($clearable, FILTER_VALIDATE_BOOLEAN);
+    $togglePassword = filter_var($togglePassword, FILTER_VALIDATE_BOOLEAN);
+
     $inputProps = [
         'value'              => $value,
         'validationRules'    => $validation,
@@ -222,6 +242,7 @@
         'validationMode'     => $validationMode,
         'isPassword'         => $isPassword,
         'type'               => $type,
+        'showError'          => $showError,
         'maxLengthAttr'      => $maxLengthAttr,
         'hasMask'            => $hasMask,
         'onBlurCallback'     => $onBlur,
@@ -347,14 +368,16 @@
     </div>
 
     {{-- Контейнер для ошибки с фиксированной высотой --}}
-    <div class="h-5 mt-1 relative">
-        <p
-            class="absolute inset-0 text-sm text-red-500 truncate"
-            :id="'{{ $id }}-error'"
-            role="alert"
-            aria-live="polite"
-            x-show="validationError || @js($error)"
-            x-text="validationError || @js($error)"
-        ></p>
-    </div>
+    @if ($showError)
+        <div class="h-5 mt-1 relative">
+            <p
+                class="absolute inset-0 text-sm text-red-500 truncate"
+                :id="'{{ $id }}-error'"
+                role="alert"
+                aria-live="polite"
+                x-show="validationError || @js($error)"
+                x-text="validationError || @js($error)"
+            ></p>
+        </div>
+     @endif
 </div>

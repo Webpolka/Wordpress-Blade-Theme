@@ -17,6 +17,9 @@
     id                  - ID слайдера (для external режима)
     paginationPosition  - 'default' (внутри) или 'external' (снаружи)
     navigationPosition  - 'default' (внутри) или 'external' (снаружи)
+    overflow            - string – CSS класс overflow для контейнера слайдера.
+        По умолчанию: 'overflow-hidden'
+        Примеры: 'overflow-visible', 'md:overflow-hidden overflow-visible'
   
   ============================================================
   ПРИМЕРЫ ИСПОЛЬЗОВАНИЯ
@@ -129,6 +132,122 @@
              </x-slider.slide>
          @endforeach
      </x-slider>
+
+       ------------------------------------------------------------
+  ПРИМЕРЫ ИСПОЛЬЗОВАНИЯ C OVERFLOW
+  ------------------------------------------------------------
+
+  1. Базовый слайдер (overflow-hidden по умолчанию):
+    <x-slider>
+        <x-slider.slide>Слайд 1</x-slider.slide>
+        <x-slider.slide>Слайд 2</x-slider.slide>
+    </x-slider>
+
+  2. Overflow visible (слайды выходят за границы):
+
+    <x-slider overflow="!overflow-visible">
+        <x-slider.slide>Слайд 1</x-slider.slide>
+        <x-slider.slide>Слайд 2</x-slider.slide>
+    </x-slider>
+
+  3. Адаптивный overflow (мобилка visible, десктоп hidden):
+
+    <x-slider overflow="md:!overflow-hidden !overflow-visible">
+        <x-slider.slide>Слайд 1</x-slider.slide>
+        <x-slider.slide>Слайд 2</x-slider.slide>
+    </x-slider>
+
+  4. С внешними контролами и адаптивным overflow:
+
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Товары</h2>
+        <div class="flex gap-2">
+            <button data-swiper-prev="catalog" class="p-2 bg-gray-100 rounded-full">←</button>
+            <button data-swiper-next="catalog" class="p-2 bg-gray-100 rounded-full">→</button>
+        </div>
+    </div>
+    
+    <x-slider 
+        id="catalog" 
+        navigation-position="external" 
+        overflow="md:!overflow-hidden !overflow-visible"
+        :slides-per-view="1.2"
+        :space-between="16"
+    >
+        <x-slider.slide>Товар 1</x-slider.slide>
+        <x-slider.slide>Товар 2</x-slider.slide>
+        <x-slider.slide>Товар 3</x-slider.slide>
+    </x-slider>
+
+     
+  ============================================================
+  КАСТОМНЫЕ БУЛЛЕТЫ
+  ============================================================
+  
+  Используй customType для предустановленных стилей буллетов:
+  
+    <x-slider :settings="[
+        'pagination' => ['customType' => 'lines']
+    ]">
+        ...
+    </x-slider>
+  
+  Доступные типы:
+    - 'numbered'       – Буллеты с номерами (1, 2, 3...)
+    - 'numberedActive' – Буллеты с номерами и hover эффектом
+    - 'lines'          – Буллеты в виде линий
+    - 'dots'           – Буллеты в виде точек с анимацией
+    - 'squares'        – Буллеты в виде квадратов
+    - 'diamonds'       – Буллеты в виде ромбов
+  
+  Примеры:
+  
+  1. Буллеты с номерами:
+    <x-slider :settings="[
+        'pagination' => ['customType' => 'numbered']
+    ]">
+        <x-slider.slide>Слайд 1</x-slider.slide>
+        <x-slider.slide>Слайд 2</x-slider.slide>
+    </x-slider>
+  
+  2. Буллеты в виде линий:
+    <x-slider :settings="[
+        'pagination' => ['customType' => 'lines']
+    ]">
+        <x-slider.slide>Слайд 1</x-slider.slide>
+        <x-slider.slide>Слайд 2</x-slider.slide>
+    </x-slider>
+  
+  3. Буллеты в виде квадратов:
+    <x-slider :settings="[
+        'pagination' => ['customType' => 'squares']
+    ]">
+        <x-slider.slide>Слайд 1</x-slider.slide>
+        <x-slider.slide>Слайд 2</x-slider.slide>
+    </x-slider>
+  
+  4. Буллеты в виде ромбов:
+    <x-slider :settings="[
+        'pagination' => ['customType' => 'diamonds']
+    ]">
+        <x-slider.slide>Слайд 1</x-slider.slide>
+        <x-slider.slide>Слайд 2</x-slider.slide>
+    </x-slider>
+  
+  5. С внешними контролами и кастомными буллетами:
+    <div data-swiper-pagination="gallery" class="flex justify-center gap-2 mb-4"></div>
+    
+    <x-slider 
+        id="gallery" 
+        pagination-position="external"
+        :settings="[
+            'pagination' => ['customType' => 'numberedActive']
+        ]"
+    >
+        <x-slider.slide>Слайд 1</x-slider.slide>
+        <x-slider.slide>Слайд 2</x-slider.slide>
+    </x-slider>
+
   
   ============================================================
   ВАЖНО: Передача массивов
@@ -174,6 +293,8 @@
     'id'                   => 'swiper-' . \Illuminate\Support\Str::random(8),
     'paginationPosition'   => 'default',  // 'default' | 'external'
     'navigationPosition'   => 'default',  // 'default' | 'external'
+      // Overflow для контейнера слайдера
+    'overflow'             => 'overflow-hidden',
 ])
 
 @php
@@ -209,7 +330,7 @@
     {{-- САМ СЛАЙДЕР --}}
     <div 
         id="{{ $id }}" 
-        class="swiper wp-swiper relative" 
+        class="swiper wp-swiper relative {{ $overflow }}" 
         data-swiper-config='@json($config)'
     >
         <div class="swiper-wrapper">

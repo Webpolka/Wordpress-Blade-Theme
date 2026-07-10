@@ -1,4 +1,4 @@
-<header class="h-16 sticky top-0 bg-white flex items-center shadow-md" x-data>
+<header class="h-16 sticky top-0 z-50 bg-white flex items-center shadow-md" x-data>
     <x-container>
         <div class="flex justify-between items-center">
 

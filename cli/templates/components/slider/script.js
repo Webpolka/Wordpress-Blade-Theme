@@ -1,34 +1,82 @@
 /**
  * Компонент Slider на базе Swiper.js
- * Версия: 2.0.0 (продакшен)
+ * Версия: 2.2.0 (продакшен)
  * 
  * Поддерживает:
- * - default – контролы внутри слайдера (overlay)
+ * - default – контролы внутри слайдера (overlay/top/bottom)
  * - external – внешние элементы через data-атрибуты
+ * - Кастомные буллеты через customType
  * 
  * Внешние контролы:
  *   <button data-swiper-prev="slider-id">←</button>
  *   <button data-swiper-next="slider-id">→</button>
  *   <div data-swiper-pagination="slider-id"></div>
+ * 
+ * Кастомные буллеты:
+ *   'pagination' => ['customType' => 'lines']
+ *   Доступные типы: numbered, numberedActive, lines, dots, squares, diamonds
  */
+
 import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay, EffectFade, EffectCoverflow, EffectCube, EffectFlip } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-// Импортируйте дополнительные стили при необходимости:
-// import 'swiper/css/effect-fade';
-// import 'swiper/css/effect-coverflow';
-// import 'swiper/css/effect-cube';
-// import 'swiper/css/effect-flip';
+
+/**
+ * Предустановленные рендереры кастомных буллетов
+ * ВАЖНО: Используем ! для Tailwind (это !important)
+ */
+export const customBulletRenderers = {
+    /**
+     * Буллеты с номерами (1, 2, 3...)
+     */
+    numbered: (index, className) => {
+        return `<span class="${className} !flex !items-center !justify-center !w-8 !h-8 !rounded-full !bg-gray-200 dark:!bg-gray-700 !text-sm !font-medium !cursor-pointer !transition-colors !text-gray-700 dark:!text-gray-200">${index + 1}</span>`;
+    },
+
+    /**
+     * Буллеты с номерами и hover эффектом
+     */
+    numberedActive: (index, className) => {
+        return `<span class="${className} !flex !items-center !justify-center !w-8 !h-8 !rounded-full !bg-gray-200 dark:!bg-gray-700 !text-sm !font-medium !cursor-pointer !transition-all hover:!bg-gray-300 dark:hover:!bg-gray-600 !text-gray-700 dark:!text-gray-200">${index + 1}</span>`;
+    },
+
+    /**
+     * Буллеты в виде линий
+     */
+    lines: (index, className) => {
+        return `<span class="${className} !w-8 !h-1 !bg-gray-300 dark:!bg-gray-600 !rounded !cursor-pointer !transition-all"></span>`;
+    },
+
+    /**
+     * Буллеты в виде точек с анимацией
+     */
+    dots: (index, className) => {
+        return `<span class="${className} !w-2 !h-2 !rounded-full !bg-gray-400 dark:!bg-gray-500 !cursor-pointer !transition-all hover:!scale-125"></span>`;
+    },
+
+    /**
+     * Буллеты в виде квадратов
+     */
+    squares: (index, className) => {
+        return `<span class="${className} !w-3 !h-3 !bg-gray-300 dark:!bg-gray-600 !cursor-pointer !transition-all !rounded-none"></span>`;
+    },
+
+    /**
+     * Буллеты в виде ромбов
+     */
+    diamonds: (index, className) => {
+        return `<span class="${className} !w-3 !h-3 !bg-gray-300 dark:!bg-gray-600 !rotate-45 !cursor-pointer !transition-all !rounded-none"></span>`;
+    },
+};
 
 export function initSliders() {
     const sliders = document.querySelectorAll('.wp-swiper:not(.swiper-initialized)');
     if (sliders.length === 0) return;
     
     sliders.forEach(el => {
-        // Парсим конфиг
         let config = {};
         try {
             config = JSON.parse(el.dataset.swiperConfig || '{}');
@@ -42,21 +90,19 @@ export function initSliders() {
         const wantPagination = config.pagination !== false;
         
         // =====================================================================
-        // ПОИСК КОНТРОЛОВ (приоритет: external > default)
+        // ПОИСК КОНТРОЛОВ
         // =====================================================================
         
         let nextBtn = null;
         let prevBtn = null;
         let pagEl = null;
         
-        // 1. Внешние контролы (через data-атрибуты)
         if (sliderId) {
             nextBtn = document.querySelector(`[data-swiper-next="${sliderId}"]`);
             prevBtn = document.querySelector(`[data-swiper-prev="${sliderId}"]`);
             pagEl = document.querySelector(`[data-swiper-pagination="${sliderId}"]`);
         }
         
-        // 2. Если внешних нет, ищем внутри слайдера
         if (!nextBtn) nextBtn = el.querySelector('.wp-swiper-next');
         if (!prevBtn) prevBtn = el.querySelector('.wp-swiper-prev');
         if (!pagEl) pagEl = el.querySelector('.swiper-pagination');
@@ -82,22 +128,18 @@ export function initSliders() {
         // =====================================================================
         
         if (wantPagination && pagEl) {
+            // Защита: если pagination = true, превращаем в пустой объект
+            const originalPagination = (typeof config.pagination === 'object' && config.pagination !== null) ? config.pagination : {};
+            
             config.pagination = {
                 el: pagEl,
                 clickable: true,
-                dynamicBullets: false,
-                dynamicMainBullets: 1,
-                type: 'bullets', // 'bullets' | 'fraction' | 'progressbar' | 'custom'
-                bulletClass: 'swiper-pagination-bullet',
-                bulletActiveClass: 'swiper-pagination-bullet-active',
-                modifierClass: 'swiper-pagination-',
-                currentClass: 'swiper-pagination-current',
-                totalClass: 'swiper-pagination-total',
-                hiddenClass: 'swiper-pagination-hidden',
-                progressbarOpposite: false,
-                clickableClass: 'swiper-pagination-clickable',
-                lockClass: 'swiper-pagination-lock',
+                type: originalPagination.type || 'bullets',
             };
+            
+            if (originalPagination.customType && customBulletRenderers[originalPagination.customType]) {
+                config.pagination.renderBullet = customBulletRenderers[originalPagination.customType];
+            }
         } else {
             delete config.pagination;
         }
@@ -106,22 +148,12 @@ export function initSliders() {
         // НАСТРОЙКА МОДУЛЕЙ
         // =====================================================================
         
-        // Определяем какие модули нужны
         const modules = [Navigation, Pagination, Autoplay];
         
-        // Добавляем модули эффектов, если они используются
-        if (config.effect === 'fade') {
-            modules.push(EffectFade);
-        }
-        if (config.effect === 'coverflow') {
-            modules.push(EffectCoverflow);
-        }
-        if (config.effect === 'cube') {
-            modules.push(EffectCube);
-        }
-        if (config.effect === 'flip') {
-            modules.push(EffectFlip);
-        }
+        if (config.effect === 'fade') modules.push(EffectFade);
+        if (config.effect === 'coverflow') modules.push(EffectCoverflow);
+        if (config.effect === 'cube') modules.push(EffectCube);
+        if (config.effect === 'flip') modules.push(EffectFlip);
         
         // =====================================================================
         // ИНИЦИАЛИЗАЦИЯ SWIPER
@@ -131,24 +163,8 @@ export function initSliders() {
             const swiperInstance = new Swiper(el, {
                 ...config,
                 modules: modules,
-                // Фолбэки для стабильности
-                watchSlidesProgress: true,
-                watchSlidesVisibility: true,
-                // Отключаем лишние вычисления для производительности
-                passiveListeners: true,
-                // Логирование ошибок
-                on: {
-                    init: function() {
-                        // Можно добавить кастомную логику при инициализации
-                        // console.log('Swiper инициализирован:', el.id);
-                    },
-                    error: function(e) {
-                        console.error('Swiper ошибка:', e);
-                    }
-                }
             });
             
-            // Сохраняем инстанс в DOM для отладки
             el._swiper = swiperInstance;
             
         } catch (e) {
@@ -161,25 +177,17 @@ export function initSliders() {
 // ИНИЦИАЛИЗАЦИЯ
 // =====================================================================
 
-// При загрузке страницы
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initSliders);
 } else {
     initSliders();
 }
 
-// Re-init при навигации в Alpine.js
 document.addEventListener('alpine:navigated', initSliders);
-
-// Re-init при Livewire обновлениях
 document.addEventListener('livewire:load', initSliders);
 document.addEventListener('livewire:update', initSliders);
-
-// Re-init при Turbo (Hotwire)
 document.addEventListener('turbo:load', initSliders);
-
-// Re-init при htmx
 document.addEventListener('htmx:afterSwap', initSliders);
 
-// Экспортируем для ручного вызова
 window.initSliders = initSliders;
+window.customBulletRenderers = customBulletRenderers;

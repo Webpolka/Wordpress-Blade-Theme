@@ -95,7 +95,31 @@
     {
       "name": "slider",
       "type": "dir"
+    },
+    {
+      "name": "card",
+      "type": "dir"
+    },
+    {
+      "name": "avatar",
+      "type": "file"
+    },
+    {
+      "name": "popover",
+      "type": "dir"
+    },
+    {
+      "name": "pagination",
+      "type": "file"
+    },
+    {
+      "name": "post-navigation",
+      "type": "file"
+    },
+    {
+      "name": "breadcrumbs",
+      "type": "file"
     }
   ],
-  "version": "f111d3a6"
+  "version": "e7b2fcca"
 }

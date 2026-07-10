@@ -36,6 +36,10 @@
         <div class="min-h-screen flex flex-col">
             @include('sections.header')
 
+            <x-container>
+                    <x-breadcrumbs class="py-3" />
+            </x-container>
+
             {{-- Проверяем, есть ли секция sidebar --}}
             @hasSection('sidebar')
                 {{-- С сайдбаром (Сетка 12 колонок) --}}
@@ -43,7 +47,8 @@
                     <div class="lg:grid lg:grid-cols-12 lg:gap-8">
 
                         {{-- контент --}}
-                        <main id="main" class="lg:col-span-8">
+                        <main id="main" class="lg:col-span-8">                           
+
                             @yield('content')
                         </main>
 
@@ -56,7 +61,8 @@
             @else
                 {{-- Без сайдбара (Контент на всю ширину) --}}
                 <x-container class="flex-1 py-8 md:py-12">
-                    <main id="main">
+                    <main id="main">                     
+
                         @yield('content')
                     </main>
                 </x-container>
