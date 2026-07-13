@@ -1,5 +1,6 @@
 /node_modules
 /vendor
+/resources/video
 /public/*
 !/public/.gitkeep
 npm-debug.log
