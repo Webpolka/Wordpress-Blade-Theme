@@ -5,7 +5,15 @@
       "type": "file"
     },
     {
+      "name": "avatar",
+      "type": "file"
+    },
+    {
       "name": "badge",
+      "type": "file"
+    },
+    {
+      "name": "breadcrumbs",
       "type": "file"
     },
     {
@@ -25,11 +33,27 @@
       "type": "file"
     },
     {
+      "name": "cookie-banner",
+      "type": "file"
+    },
+    {
+      "name": "pagination",
+      "type": "file"
+    },
+    {
+      "name": "post-navigation",
+      "type": "file"
+    },
+    {
       "name": "radio-pill",
       "type": "file"
     },
     {
       "name": "radio",
+      "type": "file"
+    },
+    {
+      "name": "skeleton",
       "type": "file"
     },
     {
@@ -41,7 +65,35 @@
       "type": "file"
     },
     {
+      "name": "accordion-faq",
+      "type": "dir"
+    },
+    {
+      "name": "accordion-menu",
+      "type": "dir"
+    },
+    {
+      "name": "card",
+      "type": "dir"
+    },
+    {
+      "name": "context-menu",
+      "type": "dir"
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "dir"
+    },
+    {
+      "name": "hover-card",
+      "type": "dir"
+    },
+    {
       "name": "input",
+      "type": "dir"
+    },
+    {
+      "name": "lightbox",
       "type": "dir"
     },
     {
@@ -57,11 +109,39 @@
       "type": "dir"
     },
     {
+      "name": "popover",
+      "type": "dir"
+    },
+    {
+      "name": "product-gallery",
+      "type": "dir"
+    },
+    {
+      "name": "prose",
+      "type": "dir"
+    },
+    {
       "name": "select",
       "type": "dir"
     },
     {
+      "name": "sheet",
+      "type": "dir"
+    },
+    {
+      "name": "slider",
+      "type": "dir"
+    },
+    {
+      "name": "tabs",
+      "type": "dir"
+    },
+    {
       "name": "textarea",
+      "type": "dir"
+    },
+    {
+      "name": "theme-toggle",
       "type": "dir"
     },
     {
@@ -75,51 +155,7 @@
     {
       "name": "tooltip-fixed",
       "type": "dir"
-    },
-    {
-      "name": "accordion-menu",
-      "type": "dir"
-    },
-    {
-      "name": "dropdown-menu",
-      "type": "dir"
-    },
-    {
-      "name": "accordion-faq",
-      "type": "dir"
-    },
-    {
-      "name": "tabs",
-      "type": "dir"
-    },
-    {
-      "name": "slider",
-      "type": "dir"
-    },
-    {
-      "name": "card",
-      "type": "dir"
-    },
-    {
-      "name": "avatar",
-      "type": "file"
-    },
-    {
-      "name": "popover",
-      "type": "dir"
-    },
-    {
-      "name": "pagination",
-      "type": "file"
-    },
-    {
-      "name": "post-navigation",
-      "type": "file"
-    },
-    {
-      "name": "breadcrumbs",
-      "type": "file"
     }
   ],
-  "version": "e7b2fcca"
+  "version": "fa4fae3c"
 }

@@ -1,13 +1,13 @@
 /**
  * Tooltip Fixed
  * 
- * Fixed-position tooltip, не обрезается в overflow контейнерах.
- * - Показ по hover/focus
- * - Скрывается при скролле, появляется снова когда скролл останавливается
- * - Все размеры в rem
- * - Один tooltip на страницу
- * - Вычисление среднего цвета для градиентов
- * - Проверка видимости триггера (не показывается если триггер за viewport)
+ * Fixed-position tooltip, not clipped in overflow containers.
+ * - Show on hover/focus
+ * - Hides on scroll, reappears when scrolling stops
+ * - All sizes in rem
+ * - One tooltip per page (Singleton)
+ * - Average color calculation for gradients
+ * - Trigger visibility check (doesn't show if trigger is off-screen)
  */
 class TooltipFixedManager {
   constructor() {
@@ -40,15 +40,13 @@ class TooltipFixedManager {
   }
 
   /**
-   * Проверяет видимость элемента в viewport
+   * Checks element visibility in viewport
    */
   isElementVisible(el, offsetInRem = 3.5) {
     const rect = el.getBoundingClientRect();
     const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
     const offsetInPx = offsetInRem * remInPx;
     
-    // Элемент виден, если его нижняя граница > смещения
-    // и верхняя граница < высоты окна
     return (
       rect.bottom > offsetInPx &&
       rect.top < window.innerHeight - offsetInPx &&
@@ -211,7 +209,6 @@ class TooltipFixedManager {
 
     window.addEventListener('resize', () => {
       if (this.tooltip && this.currentTrigger?.isConnected) {
-        // Проверяем видимость триггера при resize
         if (!this.isElementVisible(this.currentTrigger)) {
           this.removeTooltip();
           return;
@@ -225,7 +222,7 @@ class TooltipFixedManager {
   // Публичные методы
   // ============================================================================
 
-  show(trigger) {
+ show(trigger) {
     if (!trigger?.dataset?.tooltip) return;
 
     // Проверяем видимость триггера
@@ -238,7 +235,11 @@ class TooltipFixedManager {
 
     clearTimeout(this.showTimer);
 
-    const delay = parseInt(trigger.dataset.tooltipDelay) || 200;
+    //  Строгая проверка delay, чтобы 0 тоже работал
+    const delayAttr = trigger.dataset.tooltipDelay;
+    const delay = (delayAttr !== undefined && !isNaN(parseInt(delayAttr))) 
+      ? parseInt(delayAttr) 
+      : 200;
 
     this.showTimer = setTimeout(() => {
       //  Повторная проверка перед созданием (мог успеть прокрутиться)
@@ -257,6 +258,7 @@ class TooltipFixedManager {
       });
     }, delay);
   }
+
 
   hide(trigger) {
     if (!trigger || this.currentTrigger !== trigger) return;
@@ -292,18 +294,15 @@ class TooltipFixedManager {
     
     const trigger = el.closest?.('[data-tooltip]');
     
-    //  Проверяем видимость триггера
     if (trigger && this.isElementVisible(trigger)) {
       if (this.currentTrigger === trigger && this.tooltip) {
         this.tooltip.style.opacity = '1';
         this.updatePosition();
       } else if (this.currentTrigger !== trigger) {
-        // Курсор на другом триггере — показываем его tooltip
         this.removeTooltip();
         this.show(trigger);
       }
     } else {
-      // Триггер не виден — убираем tooltip
       this.removeTooltip();
     }
   }
@@ -324,14 +323,21 @@ class TooltipFixedManager {
     const position = trigger.dataset.tooltipPosition || 'top';
     const theme = trigger.dataset.tooltipTheme || 'dark';
     const color = trigger.dataset.tooltipColor || null;
-    const distanceRem = parseFloat(trigger.dataset.tooltipDistance) || this.REM.distance;
+    
+    // МАГИЯ FIX: Строгая проверка distance, чтобы 0 тоже работал
+    const distanceAttr = trigger.dataset.tooltipDistance;
+    const distanceRem = (distanceAttr !== undefined && !isNaN(parseFloat(distanceAttr))) 
+      ? parseFloat(distanceAttr) 
+      : this.REM.distance;
+      
     const arrow = trigger.dataset.tooltipArrow !== 'false';
 
-    let themeClass = 'bg-gray-800 text-white';
+    // НОВОЕ: Заменили gray на slate
+    let themeClass = 'bg-slate-800 text-white';
     if (color) {
       themeClass = color;
     } else if (theme === 'light') {
-      themeClass = 'bg-white text-gray-800 border border-gray-200 shadow-lg';
+      themeClass = 'bg-white text-slate-800 border border-slate-200 shadow-lg';
     }
 
     let arrowClass = '';
@@ -349,7 +355,7 @@ class TooltipFixedManager {
         if (fromHex && toHex) {
           arrowBgColor = TooltipFixedManager.mixColors(fromHex, toHex, 0.5);
         } else {
-          arrowClass = 'bg-gray-800';
+          arrowClass = 'bg-slate-800';
         }
       } else if (fromMatch) {
         arrowClass = `bg-${fromMatch[1]}-${fromMatch[2]}`;
@@ -358,12 +364,12 @@ class TooltipFixedManager {
       } else if (bgMatch) {
         arrowClass = `bg-${bgMatch[1]}-${bgMatch[2]}`;
       } else {
-        arrowClass = 'bg-gray-800';
+        arrowClass = 'bg-slate-800';
       }
     } else if (theme === 'light') {
-      arrowClass = 'bg-white border-t border-l border-gray-200';
+      arrowClass = 'bg-white border-t border-l border-slate-200';
     } else {
-      arrowClass = 'bg-gray-800';
+      arrowClass = 'bg-slate-800';
     }
 
     const el = document.createElement('div');
@@ -457,8 +463,19 @@ class TooltipFixedManager {
   }
 }
 
-if (typeof window !== 'undefined' && !window.tooltipFixedManager) {
-  window.tooltipFixedManager = new TooltipFixedManager();
+// МАГИЯ FIX: Безопасная инициализация Singleton
+if (typeof window !== 'undefined') {
+  if (!window.tooltipFixedManager) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        if (!window.tooltipFixedManager) {
+          window.tooltipFixedManager = new TooltipFixedManager();
+        }
+      });
+    } else {
+      window.tooltipFixedManager = new TooltipFixedManager();
+    }
+  }
 }
 
 export default TooltipFixedManager;

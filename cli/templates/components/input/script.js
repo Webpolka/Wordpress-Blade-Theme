@@ -1,21 +1,16 @@
 /**
- * Компонент Input для Alpine.js
+ * Input Component for Alpine.js
  * 
- * Универсальное поле ввода с поддержкой:
- * - Валидации (required, email, minlength, maxlength, pattern)
- * - Масок (IMask)
- * - Переключателя видимости пароля
- * - Очистки поля
- * - Кастомных callbacks (onInput, onBlur)
- * - Accessibility (ARIA-атрибуты)
+ * Universal input field with support for:
+ * - Validation (required, email, minlength, maxlength, pattern)
+ * - Masks (IMask)
+ * - Password visibility toggle
+ * - Clear input
+ * - Custom callbacks (onInput, onBlur)
+ * - Accessibility (ARIA attributes)
  */
 class InputComponent {
-  // ============================================================================
-  // Конструктор
-  // ============================================================================
-
   constructor(props) {
-    // Основные props
     this.value = props.value ?? '';
     this.validationRules = props.validationRules ?? {};
     this.validationMessages = props.validationMessages ?? {};
@@ -27,38 +22,33 @@ class InputComponent {
     this.onInputCallback = props.onInputCallback ?? null;
     this.hasMask = props.hasMask ?? false;
     this.serverError = !!props.serverError;
+    
+    // НОВОЕ: Переведенные строки для ARIA-атрибутов
+    this.labelShowPassword = props.labelShowPassword || 'Show password';
+    this.labelHidePassword = props.labelHidePassword || 'Hide password';
 
-    // Компиляция regex паттерна (один раз)
     this.compiledPatterns = {};
     if (props.validationRules?.pattern) {
       try {
         this.compiledPatterns.pattern = new RegExp(props.validationRules.pattern);
       } catch (e) {
-        console.warn('Невалидный pattern:', props.validationRules.pattern, e);
+        console.warn('Invalid regex pattern:', props.validationRules.pattern, e);
       }
     }
 
-    // Валидатор email (переиспользуемый элемент)
     this.emailValidator = document.createElement('input');
     this.emailValidator.type = 'email';
 
-    // Состояние UI
     this.validationError = '';
     this.touched = false;
     this.showPassword = false;
     this.isMaskFilled = false;
 
-    // Инстансы (для очистки)
     this.maskInstance = null;
     this.validationTimeout = null;
   }
 
-  // ============================================================================
-  // Lifecycle
-  // ============================================================================
-
   init() {
-    // Debounce валидация для oninput режима
     if (this.validationRules && Object.keys(this.validationRules).length > 0) {
       this.$watch('value', () => {
         if (this.validationMode === 'oninput') {
@@ -70,16 +60,13 @@ class InputComponent {
       });
     }
 
-    // Инициализация маски
     this.$nextTick(() => {
       this.initMask();
     });
 
-    // Очистка ресурсов при уничтожении компонента
     if (typeof this.$cleanup === 'function') {
       this.$cleanup(() => this.destroy());
     } else {
-      // Fallback для старых версий Alpine
       this.$el.addEventListener('alpine:destroy', () => this.destroy());
     }
   }
@@ -94,10 +81,6 @@ class InputComponent {
     }
   }
 
-  // ============================================================================
-  // Маска (IMask)
-  // ============================================================================
-
   initMask() {
     const input = this.$refs.input;
     if (!input) return;
@@ -106,11 +89,10 @@ class InputComponent {
     if (!mask) return;
 
     if (!window.IMask) {
-      console.warn('IMask не загружен, маска не будет работать');
+      console.warn('IMask is not loaded, input mask disabled.');
       return;
     }
 
-    // Уничтожаем предыдущий инстанс если есть
     if (this.maskInstance) {
       this.maskInstance.destroy();
     }
@@ -129,15 +111,10 @@ class InputComponent {
     this.isMaskFilled = this.maskInstance.unmaskedValue.length > 0;
   }
 
-  // ============================================================================
-  // Валидация
-  // ============================================================================
-
   validate() {
     this.touched = true;
     this.validationError = '';
 
-    // Получаем значение для проверки
     let valueToCheck = this.value || '';
     if (this.maskInstance) {
       valueToCheck = this.maskInstance.unmaskedValue || '';
@@ -145,50 +122,45 @@ class InputComponent {
       valueToCheck = valueToCheck.trim();
     }
 
-    // Required
     if (this.validationRules.required && !valueToCheck) {
       this.validationError =
-        this.validationMessages.required || 'Поле обязательно для заполнения';
+        this.validationMessages.required || 'This field is required';
       return false;
     }
 
-    // Email (через HTML5 валидацию)
     if (this.validationRules.email && valueToCheck) {
       this.emailValidator.value = valueToCheck;
       if (!this.emailValidator.checkValidity()) {
         this.validationError =
-          this.validationMessages.email || 'Введите корректный email';
+          this.validationMessages.email || 'Please enter a valid email address';
         return false;
       }
     }
 
-    // Minlength
     if (
       this.validationRules.minlength &&
       valueToCheck.length < this.validationRules.minlength
     ) {
       this.validationError =
         this.validationMessages.minlength ||
-        `Минимум ${this.validationRules.minlength} символов`;
+        `Minimum ${this.validationRules.minlength} characters`;
       return false;
     }
 
-    // Maxlength
     if (
       this.validationRules.maxlength &&
       valueToCheck.length > this.validationRules.maxlength
     ) {
       this.validationError =
         this.validationMessages.maxlength ||
-        `Максимум ${this.validationRules.maxlength} символов`;
+        `Maximum ${this.validationRules.maxlength} characters`;
       return false;
     }
 
-    // Pattern
     if (this.validationRules.pattern && valueToCheck) {
       if (!this.compiledPatterns.pattern.test(valueToCheck)) {
         this.validationError =
-          this.validationMessages.pattern || 'Некорректный формат';
+          this.validationMessages.pattern || 'Invalid format';
         return false;
       }
     }
@@ -196,24 +168,17 @@ class InputComponent {
     return true;
   }
 
-  // ============================================================================
-  // Обработчики событий
-  // ============================================================================
-
   handleInput(event) {
     this.value = event.target.value;
 
-    // Обновляем флаг заполненности маски
     if (this.hasMask && this.maskInstance) {
       this.isMaskFilled = this.maskInstance.unmaskedValue.length > 0;
     }
 
-    // Валидация в режиме onblur (если поле уже было тронуто)
     if (this.touched && this.validationMode === 'onblur') {
       this.validate();
     }
 
-    // Ограничение длины для number
     if (this.type === 'number' && this.maxLengthAttr) {
       const digits = this.value.replace(/[^0-9]/g, '');
       if (digits.length > this.maxLengthAttr) {
@@ -222,24 +187,20 @@ class InputComponent {
       }
     }
 
-    // Callback onInput
     if (this.onInputCallback) {
       this.evaluateExpression(this.onInputCallback);
     }
   }
 
   handleBlur() {
-    // Очищаем debounce таймер
     if (this.validationTimeout) {
       clearTimeout(this.validationTimeout);
     }
 
-    // Валидация в режиме onblur или change
     if (this.validationMode === 'onblur' || this.validationMode === 'change') {
       this.validate();
     }
 
-    // Callback onBlur
     if (this.onBlurCallback) {
       this.evaluateExpression(this.onBlurCallback);
     }
@@ -257,10 +218,6 @@ class InputComponent {
     }
   }
 
-  // ============================================================================
-  // UI действия
-  // ============================================================================
-
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
     this.$nextTick(() => this.$refs.input.focus());
@@ -271,7 +228,6 @@ class InputComponent {
     this.validationError = '';
     this.isMaskFilled = false;
 
-    // Диспатчим нативное input событие для x-model
     this.$nextTick(() => {
       if (this.$refs.input) {
         this.$refs.input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -282,44 +238,29 @@ class InputComponent {
     this.$dispatch('input-cleared');
   }
 
-  // ============================================================================
-  // Утилиты
-  // ============================================================================
-
-  /**
-   * Выполняет Alpine-выражение в контексте компонента.
-   * Используется для onInput/onBlur callbacks.
-   */
   evaluateExpression(expr) {
     if (!expr || typeof expr !== 'string') return;
     try {
       const fn = new Function('with(this) { ' + expr + ' }');
       fn.call(this);
     } catch (e) {
-      console.warn('Ошибка выполнения callback:', e);
+      console.warn('Error executing callback:', e);
     }
   }
 }
 
-// ============================================================================
-// Регистрация компонента
-// ============================================================================
-
-/** Регистрация компонента input в Alpine */
 export function registerInput() {
   if (typeof window.Alpine === 'undefined') {
-    console.warn('⚠️ Alpine не загружен, компонент Input не зарегистрирован');
+    console.warn('⚠️ Alpine is not loaded, Input component not registered');
     return;
   }
   window.Alpine.data('input', (props) => new InputComponent(props));
-  console.log('✅ Input компонент зарегистрирован');
+  console.log('✅ Input component registered');
 }
 
-// Авто-регистрация
-if (typeof window.Alpine !== 'undefined') {
+// Жестко вешаем слушатель на alpine:init
+document.addEventListener('alpine:init', () => {
   registerInput();
-} else {
-  document.addEventListener('alpine:init', () => registerInput());
-}
+});
 
 export default InputComponent;

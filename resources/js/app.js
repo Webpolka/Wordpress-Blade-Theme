@@ -2,7 +2,8 @@
 import Alpine from 'alpinejs';
 import IMask from 'imask';
 import { BaseHelpers } from "./base-helpers";
-import { loadComponentScripts } from './components.js';
+import { loadComponentScripts } from './load-components-scripts.js';
+import { loadComponentStyles } from './load-components-styles.js';
 import initAutoRem from './autorem';
 import { initViewport } from "./viewport";
 
@@ -25,6 +26,8 @@ window.Alpine = Alpine;
 window.IMask = IMask;
 
 // Загружаем скрипты компонентов и ждём их завершения и стартуем Alpine после загрузки всех скриптов
+
+await loadComponentStyles();
 loadComponentScripts().then(() => {
   Alpine.start();
 });

@@ -1,4 +1,6 @@
 {{--
+Ок !
+
 ==============================================================
  WP Components: Pagination
 ==============================================================
@@ -79,21 +81,21 @@
         $links[] = ['type' => 'next', 'url' => get_pagenum_link($current + 1)];
     }
 
-    // Классы кнопок
-    $btnBase = 'inline-flex items-center justify-center w-10 h-10 text-sm font-medium rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500';
+    // Классы кнопок (Добавлен dark:ring-offset-slate-900 и shrink-0)
+    $btnBase = 'inline-flex shrink-0 items-center justify-center w-10 h-10 text-sm font-medium rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900';
     $btnNormal = 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800';
     $btnActive = 'bg-blue-600 text-white shadow-sm pointer-events-none';
     $btnDots = 'text-gray-400 pointer-events-none';
 @endphp
 
-<nav class="{{ cn('flex items-center justify-center gap-1.5', $class) }}" role="navigation" aria-label="Постраничная навигация">
+<nav class="{{ cn('flex items-center justify-center gap-1.5', $class) }}" role="navigation" aria-label="{{ __('Pagination', 'weblegko') }}">
     @foreach ($links as $link)
         @if ($link['type'] === 'prev')
-            <a href="{{ $link['url'] }}" class="{{ $btnBase }} {{ $btnNormal }}" aria-label="Предыдущая страница" {{ $attributes }}>
+            <a href="{{ $link['url'] }}" class="{{ $btnBase }} {{ $btnNormal }}" aria-label="{{ __('Previous page', 'weblegko') }}" {{ $attributes }}>
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             </a>
         @elseif ($link['type'] === 'next')
-            <a href="{{ $link['url'] }}" class="{{ $btnBase }} {{ $btnNormal }}" aria-label="Следующая страница" {{ $attributes }}>
+            <a href="{{ $link['url'] }}" class="{{ $btnBase }} {{ $btnNormal }}" aria-label="{{ __('Next page', 'weblegko') }}" {{ $attributes }}>
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </a>
         @elseif ($link['type'] === 'dots')

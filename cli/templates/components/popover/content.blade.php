@@ -17,7 +17,7 @@
     $posClass = $placements[$placement] ?? $placements['bottom-start'];
 
     $panelClasses = cn(
-        'absolute z-50 rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800',
+        'absolute z-50 rounded-xl border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800',
         $width,
         $posClass,
         $class
@@ -25,7 +25,7 @@
 @endphp
 
 <div 
-    x-show="open"
+    x-show="open"    
     x-cloak
     x-transition:enter="transition ease-out duration-150"
     x-transition:enter-start="opacity-0 scale-95"

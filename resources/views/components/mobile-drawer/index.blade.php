@@ -168,6 +168,10 @@
     $translateClass = $position === 'left' ? '-translate-x-full' : 'translate-x-full';
     $positionClass = $position === 'left' ? 'left-0' : 'right-0';
     $desktopClass = $hideOnDesktop ? 'lg:hidden' : '';
+
+    // НОВОЕ: Переводы для Alpine JS
+    $labelOpen = __('Open menu', 'weblegko');
+    $labelClose = __('Close menu', 'weblegko');
 @endphp
 
 <div
@@ -183,7 +187,7 @@
     id="{{ $drawerId }}"
     class="{{ $desktopClass }}"
 >
-    {{-- Триггер (бургер) --}}
+    {{-- Триггер (кастомный слот) --}}
     @if (isset($trigger))
         <div 
             id="{{ $triggerId }}"
@@ -193,13 +197,15 @@
             tabindex="0"
             x-bind:aria-expanded="isOpen"
             aria-controls="{{ $panelId }}"
-            aria-label="Открыть меню"
+            aria-label="{{ $labelOpen }}"
             @keydown.enter="toggle()"
             @keydown.space.prevent="toggle()"
+            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-md"
         >
             {{ $trigger }}
         </div>
     @else
+        {{-- Триггер (бургер по умолчанию) --}}
         <button
             id="{{ $triggerId }}"
             data-drawer-trigger-element
@@ -207,20 +213,17 @@
             @click="toggle()"
             x-bind:aria-expanded="isOpen"
             aria-controls="{{ $panelId }}"
-            x-bind:aria-label="isOpen ? 'Закрыть меню' : 'Открыть меню'"
-            class="p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors rounded-md outline-none focus:outline-none"
+            x-bind:aria-label="isOpen ? '{{ $labelClose }}' : '{{ $labelOpen }}'"
+            class="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors rounded-md outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900"
         >
-            <span class="sr-only" x-text="isOpen ? 'Закрыть меню' : 'Открыть меню'"></span>
+            <span class="sr-only" x-text="isOpen ? '{{ $labelClose }}' : '{{ $labelOpen }}'"></span>
             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                {{-- Верхняя линия --}}
                 <line x1="4" y1="6" x2="20" y2="6"
                     x-bind:style="isOpen ? 'transform: translateY(18%) rotate(45deg)' : ''"
                     class="transition-all duration-300 ease-out origin-center" />
-                {{-- Средняя линия --}}
                 <line x1="4" y1="12" x2="20" y2="12"
                     x-bind:style="isOpen ? 'opacity: 0' : 'opacity: 1'"
                     class="transition-opacity duration-300 ease-out" />
-                {{-- Нижняя линия --}}
                 <line x1="4" y1="18" x2="20" y2="18"
                     x-bind:style="isOpen ? 'transform: translateY(-18%) rotate(-45deg)' : ''"
                     class="transition-all duration-300 ease-out origin-center" />
@@ -263,13 +266,13 @@
         x-transition:leave-end="{{ $translateClass }}"
         class="fixed inset-y-0 {{ $positionClass }} z-50 flex max-w-full outline-none"
     >
-        <div class="relative {{ $width }} max-w-full bg-white dark:bg-gray-900 shadow-2xl h-full flex flex-col">
+        <div class="relative {{ $width }} max-w-full bg-white dark:bg-slate-800 shadow-2xl h-full flex flex-col">
             {{-- Кнопка закрытия (крестик) --}}
             <button
                 type="button"
                 @click="close()"
-                class="absolute top-3 right-3 p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 z-10"
-                aria-label="Закрыть меню"
+                class="absolute top-3 right-3 p-2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-800 z-10"
+                aria-label="{{ $labelClose }}"
             >
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -278,8 +281,8 @@
 
             {{-- Заголовок --}}
             @if ($title)
-                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0">
-                    <h3 id="{{ $panelId }}-title" class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
+                    <h3 id="{{ $panelId }}-title" class="text-lg font-semibold text-slate-900 dark:text-slate-100">
                         {{ $title }}
                     </h3>
                 </div>
@@ -292,7 +295,7 @@
 
             {{-- Footer --}}
             @if (isset($footer))
-                <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-800 shrink-0">
+                <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 shrink-0">
                     {{ $footer }}
                 </div>
             @endif

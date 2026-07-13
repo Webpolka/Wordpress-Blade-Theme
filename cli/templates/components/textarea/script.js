@@ -1,17 +1,13 @@
 /**
- * Компонент Textarea для Alpine.js
+ * Textarea Component for Alpine.js
  * 
- * Многострочное поле ввода с поддержкой:
- * - Валидации (required, minlength, maxlength)
- * - Счётчика символов
- * - Кастомных callbacks (onInput, onBlur)
- * - Accessibility (ARIA-атрибуты)
+ * Multiline input field with support for:
+ * - Validation (required, minlength, maxlength)
+ * - Character counter
+ * - Custom callbacks (onInput, onBlur)
+ * - Accessibility (ARIA attributes)
  */
 class TextareaComponent {
-  // ============================================================================
-  // Конструктор
-  // ============================================================================
-
   constructor(props) {
     this.value = props.value ?? '';
     this.validationRules = props.validationRules ?? {};
@@ -27,10 +23,6 @@ class TextareaComponent {
     this.charCount = this.value.length;
     this.validationTimeout = null;
   }
-
-  // ============================================================================
-  // Lifecycle
-  // ============================================================================
 
   init() {
     // Watch за изменениями value
@@ -74,7 +66,7 @@ class TextareaComponent {
     // Required
     if (this.validationRules.required && !valueToCheck) {
       this.validationError =
-        this.validationMessages.required || 'Поле обязательно для заполнения';
+        this.validationMessages.required || 'This field is required';
       return false;
     }
 
@@ -85,7 +77,7 @@ class TextareaComponent {
     ) {
       this.validationError =
         this.validationMessages.minlength ||
-        `Минимум ${this.validationRules.minlength} символов`;
+        `Minimum ${this.validationRules.minlength} characters`;
       return false;
     }
 
@@ -96,7 +88,7 @@ class TextareaComponent {
     ) {
       this.validationError =
         this.validationMessages.maxlength ||
-        `Максимум ${this.validationRules.maxlength} символов`;
+        `Maximum ${this.validationRules.maxlength} characters`;
       return false;
     }
 
@@ -161,7 +153,7 @@ class TextareaComponent {
       const fn = new Function('with(this) { ' + expr + ' }');
       fn.call(this);
     } catch (e) {
-      console.warn('Ошибка выполнения callback:', e);
+      console.warn('❌ Error executing callback:', e);
     }
   }
 }
@@ -172,17 +164,16 @@ class TextareaComponent {
 
 export function registerTextarea() {
   if (typeof window.Alpine === 'undefined') {
-    console.warn('⚠️ Alpine не загружен, компонент Textarea не зарегистрирован');
+    console.warn('⚠️ Alpine is not loaded, Textarea component not registered');
     return;
   }
   window.Alpine.data('textarea', (props) => new TextareaComponent(props));
-  console.log('✅ Textarea компонент зарегистрирован');
+  console.log('✅ Textarea component registered');
 }
 
-if (typeof window.Alpine !== 'undefined') {
+//  Жестко вешаем слушатель на alpine:init
+document.addEventListener('alpine:init', () => {
   registerTextarea();
-} else {
-  document.addEventListener('alpine:init', () => registerTextarea());
-}
+});
 
 export default TextareaComponent;

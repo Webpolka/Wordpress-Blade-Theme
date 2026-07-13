@@ -19,7 +19,7 @@
     aria-labelledby="{{ $tabId }}"
     
     x-cloak
-    class="mt-4 focus:outline-none {{ $class }}"
+    class="{{ cn('mt-4 focus:outline-none', $class) }}"
 >
     {{ $slot }}
 </div>

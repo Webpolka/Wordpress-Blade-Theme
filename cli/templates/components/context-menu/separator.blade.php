@@ -1,0 +1,1 @@
+<div class="my-1.5 h-px bg-slate-200 dark:bg-slate-700"></div>

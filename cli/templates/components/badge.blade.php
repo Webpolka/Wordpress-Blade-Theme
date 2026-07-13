@@ -1,4 +1,6 @@
 {{--
+  OK !
+
   Компонент: Badge
   Описание: Маленькая метка для статусов, категорий, счётчиков.
              В стиле shadcn/ui.
@@ -269,9 +271,9 @@
 ])
 
 @php
-    // Базовые стили
+    // Базовые стили (Добавили leading-none для идеального выравнивания)
     $baseClasses = cn(
-        'inline-flex items-center gap-1 rounded-full font-medium',
+        'inline-flex items-center gap-1 rounded-full font-medium leading-none',
         'transition-colors whitespace-nowrap',
     );
 
@@ -317,14 +319,14 @@
 @endphp
 
 <span class="{{ $finalClasses }}" {{ $attributes }}>
-    {{-- Обычная точка-индикатор --}}
+    {{-- Обычная точка-индикатор (Добавили shrink-0) --}}
     @if ($dot)
-        <span class="inline-block w-1.5 h-1.5 rounded-full {{ $dotClass }}"></span>
+        <span class="shrink-0 inline-block w-1.5 h-1.5 rounded-full {{ $dotClass }}"></span>
     @endif
 
-    {{-- Пульсирующая точка-индикатор --}}
+    {{-- Пульсирующая точка-индикатор (Добавили shrink-0) --}}
     @if ($pulsedot)
-        <span class="relative inline-flex">
+        <span class="relative shrink-0 inline-flex">
             <span class="absolute inline-flex h-full w-full rounded-full {{ $dotClass }} opacity-75 animate-ping"></span>
             <span class="relative inline-flex w-1.5 h-1.5 rounded-full {{ $dotClass }}"></span>
         </span>
@@ -338,8 +340,8 @@
         <button
             type="button"
             @click="$dispatch('remove')"
-            class="ml-0.5 inline-flex items-center justify-center rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-            aria-label="Удалить"
+            class="ml-0.5 shrink-0 inline-flex items-center justify-center rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+            aria-label="{{ __('Remove', 'weblegko') }}"
         >
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

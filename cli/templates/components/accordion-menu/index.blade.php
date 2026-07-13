@@ -1,4 +1,6 @@
 {{--
+  Ok !
+
   ============================================================
   Компонент: Accordion Menu
   Описание: Меню с вложенностью (аккордеон).
@@ -95,7 +97,7 @@
 
 <nav
     x-data="accordionMenu({{ json_encode(['activeItem' => $activeItem]) }})"
-    class="flex flex-col gap-1 {{ $class }}"
+    class="{{ cn('flex flex-col gap-1', $class) }}"
 >
     {{ $slot }}
 </nav>

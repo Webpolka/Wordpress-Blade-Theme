@@ -1,22 +1,3 @@
-/**
- * Компонент Slider на базе Swiper.js
- * Версия: 2.2.0 (продакшен)
- * 
- * Поддерживает:
- * - default – контролы внутри слайдера (overlay/top/bottom)
- * - external – внешние элементы через data-атрибуты
- * - Кастомные буллеты через customType
- * 
- * Внешние контролы:
- *   <button data-swiper-prev="slider-id">←</button>
- *   <button data-swiper-next="slider-id">→</button>
- *   <div data-swiper-pagination="slider-id"></div>
- * 
- * Кастомные буллеты:
- *   'pagination' => ['customType' => 'lines']
- *   Доступные типы: numbered, numberedActive, lines, dots, squares, diamonds
- */
-
 import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay, EffectFade, EffectCoverflow, EffectCube, EffectFlip } from 'swiper/modules';
 
@@ -33,42 +14,42 @@ export const customBulletRenderers = {
      * Буллеты с номерами (1, 2, 3...)
      */
     numbered: (index, className) => {
-        return `<span class="${className} !flex !items-center !justify-center !w-8 !h-8 !rounded-full !bg-gray-200 dark:!bg-gray-700 !text-sm !font-medium !cursor-pointer !transition-colors !text-gray-700 dark:!text-gray-200">${index + 1}</span>`;
+        return `<span class="${className} !flex !items-center !justify-center !w-8 !h-8 !rounded-full !bg-slate-200 dark:!bg-slate-700 !text-sm !font-medium !cursor-pointer !transition-colors !text-slate-700 dark:!text-slate-200">${index + 1}</span>`;
     },
 
     /**
      * Буллеты с номерами и hover эффектом
      */
     numberedActive: (index, className) => {
-        return `<span class="${className} !flex !items-center !justify-center !w-8 !h-8 !rounded-full !bg-gray-200 dark:!bg-gray-700 !text-sm !font-medium !cursor-pointer !transition-all hover:!bg-gray-300 dark:hover:!bg-gray-600 !text-gray-700 dark:!text-gray-200">${index + 1}</span>`;
+        return `<span class="${className} !flex !items-center !justify-center !w-8 !h-8 !rounded-full !bg-slate-200 dark:!bg-slate-700 !text-sm !font-medium !cursor-pointer !transition-all hover:!bg-slate-300 dark:hover:!bg-slate-600 !text-slate-700 dark:!text-slate-200">${index + 1}</span>`;
     },
 
     /**
      * Буллеты в виде линий
      */
     lines: (index, className) => {
-        return `<span class="${className} !w-8 !h-1 !bg-gray-300 dark:!bg-gray-600 !rounded !cursor-pointer !transition-all"></span>`;
+        return `<span class="${className} !w-8 !h-1 !bg-slate-300 dark:!bg-slate-600 !rounded !cursor-pointer !transition-all"></span>`;
     },
 
     /**
      * Буллеты в виде точек с анимацией
      */
     dots: (index, className) => {
-        return `<span class="${className} !w-2 !h-2 !rounded-full !bg-gray-400 dark:!bg-gray-500 !cursor-pointer !transition-all hover:!scale-125"></span>`;
+        return `<span class="${className} !w-2 !h-2 !rounded-full !bg-slate-400 dark:!bg-slate-500 !cursor-pointer !transition-all hover:!scale-125"></span>`;
     },
 
     /**
      * Буллеты в виде квадратов
      */
     squares: (index, className) => {
-        return `<span class="${className} !w-3 !h-3 !bg-gray-300 dark:!bg-gray-600 !cursor-pointer !transition-all !rounded-none"></span>`;
+        return `<span class="${className} !w-3 !h-3 !bg-slate-300 dark:!bg-slate-600 !cursor-pointer !transition-all !rounded-none"></span>`;
     },
 
     /**
      * Буллеты в виде ромбов
      */
     diamonds: (index, className) => {
-        return `<span class="${className} !w-3 !h-3 !bg-gray-300 dark:!bg-gray-600 !rotate-45 !cursor-pointer !transition-all !rounded-none"></span>`;
+        return `<span class="${className} !w-3 !h-3 !bg-slate-300 dark:!bg-slate-600 !rotate-45 !cursor-pointer !transition-all !rounded-none"></span>`;
     },
 };
 
@@ -81,7 +62,7 @@ export function initSliders() {
         try {
             config = JSON.parse(el.dataset.swiperConfig || '{}');
         } catch (e) {
-            console.error('Ошибка чтения конфига Swiper:', e);
+            console.error('Error reading Swiper config:', e);
             return;
         }
         
@@ -168,7 +149,7 @@ export function initSliders() {
             el._swiper = swiperInstance;
             
         } catch (e) {
-            console.error('Ошибка инициализации Swiper:', e);
+            console.error('Error initializing Swiper:', e);
         }
     });
 }

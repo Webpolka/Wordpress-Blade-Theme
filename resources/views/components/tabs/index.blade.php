@@ -53,7 +53,7 @@
     x-data="{ 
         activeTab: '{{ $default }}' 
     }" 
-    class="{{ $class }}"
+    class="{{ cn($class) }}"
 >
     {{ $slot }}
 </div>

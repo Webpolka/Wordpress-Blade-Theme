@@ -1,27 +1,26 @@
 /**
- * Компонент Modal на чистом JS
- * Singleton паттерн - гарантируем один экземпляр
+ * Modal Component (Pure Vanilla JS)
+ * Singleton pattern - ensures a single instance
  * 
- * Управляет двумя типами модалок:
- * - Обычные (x-modal) - через data-modal-target / data-modal-close
- * - Динамическая (x-modal-dynamic) - через window.modalManager.openDynamic()
+ * Manages two types of modals:
+ * - Regular (x-modal) - via data-modal-target / data-modal-close
+ * - Dynamic (x-modal-dynamic) - via window.modalManager.openDynamic()
  * 
  * @example
- *   // Обычная модалка
+ *   // Regular modal
  *   window.modalManager.open('user-modal');
  *   window.modalManager.close('user-modal');
  * 
- *   // Динамическая модалка
+ *   // Dynamic modal
  *   window.modalManager.openDynamic({
- *     title: 'Заголовок',
- *     content: '<p>Контент</p>',
+ *     title: 'Title',
+ *     content: '<p>Content</p>',
  *     size: 'md'
  *   });
  *   window.modalManager.closeDynamic();
  */
 class ModalManager {
   constructor() {
-    // Singleton: если уже есть экземпляр - возвращаем его
     if (ModalManager.instance) {
       return ModalManager.instance;
     }
@@ -33,13 +32,11 @@ class ModalManager {
     this.scanTimeout = null;
     this.observer = null;
     
-    // Динамическая модалка
     this.dynamicModal = null;
     this.dynamicOnClose = null;
     
     this.init();
 
-    // Сохраняем экземпляр
     ModalManager.instance = this;
   }
 
@@ -60,7 +57,6 @@ class ModalManager {
     this.scanModals();
     this.initDynamicModal();
 
-    // MutationObserver с throttle
     this.observer = new MutationObserver(() => {
       clearTimeout(this.scanTimeout);
       this.scanTimeout = setTimeout(() => {
@@ -70,9 +66,7 @@ class ModalManager {
     });
     this.observer.observe(document.body, { childList: true, subtree: true });
 
-    // Клик
     document.addEventListener('click', (e) => {
-      // Открытие
       const trigger = e.target.closest('[data-modal-target]');
       if (trigger) {
         e.preventDefault();
@@ -81,7 +75,6 @@ class ModalManager {
         return;
       }
 
-      // Закрытие
       const closer = e.target.closest('[data-modal-close]');
       if (closer) {
         const modal = closer.closest('[data-modal], [data-modal-dynamic]');
@@ -95,7 +88,6 @@ class ModalManager {
       }
     });
 
-    // Клавиатура
     document.addEventListener('keydown', (e) => {
       const topModal = this.getTopModal();
       if (!topModal) return;
@@ -133,7 +125,6 @@ class ModalManager {
   }
 
   setupModal(modal, isDynamic = false) {
-    // Overlay click
     modal.addEventListener('click', (e) => {
       if (e.target === modal && modal.dataset.closeOnOverlay !== 'false') {
         if (isDynamic) {
@@ -144,7 +135,6 @@ class ModalManager {
       }
     });
 
-    // Transitionend для точного скрытия
     const dialog = modal.querySelector('[role="dialog"]');
     if (dialog) {
       dialog.addEventListener('transitionend', (e) => {
@@ -237,7 +227,7 @@ class ModalManager {
     onClose = null,
   } = {}) {
     if (!this.dynamicModal) {
-      console.warn('Динамическая модалка не найдена. Добавьте <x-modal-dynamic /> в лейаут.');
+      console.warn('Dynamic modal not found. Add <x-modal-dynamic /> to your layout.');
       return;
     }
 
@@ -378,16 +368,15 @@ class ModalManager {
 }
 
 // ============================================================================
-// Singleton инициализация
+// Singleton initialization
 // ============================================================================
 
-// Проверяем существует ли уже экземпляр
 if (typeof window !== 'undefined') {
   if (!window.modalManager) {
     window.modalManager = new ModalManager();
-    console.log('✅ ModalManager инициализирован');
+    console.log('✅ ModalManager initialized');
   } else {
-    console.log('ℹ️ ModalManager уже существует, используем существующий');
+    console.log('ℹ️ ModalManager already exists, using existing instance');
   }
 }
 

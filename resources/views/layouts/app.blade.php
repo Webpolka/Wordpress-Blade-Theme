@@ -5,6 +5,13 @@
     <meta charset="utf-8">
     <link rel="profile" href="https://gmpg.org/xfn/11">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        } else {
+        document.documentElement.classList.remove('dark');
+        }
+    </script>
     @php(do_action('get_header'))
     @php(wp_head())
 
@@ -21,12 +28,11 @@
     window.componentsManifestUrl = "{{ get_template_directory_uri() . '/public/components-manifest.json' }}";
 </script>
 
-<body @php(body_class('relative'))>
+<body @php(body_class('bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 antialiased relative'))>
     @php(wp_body_open())  
 
     <x-toast />
-    <x-modal-dynamic />
-  
+    <x-modal-dynamic />  
 
     <div id="app">
         <a class="sr-only focus:not-sr-only" href="#main">

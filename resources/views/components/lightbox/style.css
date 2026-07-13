@@ -1,0 +1,27 @@
+/* lightbox/style.css */
+
+/* ФИКС: Заставляем Swiper в лайтбоксе центрировать контент по вертикали */
+.lightbox-swiper .swiper-wrapper {
+    align-items: center !important; 
+}
+
+/* Заставляем сам слайд центрировать контент внутри себя */
+.lightbox-swiper .swiper-slide {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    /* height: auto !important; */
+}
+
+/* МАГИЯ SWIPER: Авто-дизейбл кнопок при достижении краев */
+.lightbox-swiper .swiper-button-disabled {
+    opacity: 0.3 !important;
+    pointer-events: none !important;
+    cursor: default !important;
+}
+
+/* Убираем дефолтные стрелки Swiper, если они где-то проскочили (мы используем кастомные) */
+.lightbox-swiper .swiper-button-next::after,
+.lightbox-swiper .swiper-button-prev::after {
+    display: none !important;
+}

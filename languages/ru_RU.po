@@ -1,0 +1,113 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Weblegko Theme 1.0.0\n"
+"Report-Msgid-Bugs-To: https://weblegko.ru/support\n"
+"Last-Translator: Weblegko Team <dev@weblegko.ru>\n"
+"Language-Team: Weblegko Team <dev@weblegko.ru>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: weblegko\n"
+"Language: ru_RU\n"
+
+msgid "Close"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Search:"
+msgstr ""
+
+msgid "Breadcrumbs"
+msgstr ""
+
+msgid "We use cookies 🍪"
+msgstr ""
+
+msgid ""
+"This site uses cookies to ensure you get the best experience. By continuing "
+"to use the site, you agree to their use."
+msgstr ""
+
+msgid "Learn more"
+msgstr ""
+
+msgid "Accept"
+msgstr ""
+
+msgid "Decline"
+msgstr ""
+
+msgid "Show password"
+msgstr ""
+
+msgid "Hide password"
+msgstr ""
+
+msgid "Clear input"
+msgstr ""
+
+msgid "Open menu"
+msgstr ""
+
+msgid "Close menu"
+msgstr ""
+
+msgid "Pagination"
+msgstr ""
+
+msgid "Previous page"
+msgstr ""
+
+msgid "Next page"
+msgstr ""
+
+msgid "(No title)"
+msgstr ""
+
+msgid "Post navigation"
+msgstr ""
+
+msgid "Previous article:"
+msgstr ""
+
+msgid "Previous article"
+msgstr ""
+
+msgid "Next article:"
+msgstr ""
+
+msgid "Next article"
+msgstr ""
+
+msgid "Show previous article"
+msgstr ""
+
+msgid "Show next article"
+msgstr ""
+
+msgid "Select..."
+msgstr ""
+
+msgid "Search..."
+msgstr ""
+
+msgid "No results found"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "Light mode"
+msgstr ""
+
+msgid "Dark mode"
+msgstr ""

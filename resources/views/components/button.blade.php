@@ -1,4 +1,6 @@
 {{--
+  OK !  
+
   Компонент: Button
   Описание: Универсальная кнопка или ссылка с оформлением в стиле shadcn/ui.
              Если передан проп `href` – рендерится тег <a>, иначе <button>.
@@ -416,12 +418,12 @@
     - Disabled состояние блокирует pointer-events и уменьшает opacity.
 --}}
 
-
 @props([
     'variant'  => 'default',
     'size'     => 'default',
     'href'     => null,
     'disabled' => false,
+    'class'    => null, // НОВОЕ: Добавили class в props для чистоты
 ])
 
 @php
@@ -431,19 +433,19 @@
         'rounded-md text-sm font-medium',
         'transition-colors',
         'cursor-pointer select-none whitespace-nowrap',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900',
         'disabled:pointer-events-none disabled:opacity-50',
     );
 
-    // Варианты цветов
+    // Единая цветовая схема (Стандартизация под shadcn/Tailwind UI)
     $variants = [
-        'primary'     => 'bg-blue-500 text-white hover:bg-blue-700',
-        'secondary'   => 'bg-orange-500 text-white hover:bg-orange-700',
-        'default'     => 'bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-50 dark:text-slate-900',
-        'destructive' => 'bg-red-500 text-white hover:bg-red-600',
-        'outline'     => 'border border-slate-200 bg-white hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800',
+        'primary'     => 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700',
+        'secondary'   => 'bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700',
+        'default'     => 'bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-200',
+        'destructive' => 'bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700',
+        'outline'     => 'border border-slate-300 bg-transparent hover:bg-slate-100 text-slate-900 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800',
         'ghost'       => 'hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-100',
-        'link'        => 'text-slate-900 underline-offset-4 hover:underline dark:text-slate-100',
+        'link'        => 'text-blue-600 dark:text-blue-400 underline-offset-4 hover:underline',
     ];
 
     // Размеры
@@ -454,16 +456,16 @@
         'icon'    => 'h-10 w-10',
     ];
 
-    // Финальные классы
-    $userClasses = $attributes->get('class', '');
+    // Формируем финальные классы
     $finalClasses = cn(
         $baseClasses,
         $variants[$variant] ?? $variants['default'],
         $sizes[$size] ?? $sizes['default'],
         $href && $disabled ? 'pointer-events-none opacity-50' : '',
-        $userClasses,
+        $class
     );
 
+    // Исключаем class из атрибутов, чтобы не дублировать
     $attributes = $attributes->except(['class']);
 
     if (!$href && $disabled) {
@@ -481,8 +483,7 @@
     >
         {{ $slot }}
     </a>
-@else    
-    {{-- Разработчик сам передаёт type через атрибуты --}}
+@else        
     <button class="{{ $finalClasses }}" {{ $attributes }}>
         {{ $slot }}
     </button>

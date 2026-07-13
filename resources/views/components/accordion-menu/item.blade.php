@@ -63,6 +63,7 @@
     
     $classes = cn([
         'flex items-center gap-3 rounded-md font-medium transition-colors',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900', // НОВОЕ: Кольцо фокуса
         $padding,
         $fontSize,
         'text-gray-700 dark:text-gray-300' => !$isActive,

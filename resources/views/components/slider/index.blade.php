@@ -271,8 +271,8 @@
   
   Пример стилизации точек:
     .wp-swiper .swiper-pagination-bullet {
-        width: 12px;
-        height: 12px;
+        width: 0.8rem;
+        height: 0.8rem;
         background: #ccc;
     }
     .wp-swiper .swiper-pagination-bullet-active {
@@ -293,7 +293,6 @@
     'id'                   => 'swiper-' . \Illuminate\Support\Str::random(8),
     'paginationPosition'   => 'default',  // 'default' | 'external'
     'navigationPosition'   => 'default',  // 'default' | 'external'
-      // Overflow для контейнера слайдера
     'overflow'             => 'overflow-hidden',
 ])
 
@@ -323,7 +322,8 @@
     $paginationIsDefault = $paginationPosition === 'default' && $pagination;
     $navigationIsDefault = $navigationPosition === 'default' && $navigation;
     
-    $btnClasses = 'cursor-pointer p-2 bg-gray-100 dark:bg-gray-800 rounded-full shadow-sm text-blue-600 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors';
+    // НОВОЕ: Стандартизировано под slate и добавлен focus-visible
+    $btnClasses = 'cursor-pointer p-2 bg-slate-100 dark:bg-slate-800 rounded-full shadow-sm text-blue-600 dark:text-blue-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900';
 @endphp
 
 <div class="wp-swiper-root {{ $class }}">
@@ -344,12 +344,12 @@
 
         {{-- Навигация внутри (default) --}}
         @if($navigationIsDefault)
-            <div class="wp-swiper-prev absolute left-2 top-1/2 -translate-y-1/2 z-10 {{ $btnClasses }} bg-white/80 dark:bg-gray-800/80 hover:bg-white">
+            <div class="wp-swiper-prev absolute left-2 top-1/2 -translate-y-1/2 z-10 {{ $btnClasses }} bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-700">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </div>
-            <div class="wp-swiper-next absolute right-2 top-1/2 -translate-y-1/2 z-10 {{ $btnClasses }} bg-white/80 dark:bg-gray-800/80 hover:bg-white">
+            <div class="wp-swiper-next absolute right-2 top-1/2 -translate-y-1/2 z-10 {{ $btnClasses }} bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-700">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>

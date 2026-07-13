@@ -1,4 +1,6 @@
 {{--
+  Ok !
+
   Компонент: Spinner
   Описание: Индикатор загрузки (спиннер) с Tailwind стилизацией.
 
@@ -93,7 +95,7 @@
 
 @props([
     'size'  => 'md',
-    'color' => 'white',
+    'color' => 'blue',
     'class' => null,
 ])
 
@@ -107,18 +109,19 @@
     ];
     $currentSize = $sizeClasses[$size] ?? $sizeClasses['md'];
 
+    // Стандартизировано под нашу цветовую схему (slate вместо gray, 600 вместо 500)
     $colorClasses = [
+        'blue'    => 'text-blue-600 dark:text-blue-400',
+        'slate'   => 'text-slate-600 dark:text-slate-400',
         'white'   => 'text-white',
-        'blue'    => 'text-blue-500',
-        'gray'    => 'text-gray-500',
         'current' => 'text-current',
     ];
-    $currentColor = $colorClasses[$color] ?? $colorClasses['white'];
+    $currentColor = $colorClasses[$color] ?? $colorClasses['blue'];
 
     $spinnerClasses = cn(
+        'animate-spin',
         $currentSize,
         $currentColor,
-        'animate-spin',
         $class ?? '',
     );
 @endphp

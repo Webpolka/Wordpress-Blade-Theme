@@ -9,6 +9,6 @@
         : ($align === 'between' ? 'justify-between' : 'justify-start');
 @endphp
 
-<div class="{{ cn('flex items-center p-6 pt-0', $alignClass, $class) }}">
+<div class="{{ cn('flex items-center gap-2 p-6 pt-0', $alignClass, $class) }}">
     {{ $slot }}
 </div>

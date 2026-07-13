@@ -1,9 +1,10 @@
 @import 'tailwindcss' theme(static);
 @import 'fonts.css';
 
-@import 'components.css';
+@import 'global.css';
 
 @config "../../tailwind.config.js";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @source "../../app/**/*.php";
 @source "../**/*.blade.php";
@@ -41,42 +42,14 @@
     --radius: 0.5rem;
   }
 
+
   /* Применяем цвет бордера ко всем элементам */
   * {
     @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground antialiased font-poppins;
+    @apply font-poppins border-r dark:border-gray-800 border-slate-200;
   }
 
-  /* Базовая типографика */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-bold tracking-tight text-foreground;
-  }
-  h1 {
-    @apply text-4xl;
-  }
-  h2 {
-    @apply text-3xl;
-  }
-  h3 {
-    @apply text-2xl;
-  }
-  h4 {
-    @apply text-xl;
-  }
-
-  p {
-    @apply leading-relaxed;
-  }
-
-  a {
-    @apply text-primary underline-offset-4 hover:underline;
-  }
 }

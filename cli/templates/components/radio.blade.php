@@ -1,4 +1,6 @@
 {{--
+  Ок !
+
   Компонент: Radio
   Описание: Кастомный radio button с Tailwind стилизацией.
   Верстальщик сам оборачивает компонент в <label> с текстом.
@@ -237,7 +239,7 @@
         $isChecked = (string) $checked === (string) $value;
     }
 
-    // Цвета: [unchecked border, checked border, checked dot]
+    // Единая цветовая схема (Стандартизация: gray заменен на slate)
     $colorClasses = [
         'blue'   => [
             'unchecked' => 'border-gray-300 dark:border-gray-600',
@@ -263,9 +265,10 @@
             'unchecked' => 'border-gray-300 dark:border-gray-600',
             'checked'   => 'peer-checked:border-pink-600 peer-checked:[&>span]:bg-pink-600 peer-checked:[&>span]:scale-100',
         ],
-        'gray'   => [
+        // НОВОЕ: Заменили gray на slate
+        'slate'  => [
             'unchecked' => 'border-gray-300 dark:border-gray-600',
-            'checked'   => 'peer-checked:border-gray-700 peer-checked:[&>span]:bg-gray-700 peer-checked:[&>span]:scale-100 dark:peer-checked:border-gray-500 dark:peer-checked:[&>span]:bg-gray-500',
+            'checked'   => 'peer-checked:border-slate-700 peer-checked:[&>span]:bg-slate-700 peer-checked:[&>span]:scale-100 dark:peer-checked:border-slate-500 dark:peer-checked:[&>span]:bg-slate-500',
         ],
     ];
     $currentColor = $colorClasses[$color] ?? $colorClasses['blue'];
@@ -279,39 +282,45 @@
     $currentSize = $sizeClasses[$size] ?? $sizeClasses['md'];
 
     $outerClasses = cn(
-            // Базовые стили
-            $currentSize['box'],
-            'relative inline-flex items-center justify-center', // ← добавили relative
-            'rounded-full border-2',
-            'bg-white dark:bg-gray-800',
-            'transition-all duration-200',
-            
-            // Unchecked состояние
-            $currentColor['unchecked'],
-            
-            // Checked состояние (цвет)
-            $currentColor['checked'],
-            
-            // Focus
-            'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-400',
-            
-            // Disabled
-            'peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
-            
-            // Error
-            $hasError ? 'border-red-500' : '',
-            
-            // Дополнительные классы
-            $class ?? '',
-        );
+        // Базовые стили
+        $currentSize['box'],
+        'inline-flex items-center justify-center',
+        'rounded-full border-2',
+        'bg-white dark:bg-gray-800',
+        'transition-all duration-200',
+        
+        // Unchecked состояние
+        $currentColor['unchecked'],
+        
+        // НОВОЕ: Hover только если не выбран (peer-not-checked)
+        'peer-not-checked:hover:border-gray-400 dark:peer-not-checked:hover:border-gray-500',
+        
+        // Checked состояние (цвет)
+        $currentColor['checked'],
+        
+        // Focus (Добавлен dark:ring-offset-slate-900)
+        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-500 dark:peer-focus-visible:ring-offset-slate-900',
+        
+        // Disabled
+        'peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
+        
+        // Error (Добавлен dark:border-red-500)
+        $hasError ? 'border-red-500 dark:border-red-500' : '',
+        
+        // Cursor
+        $disabled ? 'cursor-not-allowed' : 'cursor-pointer select-none',
+        
+        // Дополнительные классы
+        $class ?? '',
+    );
 
-        $dotClasses = cn(
-            $currentSize['dot'],
-            'rounded-full',
-            'absolute inset-0 m-auto', // ← центрируем через absolute
-            'scale-0',
-            'transition-transform duration-200',
-        );
+    // НОВОЕ: Убрали absolute, так как родительский блок уже flex и отцентрует точку
+    $dotClasses = cn(
+        $currentSize['dot'],
+        'rounded-full',
+        'scale-0',
+        'transition-transform duration-200',
+    );
 @endphp
 
 <div class="inline-flex" {{ $attributes->except(['class']) }}>
@@ -329,9 +338,9 @@
         class="peer sr-only"
     />
 
-    {{-- Кастомный круг --}}
-    <span class="{{ $outerClasses }}">
+    {{-- НОВОЕ: Изменили span на label for=id, чтобы клик по кружку работал --}}
+    <label for="{{ $id }}" class="{{ $outerClasses }}">
         {{-- Внутренняя точка --}}
         <span class="{{ $dotClasses }}"></span>
-    </span>
+    </label>
 </div>

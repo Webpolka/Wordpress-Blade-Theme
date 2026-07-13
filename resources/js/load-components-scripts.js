@@ -46,9 +46,8 @@ export async function loadComponentScripts() {
           continue;
         }
         // Ошибка в существующем файле – выводим предупреждение
-        console.warn(
-          `⚠️ Ошибка загрузки скрипта для компонента ${comp}:`,
-          error.message,
+         console.log(
+          `⚠️ Скриптов у компонента ${comp} нет.` 
         );
       }
     }

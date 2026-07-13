@@ -1,20 +1,16 @@
 /**
- * Компоненты Select и ChipsDrag для Alpine.js
+ * Select and ChipsDrag Components for Alpine.js
  * 
- * Select - универсальный выпадающий список с одиночным/множественным выбором,
- *          поиском, иконками, клавиатурной навигацией.
+ * Select - universal dropdown with single/multiple selection,
+ *          search, icons, keyboard navigation.
  * 
- * ChipsDrag - drag-scroll контейнер для чипсов в мультиселекте.
+ * ChipsDrag - drag-scroll container for chips in multiselect.
  */
 
 // ============================================================================
 // SelectComponent
 // ============================================================================
 
-/**
- * Компонент Select для Alpine.js.
- * Поддерживает одиночный и множественный выбор, поиск, иконки, клавиатуру.
- */
 class SelectComponent {
   constructor(props) {
     this.options = props.options || [];
@@ -23,7 +19,9 @@ class SelectComponent {
       : (props.value ?? null);
     this.multiple = props.multiple || false;
     this.searchable = props.searchable ?? true;
-    this.placeholder = props.placeholder || 'Выберите...';
+    this.placeholder = props.placeholder || 'Select...';
+    this.placeholderSearch = props.placeholderSearch || 'Search...';
+    this.noResultsText = props.noResultsText || 'No results found';
     this.disabled = props.disabled || false;
     this.required = props.required || false;
     this.validationRules = props.validationRules || {};
@@ -172,7 +170,7 @@ class SelectComponent {
       if (this.multiple) {
         if (!valueToCheck || valueToCheck === 0) {
           this.validationError =
-            this.validationMessages.required || 'Выберите хотя бы один вариант';
+            this.validationMessages.required || 'Select at least one option';
           return false;
         }
       } else {
@@ -182,7 +180,7 @@ class SelectComponent {
           valueToCheck === ''
         ) {
           this.validationError =
-            this.validationMessages.required || 'Обязательное поле';
+            this.validationMessages.required || 'This field is required';
           return false;
         }
       }
@@ -210,7 +208,7 @@ class SelectComponent {
       const fn = new Function('with(this) { ' + expr + ' }');
       fn.call(this);
     } catch (e) {
-      console.warn('❌ Ошибка выполнения callback:', e);
+      console.warn('❌ Error executing callback:', e);
     }
   }
 
@@ -344,10 +342,6 @@ class SelectComponent {
 // ChipsDragComponent
 // ============================================================================
 
-/**
- * Компонент для drag-scroll контейнера чипсов.
- * Поддерживает перетаскивание мышью и тач-события.
- */
 class ChipsDragComponent {
   constructor(props) {
     this.isDragging = false;
@@ -427,42 +421,28 @@ class ChipsDragComponent {
 // Регистрация компонентов
 // ============================================================================
 
-/** Регистрация компонента select в Alpine */
 export function registerSelect() {
   if (typeof window.Alpine === 'undefined') {
-    console.warn('⚠️ Alpine не загружен, компонент Select не зарегистрирован');
+    console.warn('⚠️ Alpine is not loaded, Select component not registered');
     return;
   }
   window.Alpine.data('select', (props) => new SelectComponent(props));
-  console.log('✅ Select компонент зарегистрирован');
+  console.log('✅ Select component registered');
 }
 
-/** Регистрация компонента chipsDrag в Alpine */
 export function registerChipsDrag() {
   if (typeof window.Alpine === 'undefined') {
-    console.warn('⚠️ Alpine не загружен, компонент ChipsDrag не зарегистрирован');
+    console.warn('⚠️ Alpine is not loaded, ChipsDrag component not registered');
     return;
   }
   window.Alpine.data('chipsDrag', (props) => new ChipsDragComponent(props));
-  console.log('✅ ChipsDrag компонент зарегистрирован');
+  console.log('✅ ChipsDrag component registered');
 }
 
-// ============================================================================
-// Авто-регистрация
-// ============================================================================
-
-if (typeof window.Alpine !== 'undefined') {
+// Жестко вешаем слушатель на alpine:init
+document.addEventListener('alpine:init', () => {
   registerSelect();
   registerChipsDrag();
-} else {
-  document.addEventListener('alpine:init', () => {
-    registerSelect();
-    registerChipsDrag();
-  });
-}
-
-// ============================================================================
-// Экспорт
-// ============================================================================
+});
 
 export default SelectComponent;

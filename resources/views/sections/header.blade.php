@@ -1,6 +1,15 @@
-<header class="h-16 sticky top-0 z-50 bg-white flex items-center shadow-md" x-data>
+<header x-data
+    class="{{ cn(
+        'bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 antialiased',
+        'h-16 sticky top-0 z-50 flex items-center',
+        'shadow-md dark:shadow-none dark:border-b dark:border-gray-800'
+    ) }}">
     <x-container>
         <div class="flex justify-between items-center">
+
+            <x-theme-toggle variant="rounded" size="lg" showLabel="true" showTooltip="true" initialTheme="dark"
+                onThemeChange="console.log('Theme changed to', theme)" onThemeToggle="console.log('Theme toggled')"
+                className="fixed top-4 right-4 z-50 shadow-lg" />
 
             <a class="brand" href="{{ home_url('/') }}">
                 {!! $siteName !!}
@@ -15,7 +24,6 @@
 
                 @endphp
                 <x-dropdown-menu :items="[
-                    ['label' => 'Главная', 'url' => '/'],
                     [
                         'label' => 'Каталог',
                         'url' => '/catalog',
@@ -33,11 +41,34 @@
                                     ['label' => 'Товары', 'url' => '/catalog/products'],
                                     ['label' => 'Товары', 'url' => '/catalog/products'],
                                     ['label' => 'Товары', 'url' => '/catalog/products'],
-                                    ['label' => 'Товары', 'url' => '/catalog/products',],
+                                    ['label' => 'Товары', 'url' => '/catalog/products'],
+                                    ['label' => 'Товары', 'url' => '/catalog/products'],
+                                    ['label' => 'Товары', 'url' => '/catalog/products'],
+                                    ['label' => 'Товары', 'url' => '/catalog/products'],
+                                    ['label' => 'Товары', 'url' => '/catalog/products'],
+                                    [
+                                        'label' => 'Товары',
+                                        'url' => '/catalog/products',
+                                        'children' => [
+                                            ['label' => 'Электроника', 'url' => '/catalog/electronics'],
+                                            ['label' => 'Одежда', 'url' => '/catalog/clothing'],
+                                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                                            ['label' => 'Товары', 'url' => '/catalog/products'],
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
                     ],
+                    ['label' => 'Главная', 'url' => '/'],
                     ['label' => 'Контакты', 'url' => '/contacts'],
                 ]" />
             </div>

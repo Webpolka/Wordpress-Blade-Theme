@@ -188,11 +188,11 @@
     $resizeClass = $resizeClasses[$resize] ?? $resizeClasses['vertical'];
 
     $textareaClasses = cn(
-        'w-full rounded-md border px-3 py-2 text-sm transition-colors',
-        'focus:outline-none focus:ring-2 focus:ring-offset-1',
+        'w-full rounded-md border px-3 py-2 text-sm transition-colors bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400',
+        'focus:outline-none focus:ring-2 focus:ring-offset-1 dark:ring-offset-slate-900',
         $hasError
-            ? 'border-red-500 focus:ring-red-400'
-            : 'border-gray-300 dark:border-gray-600 focus:ring-blue-400',
+            ? 'border-red-500 focus:ring-red-500'
+            : 'border-slate-300 dark:border-slate-600 focus:ring-blue-500',
         $disabled ? 'opacity-50 cursor-not-allowed' : '',
         $resizeClass,
         $class,
@@ -211,7 +211,7 @@
     @if ($label)
         <label
             for="{{ $id }}"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
         >
             {{ $label }}
             @if ($required || isset($validation['required']))
@@ -237,7 +237,7 @@
         @input="handleInput($event)"
         @if($maxlength) maxlength="{{ $maxlength }}" @endif
         class="{{ $textareaClasses }}"
-        :class="[{ 'border-red-500 focus:ring-red-400': validationError || serverError }]"
+        :class="[{ 'border-red-500 focus:ring-red-500': validationError || serverError }]"
         {{ $attributes->except(['class', 'wrapperClass', 'name', 'id', 'value', 'label', 'placeholder', 'error', 'required', 'disabled', 'autofocus', 'rows', 'validation', 'validationMode', 'messages', 'onInput', 'onBlur', 'counter', 'maxlength', 'resize']) }}
     >{{ $value }}</textarea>
 
@@ -247,7 +247,7 @@
             <span
                 class="text-xs"
                 :class="{
-                    'text-gray-500': charCount < {{ $maxlength }} * 0.8,
+                    'text-slate-500': charCount < {{ $maxlength }} * 0.8,
                     'text-orange-500': charCount >= {{ $maxlength }} * 0.8 && charCount < {{ $maxlength }},
                     'text-red-500': charCount >= {{ $maxlength }}
                 }"

@@ -296,7 +296,6 @@
       transform: scale(1) translateY(0) !important;
     }
 --}}
-
 @props([
     'name'            => null,
     'title'           => null,
@@ -329,7 +328,7 @@
     $descId = "modal-desc-{$name}";
 
     $modalClasses = cn(
-        'relative bg-white dark:bg-gray-900 rounded-lg shadow-xl',
+        'relative bg-white dark:bg-slate-800 rounded-lg shadow-xl',
         'w-full',
         $currentSize,
         'max-h-[90vh] flex flex-col',
@@ -360,16 +359,16 @@
     >
         {{-- Header --}}
         @if ($hasHeader)
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0 relative">
+            <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 shrink-0 relative">
                 @if (isset($header))
                     {{ $header }}
                 @elseif ($title)
                     <div class="pr-8">
-                        <h3 id="{{ $titleId }}" class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                        <h3 id="{{ $titleId }}" class="text-lg font-semibold text-slate-900 dark:text-slate-100">
                             {{ $title }}
                         </h3>
                         @if ($description)
-                            <p id="{{ $descId }}" class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            <p id="{{ $descId }}" class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                                 {{ $description }}
                             </p>
                         @endif
@@ -380,8 +379,8 @@
                     <button
                         type="button"
                         data-modal-close
-                        class="absolute top-4 right-4 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                        aria-label="Закрыть"
+                        class="absolute top-4 right-4 rounded-md text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-800"
+                        aria-label="{{ __('Close', 'weblegko') }}"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -398,7 +397,7 @@
 
         {{-- Footer --}}
         @if (isset($footer))
-            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-800 shrink-0">
+            <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 shrink-0">
                 <div class="flex justify-end gap-2">
                     {{ $footer }}
                 </div>

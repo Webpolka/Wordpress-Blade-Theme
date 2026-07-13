@@ -1,4 +1,6 @@
 {{--
+  OK !  
+
   ============================================================
   Компонент: Avatar
   Описание: Аватарка пользователя с авто-фолбэком на инициалы.
@@ -196,10 +198,9 @@
 
     {{-- Статус-индикатор --}}
     @if($statusClass)
-        <span 
-            class="absolute rounded-full {{ $statusClass }}"
-            style="bottom: 0; right: 0; transform: translate(15%, 15%);"
-            aria-label="Статус: {{ $status }}"
+        <span             
+            class="absolute bottom-0 right-0 translate-x-[15%] translate-y-[15%] rounded-full {{ $statusClass }}"          
+            aria-label="{{ __('Status', 'weblegko') }}: {{ $status }}"
         ></span>
     @endif
 </div>

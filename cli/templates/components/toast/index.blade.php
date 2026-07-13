@@ -11,17 +11,17 @@
   
   Пример использования в Alpine:
 
-        <x-button @click="$store.toast.show({ message: 'Успешно!', type: 'success', timeout: 3000 })">
+        <x-button x-data @click="$store.toast.show({ message: 'Успешно!', type: 'success', timeout: 3000 })">
             Показать успех
         </x-button>
 
 
-        <x-button @click="$store.toast.show({ message: 'Ошибка сети', type: 'error', title: 'Ошибка', timeout: 5000 })">
+        <x-button x-data @click="$store.toast.show({ message: 'Ошибка сети', type: 'error', title: 'Ошибка', timeout: 5000 })">
             Показать ошибку
         </x-button>
 
 
-        <x-button @click="$store.toast.show({ message: 'Нажмите на крестик чтобы закрыть', timeout: 0 })">
+        <x-button x-data @click="$store.toast.show({ message: 'Нажмите на крестик чтобы закрыть', timeout: 0 })">
             Вечное уведомление
         </x-button>
 
@@ -66,17 +66,15 @@
             x-transition:leave-end="opacity-0 scale-95 translate-x-4"
             class="pointer-events-auto w-full rounded-lg border p-4 shadow-lg backdrop-blur-sm flex items-center justify-between gap-3"
             :class="{
-                'border-green-500 bg-green-50 text-green-900 dark:bg-green-900 dark:text-green-100': msg
-                    .type === 'success',
-                'border-red-500 bg-red-50 text-red-900 dark:bg-red-900 dark:text-red-100': msg.type === 'error',
-                'border-yellow-500 bg-yellow-50 text-yellow-900 dark:bg-yellow-900 dark:text-yellow-100': msg
-                    .type === 'warning',
-                'bg-background text-foreground border-border': msg.type === 'default' || !msg.type,
+                'border-green-600 bg-green-600 text-white': msg.type === 'success',
+                'border-red-600 bg-red-600 text-white': msg.type === 'error',
+                'border-orange-500 bg-orange-500 text-white': msg.type === 'warning',
+                'bg-slate-800 text-white border-slate-800': msg.type === 'default' || !msg.type,
             }">
             <p class="text-sm font-medium" x-text="msg.message"></p>
             <button @click="$store.toast.remove(msg.id)"
-                class="shrink-0 rounded-md p-1 opacity-70 hover:opacity-100 transition-opacity focus:outline-none"
-                aria-label="Закрыть">
+                class="shrink-0 rounded-md p-1 opacity-70 hover:opacity-100 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-800"
+                aria-label="{{ __('Close', 'weblegko') }}">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>

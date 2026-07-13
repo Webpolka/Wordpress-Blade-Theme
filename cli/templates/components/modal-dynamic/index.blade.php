@@ -267,12 +267,12 @@
         aria-modal="true"
         aria-labelledby="modal-dynamic-title"
         tabindex="-1"
-        class="relative bg-white dark:bg-gray-900 rounded-lg shadow-xl w-full max-w-md max-h-[90vh] flex flex-col"
+        class="relative bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-md max-h-[90vh] flex flex-col"
     >
         {{-- Header --}}
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0 relative">
+        <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 shrink-0 relative">
             <div class="pr-8">
-                <h3 id="modal-dynamic-title" class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                <h3 id="modal-dynamic-title" class="text-lg font-semibold text-slate-900 dark:text-slate-100">
                     {{-- Заголовок вставляется через JS --}}
                 </h3>
             </div>
@@ -280,8 +280,8 @@
             <button
                 type="button"
                 data-modal-close
-                class="absolute top-4 right-4 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                aria-label="Закрыть"
+                class="absolute top-4 right-4 rounded-md text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-800"
+                aria-label="{{ __('Close', 'weblegko') }}"
             >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

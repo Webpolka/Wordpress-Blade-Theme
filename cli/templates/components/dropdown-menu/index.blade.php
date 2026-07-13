@@ -1,4 +1,6 @@
 {{--
+  Ok !
+
   |--------------------------------------------------------------------------
   | Компонент: Dropdown Menu
   |--------------------------------------------------------------------------
@@ -29,7 +31,7 @@
   |--------------------------------------------------------------------------
   |
   | сделай доступной функцию для создания дерева менюшек
-  | добавьь в массив  $componentHelpers в app/setup.php
+  | добавьь в массив  $componentHelpers в файле app/components.php
   |
   | get_theme_file_path('resources/views/components/dropdown-menu/build-tree-menu.php'),
   |
@@ -94,22 +96,15 @@
 
 @php
     $isTopLevel = $level === 0;
-    // Стили корневого <ul> — горизонтальный flex
-    // Стили вложенных <ul> — карточка с тенью
-    $listClasses = $isTopLevel ? 'flex space-x-4' : 'bg-white dark:bg-gray-800 shadow-lg rounded-md';
-    // Разделители между пунктами (только для вложенных)
-    $itemClasses = $isTopLevel ? '' : 'border-b border-gray-100 dark:border-gray-700 last:border-0';
+    // Стандартизировано: gray заменен на slate
+    $listClasses = $isTopLevel ? 'flex space-x-4' : 'bg-white dark:bg-slate-800 shadow-lg rounded-md border border-slate-200 dark:border-slate-700';
+    $itemClasses = $isTopLevel ? '' : 'border-b border-slate-100 dark:border-slate-700 last:border-0';
 @endphp
 
 <ul {{ $attributes->merge(['class' => $listClasses]) }}>
     @foreach ($items as $item)
         @php $hasChildren = !empty($item['children']); @endphp
 
-        {{--
-          <li> — контейнер пункта.
-          x-data="dropdown(...)" — инициализация Alpine-компонента с конфигом.
-          hover-события управляют открытием/закрытием.
-        --}}
         <li class="relative scrollbar-none {{ $itemClasses }}" x-data="dropdown({
             level: {{ $level }},
             delay: {{ $delay }},
@@ -117,21 +112,14 @@
         })" @mouseenter="onMouseEnter()"
             @mouseleave="scheduleClose()">
 
-            {{--
-              Триггер-блок (.dropdown-li-full):
-                • Содержит ссылку и стрелку (если есть дети)
-                • На level > 1 клик переключает isOpen (toggleOpen)
-                • Его координаты используются JS для позиционирования fixed-меню
-            --}}
-            <div class="dropdown-li-full text-black flex items-center justify-between gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition cursor-pointer"
+            <div class="dropdown-li-full text-slate-900 dark:text-slate-100 flex items-center justify-between gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-slate-800 rounded-md"
                 @if ($level > 1) @click.stop="toggleOpen($event)" @endif>
-                <a class="leading-[1.2]" href="{{ $item['url'] ?? '#' }}">
+                <a class="leading-[1.2] focus-visible:outline-none" href="{{ $item['url'] ?? '#' }}">
                     <span>{{ $item['label'] }}</span>
                 </a>
 
-                {{-- Стрелка: вращается при hover (level ≤ 1) или при isOpen (level > 1) --}}
                 @if ($hasChildren)
-                    <svg class="inline-block w-4 h-4 shrink-0 transition-transform duration-200"
+                    <svg class="inline-block w-4 h-4 shrink-0 transition-transform duration-200 text-slate-400"
                         :class="{ 'rotate-180': ({{ $level }} <= 1 && hover) || isOpen }" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -139,17 +127,6 @@
                 @endif
             </div>
 
-            {{--
-              Контейнер подменю.
-              Режим отображения зависит от уровня:
-                • Level ≤ 1: hover-режим (x-show="hover"), mouseenter/leave
-                • Level > 1:  click-режим (x-show="isOpen"), без hover-обработчиков
-
-              Позиционирование:
-                • Level 0: absolute, под триггером (top-full left-0)
-                • Level 1: fixed, координаты из fixedPos (JS-расчёт)
-                • Level 2+: relative, в потоке родителя (pl-4 для отступа)
-            --}}
             @if ($hasChildren)
                 <div x-show="{{ $level <= 1 ? 'hover' : 'isOpen' }}" x-cloak                    
                     @if ($level <= 1) @mouseenter="clearTimeout(closeTimeout)" @mouseleave="scheduleClose()" @endif
@@ -159,18 +136,14 @@
                     x-transition:leave="transition ease-in duration-100"
                     x-transition:leave-start="opacity-100 scale-100"
                     x-transition:leave-end="opacity-0 scale-95"
-                    class="{{ $level > 1 ? 'pl-4' : '' }} w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 max-h-[calc(100vh-4rem)] scrollbar-none overflow-y-auto"
+                    class="{{ $level > 1 ? 'pl-4' : '' }} w-48 bg-white dark:bg-slate-800 shadow-lg rounded-md z-50 max-h-[calc(100vh-4rem)] scrollbar-none overflow-y-auto"
                     :class="{
                         'absolute left-0 top-full': {{ $isTopLevel ? 'true' : 'false' }},
                         'fixed': {{ $level }} === 1,
                         'relative': {{ $level }} > 1,
                     }"
-                    :style="{
-                        left: {{ $level }} === 1 ? fixedPos.left + 'rem' : 'auto',
-                        top: {{ $level }} === 1 ? fixedPos.top + 'rem' : 'auto',
-                        maxHeight: {{ $level }} === 1 ? fixedPos.maxHeight + 'rem' : 'calc(100vh - 4rem)'
-                    }">
-                    {{-- Рекурсивный вызов компонента для вложенных пунктов --}}
+                    :style="{{ $level }} === 1 ? fixedPos : { maxHeight: 'calc(100vh - 4rem)' }"
+                >
                     <x-dropdown-menu :items="$item['children']" level="{{ $level + 1 }}" :delay="$delay" />
                 </div>
             @endif

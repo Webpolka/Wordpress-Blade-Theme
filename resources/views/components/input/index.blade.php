@@ -125,8 +125,8 @@
     />
 
   Интеграция с Alpine-формой
-
-     <div class="p-6 bg-gray-100 rounded-md">
+  
+    <div class="p-6 border-amber-300 border rounded-md">
         <form class="flex flex-col gap-4" x-data="{
             form: { name: '', email: '' },
             handleSubmit() {
@@ -248,17 +248,20 @@
         'onBlurCallback'     => $onBlur,
         'onInputCallback'    => $onInput,
         'serverError'        => $hasError,
+        // НОВОЕ: Передаем переводы для Alpine JS
+        'labelShowPassword'  => __('Show password', 'weblegko'),
+        'labelHidePassword'  => __('Hide password', 'weblegko'),
     ];
 
     $inputClasses = cn(
-        'w-full rounded-md border px-3 py-3 text-sm transition-colors',
-        'focus:outline-none focus:ring-2 focus:ring-offset-1',
+        'w-full rounded-md border px-3 py-3 text-sm transition-colors bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100',
+        'focus:outline-none focus:ring-2 focus:ring-offset-1 dark:ring-offset-slate-900 placeholder:text-slate-400',
         $type === 'search' ? 'search-cancel-none' : '',
         $hasIconLeft ? 'pl-12' : '',
         $hasIconRight ? 'pr-12' : '',
         $hasError || !empty($error)
-            ? 'border-red-500 focus:ring-red-400'
-            : 'border-gray-300 dark:border-gray-600 focus:ring-blue-400',
+            ? 'border-red-500 focus:ring-red-500'
+            : 'border-slate-300 dark:border-slate-600 focus:ring-blue-500',
         $disabled ? 'opacity-50 cursor-not-allowed' : '',
         $class,
     );
@@ -276,7 +279,7 @@
     @if ($label)
         <label
             for="{{ $id }}"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
         >
             {{ $label }}
             @if ($required || isset($validation['required']))
@@ -288,7 +291,7 @@
     <div class="relative">
         {{-- Иконка слева --}}
         @if ($hasIconLeft)
-            <div class="absolute top-1/2 -translate-y-1/2 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+            <div class="absolute top-1/2 -translate-y-1/2 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
                 {!! $iconLeft !!}
             </div>
         @endif
@@ -312,22 +315,22 @@
             mask="{{ $mask }}"
             @if($autocomplete) autocomplete="on" @else autocomplete="off" @endif
             class="{{ $inputClasses }}"
-            :class="[{ 'border-red-500 focus:ring-red-400': validationError || serverError }]"
-            :style="hasMask && !isMaskFilled ? 'color: #9CA3AF;' : ''"
+            :class="[{ 'border-red-500 focus:ring-red-500': validationError || serverError }]"
+            :style="hasMask && !isMaskFilled ? 'color: #94a3b8;' : ''"
             @if($maxLengthAttr) maxlength="{{ $maxLengthAttr }}" @endif
             {{ $attributes->except(['class', 'wrapperClass', 'name', 'id', 'value', 'label', 'placeholder', 'error', 'required', 'disabled', 'autofocus', 'iconLeft', 'iconRight', 'clearable', 'validation', 'validationMode', 'messages', 'togglePassword', 'onInput', 'onBlur', 'type', 'mask', 'autocomplete']) }}
         />
 
         {{-- Иконки справа --}}
         @if ($hasIconRight)
-            <div class="absolute inset-y-0 right-0 flex items-center pr-3 space-x-1 text-gray-400">
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 space-x-1 text-slate-400">
                 {{-- Глазик для пароля --}}
                 @if ($showPasswordToggle)
                     <button
                         type="button"
                         @click="togglePasswordVisibility()"
-                        class="text-gray-400 hover:text-gray-600 transition"
-                        :aria-label="showPassword ? 'Скрыть пароль' : 'Показать пароль'"
+                        class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-md"
+                        :aria-label="showPassword ? labelHidePassword : labelShowPassword"
                     >
                         <svg x-show="!showPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -349,8 +352,8 @@
                         x-show="value !== null && value !== '' && value !== undefined"
                         x-cloak
                         @click="clear()"
-                        class="text-gray-400 hover:text-gray-600 transition"
-                        aria-label="Очистить поле"
+                        class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-md"
+                        aria-label="{{ __('Clear input', 'weblegko') }}"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

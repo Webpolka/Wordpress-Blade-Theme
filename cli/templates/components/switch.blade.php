@@ -1,4 +1,6 @@
 {{--
+  Ok !
+
   Компонент: Switch (Toggle)
   Описание: Кастомный переключатель с Tailwind стилизацией.
   Верстальщик сам оборачивает компонент в <label> с текстом.
@@ -189,7 +191,7 @@
     $isMultiple = is_array($checked);
     $isChecked = $isMultiple ? in_array($value, $checked ?? []) : (bool)$checked;
 
-    // Цвета для checked состояния
+    // Единая цветовая схема (Стандартизация: gray заменен на slate)
     $checkedColors = [
         'blue'   => 'peer-checked:bg-blue-600',
         'green'  => 'peer-checked:bg-green-600',
@@ -197,7 +199,7 @@
         'purple' => 'peer-checked:bg-purple-600',
         'orange' => 'peer-checked:bg-orange-600',
         'pink'   => 'peer-checked:bg-pink-600',
-        'gray'   => 'peer-checked:bg-gray-700 dark:peer-checked:bg-gray-600',
+        'slate'  => 'peer-checked:bg-slate-700 dark:peer-checked:bg-slate-600',
     ];
     $currentColor = $checkedColors[$color] ?? $checkedColors['blue'];
 
@@ -219,6 +221,9 @@
         // Unchecked состояние
         'bg-gray-300 dark:bg-gray-600',
         
+        // НОВОЕ: Hover только если не выбран (peer-not-checked)
+        'peer-not-checked:hover:bg-gray-400 dark:peer-not-checked:hover:bg-gray-500',
+        
         // Checked состояние (цвет)
         $currentColor,
         
@@ -226,14 +231,14 @@
         'peer-checked:[&>span]:left-[calc(100%-0.125rem)]',
         'peer-checked:[&>span]:-translate-x-full',
         
-        // Focus
-        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-400',
+        // Focus (Добавлен dark:ring-offset-slate-900)
+        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-500 dark:peer-focus-visible:ring-offset-slate-900',
         
         // Disabled
         'peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
         
-        // Error
-        $hasError ? 'ring-2 ring-red-500' : '',
+        // Error (Добавлен dark:ring-red-500)
+        $hasError ? 'ring-2 ring-red-500 dark:ring-red-500' : '',
         
         // Cursor
         $disabled ? 'cursor-not-allowed' : 'cursor-pointer',
@@ -269,9 +274,9 @@
         class="peer sr-only"
     />
 
-    {{-- Трек с ползунком --}}
-    <span class="{{ $trackClasses }}">
+    {{-- НОВОЕ: Изменили span на label for=id, чтобы клик по треку работал --}}
+    <label for="{{ $id }}" class="{{ $trackClasses }}">
         {{-- Ползунок --}}
         <span class="{{ $thumbClasses }}"></span>
-    </span>
+    </label>
 </div>

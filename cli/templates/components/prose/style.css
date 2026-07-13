@@ -1,0 +1,164 @@
+/* components/Prose/style.css */
+
+.wp-prose {
+    color: #334155; /* slate-700 */
+    line-height: 1.75;
+    max-width: 65ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dark .wp-prose {
+    color: #cbd5e1; /* slate-300 */
+}
+
+/* Размеры шрифтов */
+.prose-sm { font-size: 0.875rem; line-height: 1.5; }
+.prose-base { font-size: 1rem; line-height: 1.75; }
+.prose-lg { font-size: 1.125rem; line-height: 1.75; }
+
+/* Заголовки */
+.wp-prose h1, .wp-prose h2, .wp-prose h3, .wp-prose h4 {
+    color: #0f172a; /* slate-900 */
+    font-weight: 700;
+    line-height: 1.25;
+    margin-top: 2em;
+    margin-bottom: 1em;
+}
+
+.dark .wp-prose h1, .dark .wp-prose h2, .dark .wp-prose h3, .dark .wp-prose h4 {
+    color: #f8fafc; /* slate-50 */
+}
+
+.wp-prose h1 { font-size: 2.25em; }
+.wp-prose h2 { font-size: 1.5em; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3em; }
+.dark .wp-prose h2 { border-color: #334155; }
+.wp-prose h3 { font-size: 1.25em; }
+.wp-prose h4 { font-size: 1em; }
+
+/* Параграфы */
+.wp-prose p {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+}
+
+/* Ссылки */
+.wp-prose a {
+    color: #2563eb; /* blue-600 */
+    text-decoration: underline;
+    font-weight: 500;
+}
+.wp-prose a:hover {
+    color: #1d4ed8; /* blue-700 */
+}
+.dark .wp-prose a {
+    color: #60a5fa; /* blue-400 */
+}
+
+/* Списки */
+.wp-prose ul, .wp-prose ol {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding-left: 1.5em;
+}
+.wp-prose ul { list-style-type: disc; }
+.wp-prose ol { list-style-type: decimal; }
+.wp-prose li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+.wp-prose li::marker {
+    color: #94a3b8; /* slate-400 */
+}
+
+/* Цитаты */
+.wp-prose blockquote {
+    font-style: italic;
+    font-weight: 500;
+    color: #0f172a; /* slate-900 */
+    border-left: 4px solid #e2e8f0; /* slate-200 */
+    padding-left: 1.5em;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+.dark .wp-prose blockquote {
+    color: #e2e8f0; /* slate-200 */
+    border-color: #475569; /* slate-600 */
+}
+
+/* Код (inline и блоки) */
+.wp-prose code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875em;
+    background-color: #f1f5f9; /* slate-100 */
+    padding: 0.2em 0.4em;
+    border-radius: 0.375rem;
+    font-weight: 600;
+}
+.dark .wp-prose code {
+    background-color: #1e293b; /* slate-800 */
+}
+.wp-prose pre {
+    background-color: #1e293b; /* slate-800 */
+    color: #e2e8f0; /* slate-200 */
+    overflow-x: auto;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+.wp-prose pre code {
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+    font-weight: 400;
+}
+
+/* Изображения */
+.wp-prose img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+/* Таблицы */
+.wp-prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    font-size: 0.875em;
+}
+.wp-prose th, .wp-prose td {
+    border: 1px solid #e2e8f0; /* slate-200 */
+    padding: 0.5em 1em;
+    text-align: left;
+}
+.dark .wp-prose th, .dark .wp-prose td {
+    border-color: #475569; /* slate-600 */
+}
+.wp-prose th {
+    background-color: #f8fafc; /* slate-50 */
+    font-weight: 600;
+}
+.dark .wp-prose th {
+    background-color: #334155; /* slate-700 */
+}
+
+/* Разделители */
+.wp-prose hr {
+    border-color: #e2e8f0; /* slate-200 */
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+.dark .wp-prose hr {
+    border-color: #334155; /* slate-700 */
+}
+
+/* Адаптивность */
+@media (max-width: 640px) {
+    .wp-prose h1 { font-size: 1.875em; }
+    .wp-prose h2 { font-size: 1.25em; }
+}

@@ -1,0 +1,59 @@
+html {
+  scrollbar-gutter: stable;
+}
+
+/*=======================================
+for alpine
+========================================*/
+[x-cloak] {
+  display: none !important;
+}
+
+/*=======================================
+Hide scrollbar
+========================================*/
+.scrollbar-none::-webkit-scrollbar {
+  inline-size: 0px;
+  background-color: transparent;
+  display: none;
+}
+
+.scrollbar-none::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-none::-webkit-scrollbar-thumb {
+  border: 0 none transparent;
+  background-color: transparent;
+}
+
+@media (hover: hover) {
+  .scrollbar-none::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+
+.swiper-button-disabled {
+  opacity: 0.2 !important;
+  pointer-events: none !important;
+  cursor: default !important;
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,12 @@
+.product-gallery-horizontal-thumbs .swiper-slide img,
+.product-gallery-vertical-thumbs .swiper-slide img {
+  transition: border-color 0.2s ease-in-out;
+}
+.product-gallery-horizontal-thumbs .swiper-slide:not(.swiper-slide-thumb-active) img:hover,
+.product-gallery-vertical-thumbs .swiper-slide:not(.swiper-slide-thumb-active) img:hover {
+  border-color: #94a3b8; /* slate-400 при ховере */
+}
+.product-gallery-horizontal-thumbs .swiper-slide-thumb-active img,
+.product-gallery-vertical-thumbs .swiper-slide-thumb-active img {
+  border-color: #3b82f6; /* blue-500 для активного */
+}

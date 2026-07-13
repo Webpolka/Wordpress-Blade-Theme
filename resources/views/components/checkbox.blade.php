@@ -1,4 +1,6 @@
 {{--
+  ОК !  
+
   Компонент: Checkbox
   Описание: Кастомный checkbox с Tailwind стилизацией.
   Верстальщик сам оборачивает компонент в <label> с текстом.
@@ -171,16 +173,45 @@
     $isMultiple = is_array($checked);
     $isChecked = $isMultiple ? in_array($value, $checked ?? []) : (bool)$checked;
 
+    // Единая цветовая схема (Стандартизация)
     $colorClasses = [
-        'transparent' => 'peer-checked:bg-transparent peer-checked:border-gray-300',
-        'blue'        => 'peer-checked:bg-blue-600 peer-checked:border-blue-600',
-        'green'       => 'peer-checked:bg-green-600 peer-checked:border-green-600',
-        'red'         => 'peer-checked:bg-red-600 peer-checked:border-red-600',
-        'purple'      => 'peer-checked:bg-purple-600 peer-checked:border-purple-600',
-        'orange'      => 'peer-checked:bg-orange-600 peer-checked:border-orange-600',
-        'pink'        => 'peer-checked:bg-pink-600 peer-checked:border-pink-600',
+        'transparent' => [
+            'box' => 'peer-checked:bg-transparent peer-checked:border-blue-600 dark:peer-checked:border-blue-400',
+            'icon' => 'text-blue-600 dark:text-blue-400'
+        ],
+        'blue'        => [
+            'box' => 'peer-checked:bg-blue-600 peer-checked:border-blue-600',
+            'icon' => 'text-white'
+        ],
+        'green'       => [
+            'box' => 'peer-checked:bg-green-600 peer-checked:border-green-600',
+            'icon' => 'text-white'
+        ],
+        'red'         => [
+            'box' => 'peer-checked:bg-red-600 peer-checked:border-red-600',
+            'icon' => 'text-white'
+        ],
+        'purple'      => [
+            'box' => 'peer-checked:bg-purple-600 peer-checked:border-purple-600',
+            'icon' => 'text-white'
+        ],
+        'orange'      => [
+            'box' => 'peer-checked:bg-orange-600 peer-checked:border-orange-600',
+            'icon' => 'text-white'
+        ],
+        'pink'        => [
+            'box' => 'peer-checked:bg-pink-600 peer-checked:border-pink-600',
+            'icon' => 'text-white'
+        ],
+        // НОВОЕ: Добавили slate для единообразия с кнопками
+        'slate'       => [
+            'box' => 'peer-checked:bg-slate-700 peer-checked:border-slate-700 dark:peer-checked:bg-slate-600 dark:peer-checked:border-slate-600',
+            'icon' => 'text-white'
+        ],
     ];
-    $currentColor = $colorClasses[$color] ?? $colorClasses['blue'];
+    
+    // Безопасное извлечение массива
+    $currentColors = $colorClasses[$color] ?? $colorClasses['transparent'];
 
     $sizeClasses = [
         'sm' => ['box' => 'w-4 h-4', 'icon' => 'w-3 h-3'],
@@ -189,6 +220,7 @@
     ];
     $currentSize = $sizeClasses[$size] ?? $sizeClasses['md'];
 @endphp
+
 <div class="inline-flex" {{ $attributes->except(['class']) }}>
     {{-- Нативный checkbox (скрыт через sr-only) --}}
     <input
@@ -211,22 +243,27 @@
             inline-flex items-center justify-center
             border-2 rounded
             transition-all duration-200
+            
             bg-white dark:bg-gray-800
             border-gray-300 dark:border-gray-600
-            {{ $currentColor }}
-            peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-400
+            
+            {{ $currentColors['box'] }}
+            
+            peer-not-checked:hover:border-gray-400 dark:peer-not-checked:hover:border-gray-500
+            peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-500 dark:peer-focus-visible:ring-offset-slate-900
             peer-disabled:opacity-50 peer-disabled:cursor-not-allowed
             peer-checked:[&>svg]:opacity-100 peer-checked:[&>svg]:scale-100
-            @if($hasError) border-red-500 @endif
+            
+            @if($hasError) border-red-500 dark:border-red-500 @endif
             {{ $disabled ? 'cursor-not-allowed' : 'cursor-pointer' }}
             {{ $class ?? '' }}
         "
     >
-        {{-- Галочка --}}
+        {{-- Галочка (Цвет берется из логики currentColors['icon']) --}}
         <svg
             class="
                 {{ $currentSize['icon'] }}
-                text-green-500
+                {{ $currentColors['icon'] }}
                 opacity-0 scale-50
                 transition-all duration-150
             "

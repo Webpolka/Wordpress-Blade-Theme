@@ -82,7 +82,8 @@
     x-data="{ open: false }" 
     @keydown.escape.window="open = false"
     @click.outside="open = false"
-    class="relative inline-block {{ $class }}"
+    @scroll.window="open = false"
+    class="{{ cn('relative inline-block', $class) }}"
 >
     {{ $slot }}
 </div>

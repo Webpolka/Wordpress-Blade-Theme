@@ -1,4 +1,6 @@
 {{--
+OK !
+
 ==============================================================
  WP Components: Breadcrumbs (Хлебные крошки)
 ==============================================================
@@ -68,9 +70,13 @@
             }
         }
     } 
-    // 3. WooCommerce (берем массив, чтобы не зависеть от их HTML)
-    elseif (function_exists('woocommerce_breadcrumb')) {
-        $wooCrumbs = apply_filters('woocommerce_get_breadcrumb', []);
+    // 3. WooCommerce ( Берем массив через родной класс WC_Breadcrumb)
+    elseif (class_exists('WC_Breadcrumb')) {
+        $wc_breadcrumb = new WC_Breadcrumb();
+        // Добавляем главную страницу магазина/сайта
+        $wc_breadcrumb->add_crumb(__('Home', 'weblegko'), apply_filters('woocommerce_breadcrumb_home_url', home_url('/')));
+        
+        $wooCrumbs = $wc_breadcrumb->generate();
         if (!empty($wooCrumbs)) {
             foreach ($wooCrumbs as $c) {
                 $crumbs[] = ['title' => $c[0], 'url' => $c[1] ?? ''];
@@ -79,7 +85,7 @@
     } 
     // 4. Нативный фолбэк WordPress (если плагинов нет)
     else {
-        $crumbs[] = ['title' => 'Главная', 'url' => home_url('/')];
+        $crumbs[] = ['title' => __('Home', 'weblegko'), 'url' => home_url('/')];
 
         if (is_singular('post')) {
             $cats = get_the_category();
@@ -92,7 +98,8 @@
         } elseif (is_page()) {
             $crumbs[] = ['title' => get_the_title(), 'url' => ''];
         } elseif (is_search()) {
-            $crumbs[] = ['title' => 'Поиск: ' . get_search_query(), 'url' => ''];
+            // НОВОЕ: Перевод "Поиск:"
+            $crumbs[] = ['title' => __('Search:', 'weblegko') . ' ' . get_search_query(), 'url' => ''];
         } elseif (is_404()) {
             $crumbs[] = ['title' => '404', 'url' => ''];
         }
@@ -102,18 +109,18 @@
     if (empty($crumbs)) return;
 @endphp
 
-<nav aria-label="Хлебные крошки" class="{{ cn('w-full', $class) }}">
+<nav aria-label="{{ __('Breadcrumbs', 'weblegko') }}" class="{{ cn('w-full', $class) }}">
     <ol class="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 overflow-x-auto whitespace-nowrap scrollbar-none">
         @foreach ($crumbs as $i => $crumb)
             @php $isLast = $i === array_key_last($crumbs); @endphp
             
-            <li class="flex items-center gap-1.5">
+            <li class="flex items-center gap-1.5 shrink-0">
                 @if (!$isLast && !empty($crumb['url']))
                     <a href="{{ $crumb['url'] }}" class="hover:text-blue-500 no-underline dark:hover:text-gray-100 transition-colors">
                         {{ $crumb['title'] }}
                     </a>
                     {{-- Разделитель (Шеврон) --}}
-                    <svg class="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-0 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                 @else

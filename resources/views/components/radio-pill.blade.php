@@ -1,4 +1,6 @@
 {{--
+  Ок !  
+
   Компонент: Radio Pill
   Описание: Овальный radio button с текстом внутри.
   Верстальщик сам оборачивает компонент в <label>.
@@ -250,15 +252,15 @@
         $isChecked = (string) $checked === (string) $value;
     }
 
-    // Полные классы для checked состояния каждого цвета
+    // Полные классы для checked состояния каждого цвета (Стандартизировано под 600)
     $checkedColors = [
         'blue'   => 'peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600',
         'green'  => 'peer-checked:bg-green-600 peer-checked:text-white peer-checked:border-green-600',
         'red'    => 'peer-checked:bg-red-600 peer-checked:text-white peer-checked:border-red-600',
         'purple' => 'peer-checked:bg-purple-600 peer-checked:text-white peer-checked:border-purple-600',
         'orange' => 'peer-checked:bg-orange-600 peer-checked:text-white peer-checked:border-orange-600',
-        'pink'   => 'peer-checked:bg-pink-600 peer-checked:text-white peer-checked:border-pink-600',
-        'gray'   => 'peer-checked:bg-gray-700 peer-checked:text-white peer-checked:border-gray-700 dark:peer-checked:bg-gray-600 dark:peer-checked:border-gray-600',
+        'pink'   => 'peer-checked:bg-pink-600 peer-checked:text-white peer-checked:border-pink-600',        
+        'slate'  => 'peer-checked:bg-slate-700 peer-checked:text-white peer-checked:border-slate-700 dark:peer-checked:bg-slate-600 dark:peer-checked:border-slate-600',
     ];
     $currentColor = $checkedColors[$color] ?? $checkedColors['blue'];
 
@@ -274,7 +276,7 @@
         // Базовые стили
         $currentSize,
         'inline-flex items-center justify-center',
-        'border-2 rounded-full',
+        'border rounded-full', // Изменил border-2 на border для консистентности
         'font-medium',
         'transition-all duration-200',
         
@@ -283,17 +285,21 @@
         'text-gray-700 dark:text-gray-300',
         'border-gray-300 dark:border-gray-600',
         
+        // НОВОЕ: Hover срабатывает ТОЛЬКО если не выбран (peer-not-checked)
+        'peer-not-checked:hover:bg-gray-50 dark:peer-not-checked:hover:bg-gray-700/50',
+        'peer-not-checked:hover:border-gray-400 dark:peer-not-checked:hover:border-gray-500',
+        
         // Checked состояние (цвет)
         $currentColor,
         
-        // Focus
-        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-400',
+        // Focus (Добавлен dark:ring-offset-slate-900)
+        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-500 dark:peer-focus-visible:ring-offset-slate-900',
         
         // Disabled
         'peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
         
         // Error
-        $hasError ? 'border-red-500 text-red-500' : '',
+        $hasError ? 'border-red-500 text-red-500 dark:border-red-500 dark:text-red-500' : '',
         
         // Cursor
         $disabled ? 'cursor-not-allowed' : 'cursor-pointer select-none',
@@ -318,8 +324,8 @@
         class="peer sr-only"
     />
 
-    {{-- Овальный pill с текстом --}}
-    <span class="{{ $pillClasses }}">
+    {{-- НОВОЕ: Изменили span на label for=id, чтобы клик по тексту работал --}}
+    <label for="{{ $id }}" class="{{ $pillClasses }}">
         {{ $slot }}
-    </span>
+    </label>
 </div>

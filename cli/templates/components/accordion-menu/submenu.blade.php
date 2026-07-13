@@ -63,6 +63,7 @@
     
     $buttonClasses = cn(
         'flex items-center gap-3 w-full rounded-md font-medium text-gray-700 dark:text-gray-300 transition-colors',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900', // НОВОЕ: Кольцо фокуса
         $padding,
         $fontSize,
         $hoverClasses
@@ -71,12 +72,11 @@
 
 <div
     x-data="accordionSubmenu({{ json_encode(['open' => $open, 'label' => $label]) }})"
-     {{-- МАГИЯ: Рендерим атрибуты Alpine только если hover=true в PHP --}}
     @if($hover) 
         @mouseenter="open()" 
         @mouseleave="close()" 
     @endif
-    class="{{ $class }}"
+    class="{{ cn($class) }}"
 >
     <button
         type="button"

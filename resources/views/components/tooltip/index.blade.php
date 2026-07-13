@@ -171,6 +171,22 @@
     - Поддерживает кастомный HTML контент
 --}}
 
+{{--
+  ============================================================
+  Компонент: Tooltip
+  ============================================================
+  Всплывающая подсказка с поддержкой 4 позиций, задержки, 
+  стрелок, тем (dark, light) и кастомных цветов.
+  
+  ------------------------------------------------------------
+  ACCESSIBILITY
+  ------------------------------------------------------------
+    - role="tooltip" на контейнере подсказки
+    - aria-describedby связывает триггер с tooltip
+    - Показывается при фокусе (keyboard navigation)
+    - Скрывается при потере фокуса
+--}}
+
 @props([
     'position' => 'top',
     'delay' => 200,
@@ -183,10 +199,8 @@
 ])
 
 @php
-    // Проверяем есть ли контент для показа
     $hasContent = !empty($text) || isset($content);
 @endphp
-
 
 <div x-data="tooltip({{ json_encode([
     'position' => $position,
@@ -195,14 +209,14 @@
     'theme' => $theme,
     'color'    => $color,
     'distance' => $distance,
-]) }})" class="relative inline-block {{ $class }}">
+]) }})" class="{{ cn('relative inline-block', $class) }}">
     {{-- Триггер --}}
     <div
         @if($hasContent)
             @mouseenter="show()"
             @mouseleave="hide()"
-            @focus="show()"
-            @blur="hide()"
+            @focusin="show()"
+            @focusout="hide()"
             x-bind:aria-describedby="isOpen ? id : null"
         @endif
     >

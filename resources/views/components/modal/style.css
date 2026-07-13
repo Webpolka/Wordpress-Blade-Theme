@@ -1,0 +1,21 @@
+[data-modal]:not(.hidden) {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+[data-modal]:not(.hidden) [role='dialog'] {
+  opacity: 0;
+  transform: scale(0.95) translateY(0.65rem);
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out;
+}
+
+.modal-overlay-visible {
+  opacity: 1 !important;
+}
+
+.modal-dialog-visible {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
+}

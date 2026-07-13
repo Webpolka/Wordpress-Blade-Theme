@@ -1,17 +1,12 @@
 import AlpineCollapse from '@alpinejs/collapse';
 
-// Регистрируем плагин, если Alpine уже загружен
-if (typeof window.Alpine !== 'undefined') {
-  window.Alpine.plugin(AlpineCollapse);
-}
-
 export function registerAccordionFaq() {
   if (typeof window.Alpine === 'undefined') {
-    console.warn('⚠️ Alpine не загружен, компонент FaqAccordion не зарегистрирован');
+    console.warn('⚠️ Alpine is not loaded, AccordionFaq component not registered');
     return;
   }
 
-  // Обязательно регистрируем плагин при инициализации Alpine
+  // Регистрируем плагин один раз, внутри функции
   window.Alpine.plugin(AlpineCollapse);
 
   window.Alpine.data('accordionFaq', (props = {}) => ({
@@ -20,7 +15,7 @@ export function registerAccordionFaq() {
     firstOpen: props.firstOpen ?? false,
 
     init() {
-      // Слушаем регистрацию дочерних элементов (заменяет @faq-register в HTML)
+      // Слушаем регистрацию дочерних элементов
       this.$el.addEventListener('faq-register', (e) => {
         // Если firstOpen=true и пока ни один элемент не открыт, открываем первый пришедший
         if (this.firstOpen && this.openIds.length === 0) {
@@ -46,12 +41,10 @@ export function registerAccordionFaq() {
     }
   }));
 
-  console.log('✅ AccordionFaq компонент зарегистрирован');
+  console.log('✅ AccordionFaq component registered');
 }
 
-// Авто-регистрация
-if (typeof window.Alpine !== 'undefined') {
+// МАГИЯ FIX: Жестко вешаем слушатель на alpine:init
+document.addEventListener('alpine:init', () => {
   registerAccordionFaq();
-} else {
-  document.addEventListener('alpine:init', () => registerAccordionFaq());
-}
+});

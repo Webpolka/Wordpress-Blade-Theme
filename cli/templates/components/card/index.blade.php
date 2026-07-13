@@ -1,4 +1,5 @@
 {{-- 
+Ок !
 
 ==============================================================
  WP Components: Card
@@ -57,7 +58,6 @@
 
  --}}
  
-
 @props([
     'as'    => 'div',
     'hover' => false,
@@ -66,7 +66,8 @@
 
 @php
     $classes = cn(
-        'rounded-xl border border-gray-200 bg-white text-gray-950 shadow-sm dark:border-gray-800 dark:bg-gray-950 dark:text-gray-50',
+        'rounded-xl border border-gray-200 bg-white text-gray-950 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900', // НОВОЕ: Фокус для карточки-ссылки
         $hover ? 'transition-all duration-300 hover:shadow-lg hover:-translate-y-1' : '',
         $class
     );

@@ -1,5 +1,5 @@
 @props([
-    'as'    => 'div', // Изменили по умолчанию на div, чтобы не ломать HTML при вложении кнопок
+    'as'    => 'div',
     'class' => null,
 ])
 
@@ -9,7 +9,7 @@
     :aria-expanded="open"
     role="button"
     tabindex="0"
-    class="inline-flex items-center justify-center cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md {{ $class }}"
+    class="{{ cn('inline-flex items-center justify-center cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-md', $class) }}"
 >
     {{ $slot }}
 </{{ $as }}>
