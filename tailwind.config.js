@@ -53,6 +53,8 @@ module.exports = {
         border: 'rgb(var(--border) / <alpha-value>)',
         input: 'rgb(var(--input) / <alpha-value>)',
         ring: 'rgb(var(--ring) / <alpha-value>)',
+
+       rating: 'rgb(var(--rating) / <alpha-value>)',    // rating stars color
       },
 
       fontFamily: {

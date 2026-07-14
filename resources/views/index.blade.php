@@ -4,57 +4,27 @@
 @section('content')
 
     @include('partials.page-header')
-<x-accordion-faq>
-        <x-accordion-faq.item>
-            <x-slot:question>
-                <span class="text-blue-600">Важно:</span> Как вернуть товар?
-            </x-slot:question>
-            Ответ здесь...
-        </x-accordion-faq.item>
-    </x-accordion-faq>
 
-   @php
-        $gallery_media = [
-                [
-                    'src' => 'https://images.unsplash.com/photo-1506744038136-46273834b3fb', 
-                    'title' => 'Просто красивая картинка (Можно задвоить клик для зума)',
-                    'thumb' => ''
-                ],
-                [
-                    'src' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 
-                    'title' => 'YouTube видео (Rick Astley)',
-                    'thumb' => ''
-                ],
-                [
-                    'src' => 'https://vimeo.com/76979871', 
-                    'title' => 'Vimeo видео (The Mountain)',
-                    'thumb' => ''
-                ],
-                [
-                    'src' => 'https://rutube.ru/video/9196c1067e4d925a4e5899a23c00c63b/?r=wd', 
-                    'title' => 'Rutube видео',
-                    'thumb' => ''
-                ],
-                [
-                    'src' => 'https://vk.com/video-211869299_456240914', 
-                    'title' => 'VK Видео',
-                    'thumb' => ''
-                ],
-                 [
-                    'src' => 'https://www.dailymotion.com/video/x9lygl2', // <-- DAILYMOTION
-                    'title' => 'Dailymotion видео',
-                    'thumb' => ''
-                ],
-                [
-                    'src' => Vite::asset('resources/video/dj-lovely.mp4'), 
-                    'title' => 'Просто локальный видосик',
-                    'thumb' => ''
-                ]        
-            ];      
-    @endphp
+      <x-section variant="dark" size="xl">
+        <h2 class="text-white">Готовы начать?</h2>
 
-  <x-product-gallery :images="$gallery_media" />
-    
+        <x-empty-state 
+        title="Страница не найдена" 
+        description="К сожалению, такой страницы больше не существует, или она была перемещена."
+    >        
+        <x-slot:icon>
+            <svg class="w-16 h-16 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        </x-slot:icon>
+        
+        <x-button variant="primary">
+            Вернуться на главную
+        </x-button>
+    </x-empty-state>
+    </x-section>
+ 
+ 
     @if (!have_posts())
         <x-alert type="warning">
             {!! __('Sorry, no results were found.', 'sage') !!}

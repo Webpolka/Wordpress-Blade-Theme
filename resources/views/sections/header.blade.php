@@ -74,17 +74,33 @@
             </div>
 
             {{-- Мобильный дравер --}}
-            <x-mobile-drawer position="right" title="Меню">
-                <x-accordion-menu :hover="false">
-                    <x-accordion-menu.submenu label="Каталог">
-                        <x-accordion-menu.item href="#">Главная</x-accordion-menu.item>
-                        <x-accordion-menu.item href="#">О нас</x-accordion-menu.item>
-                        <x-accordion-menu.item href="#">Контакты</x-accordion-menu.item>
-                        <x-accordion-menu.item href="#">Социальные сети</x-accordion-menu.item>
-                    </x-accordion-menu.submenu>
-                </x-accordion-menu>
-
-            </x-mobile-drawer>
+             <button x-data @click="$dispatch('drawer-toggle', 'cart')" class="relative">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+    </button>
+    
+    <x-mobile-drawer name="cart" position="right" title="Корзина">
+        <div class="space-y-4">
+            <div class="flex gap-3 p-3 border rounded-lg">
+                <img src="product.jpg" class="w-16 h-16 rounded object-cover">
+                <div class="flex-1">
+                    <h4 class="font-semibold">Товар 1</h4>
+                    <p class="text-sm text-gray-500">Размер: M</p>
+                    <p class="text-sm font-medium mt-1">1 000 ₽</p>
+                </div>
+            </div>
+        </div>
+        
+        <x-slot:footer>
+            <div class="flex justify-between items-center mb-3">
+                <span class="font-semibold">Итого:</span>
+                <span class="text-xl font-bold">3 000 ₽</span>
+            </div>
+            <x-button variant="primary" class="w-full">Оформить заказ</x-button>
+        </x-slot:footer>
+    </x-mobile-drawer>
 
 
         </div>

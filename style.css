@@ -9,3 +9,7 @@ License URI:        https://opensource.org/licenses/MIT
 Requires PHP:       8.3
 Requires at least:  6.6
 */
+
+.a{
+    color:hsl(39, 100%, 50%);
+}

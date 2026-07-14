@@ -286,8 +286,11 @@ export function registerTooltip() {
     console.warn('⚠️ Alpine is not loaded, Tooltip component not registered');
     return;
   }
-  window.Alpine.data('tooltip', (props) => new TooltipComponent(props));
-  console.log('✅ Tooltip component registered');
+  if (!window.wpTooltipRegistered) {
+    window.Alpine.data('tooltip', (props) => new TooltipComponent(props));
+    console.log('✅ Tooltip component registered');
+    window.wpTooltipRegistered = true;
+  }
 }
 
 //  Жестко вешаем слушатель на alpine:init

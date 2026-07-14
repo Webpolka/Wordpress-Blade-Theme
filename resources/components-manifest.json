@@ -37,11 +37,19 @@
       "type": "file"
     },
     {
+      "name": "empty-state",
+      "type": "file"
+    },
+    {
       "name": "pagination",
       "type": "file"
     },
     {
       "name": "post-navigation",
+      "type": "file"
+    },
+    {
+      "name": "progress",
       "type": "file"
     },
     {
@@ -53,11 +61,19 @@
       "type": "file"
     },
     {
+      "name": "section",
+      "type": "file"
+    },
+    {
       "name": "skeleton",
       "type": "file"
     },
     {
       "name": "spinner",
+      "type": "file"
+    },
+    {
+      "name": "star-rating",
       "type": "file"
     },
     {
@@ -121,6 +137,14 @@
       "type": "dir"
     },
     {
+      "name": "quantity",
+      "type": "dir"
+    },
+    {
+      "name": "range-slider",
+      "type": "dir"
+    },
+    {
       "name": "select",
       "type": "dir"
     },
@@ -130,6 +154,10 @@
     },
     {
       "name": "slider",
+      "type": "dir"
+    },
+    {
+      "name": "stat",
       "type": "dir"
     },
     {
@@ -153,9 +181,13 @@
       "type": "dir"
     },
     {
+      "name": "tooltip-absolute",
+      "type": "dir"
+    },
+    {
       "name": "tooltip-fixed",
       "type": "dir"
     }
   ],
-  "version": "fa4fae3c"
+  "version": "2535a981"
 }
