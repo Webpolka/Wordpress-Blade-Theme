@@ -9,7 +9,8 @@
 ])
 
 @php    
-    $panelClasses = 'absolute bg-white dark:bg-slate-800 shadow-xl flex flex-col';
+    // Design System: bg-card text-card-foreground
+    $panelClasses = 'absolute bg-card text-card-foreground shadow-xl flex flex-col';
 
     // Настройка анимаций в зависимости от стороны
     if ($side === 'right') {

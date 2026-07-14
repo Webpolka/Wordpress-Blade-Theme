@@ -169,7 +169,7 @@
     $positionClass = $position === 'left' ? 'left-0' : 'right-0';
     $desktopClass = $hideOnDesktop ? 'lg:hidden' : '';
 
-    // НОВОЕ: Переводы для Alpine JS
+    // Переводы для Alpine JS
     $labelOpen = __('Open menu', 'weblegko');
     $labelClose = __('Close menu', 'weblegko');
 @endphp
@@ -200,7 +200,7 @@
             aria-label="{{ $labelOpen }}"
             @keydown.enter="toggle()"
             @keydown.space.prevent="toggle()"
-            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-md"
+            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-md"
         >
             {{ $trigger }}
         </div>
@@ -214,7 +214,7 @@
             x-bind:aria-expanded="isOpen"
             aria-controls="{{ $panelId }}"
             x-bind:aria-label="isOpen ? '{{ $labelClose }}' : '{{ $labelOpen }}'"
-            class="p-2 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors rounded-md outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900"
+            class="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-md outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background"
         >
             <span class="sr-only" x-text="isOpen ? '{{ $labelClose }}' : '{{ $labelOpen }}'"></span>
             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -243,7 +243,7 @@
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
             @click="close()"
-            class="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
+            class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
             aria-hidden="true"
         ></div>
     @endif
@@ -266,12 +266,12 @@
         x-transition:leave-end="{{ $translateClass }}"
         class="fixed inset-y-0 {{ $positionClass }} z-50 flex max-w-full outline-none"
     >
-        <div class="relative {{ $width }} max-w-full bg-white dark:bg-slate-800 shadow-2xl h-full flex flex-col">
+        <div class="relative {{ $width }} max-w-full bg-card text-card-foreground shadow-2xl h-full flex flex-col">
             {{-- Кнопка закрытия (крестик) --}}
             <button
                 type="button"
                 @click="close()"
-                class="absolute top-3 right-3 p-2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-800 z-10"
+                class="absolute top-3 right-3 p-2 text-muted-foreground hover:text-foreground rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background z-10"
                 aria-label="{{ $labelClose }}"
             >
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -281,8 +281,8 @@
 
             {{-- Заголовок --}}
             @if ($title)
-                <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
-                    <h3 id="{{ $panelId }}-title" class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                <div class="px-6 py-4 border-b border-border shrink-0">
+                    <h3 id="{{ $panelId }}-title" class="text-lg font-semibold text-card-foreground">
                         {{ $title }}
                     </h3>
                 </div>
@@ -295,7 +295,7 @@
 
             {{-- Footer --}}
             @if (isset($footer))
-                <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 shrink-0">
+                <div class="px-6 py-4 border-t border-border shrink-0">
                     {{ $footer }}
                 </div>
             @endif

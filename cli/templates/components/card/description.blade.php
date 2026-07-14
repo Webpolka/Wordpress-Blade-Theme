@@ -3,6 +3,6 @@
     'class' => null,
 ])
 
-<{{ $as }} class="{{ cn('text-sm text-gray-500 dark:text-gray-400', $class) }}">
+<{{ $as }} class="{{ cn('text-sm text-muted-foreground', $class) }}">
     {{ $slot }}
 </{{ $as }}>

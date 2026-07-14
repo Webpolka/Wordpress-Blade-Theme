@@ -77,7 +77,6 @@ OK !
 ==============================================================
   
 --}}
-
 @props([
     'as'    => 'div',
     'class' => null,
@@ -94,19 +93,21 @@ OK !
         .wp-skeleton {
             position: relative;
             overflow: hidden;
-            background-color: #e2e8f0; /* slate-200 */
+            /* Design System: Берем цвет из переменной --muted. 
+               В темной теме она автоматически станет темной! */
+            background-color: rgb(var(--muted));
         }
 
-        .wp-skeleton.force-dark,
-        .dark .wp-skeleton {
-            background-color: #1e293b; /* slate-800 */
+        /* Для принудительно темного фона (force-dark), например на цветных кнопках */
+        .wp-skeleton.force-dark {
+            background-color: rgb(30 41 59); /* slate-800 */
         }
 
         /* Сама волна: прозрачный градиент, который едет поверх фона */
         .wp-skeleton::after {
             position: absolute;
             inset: 0;
-            z-index:0;
+            z-index: 0;
             transform: translateX(-100%);
             background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.6) 20%, rgba(255,255,255,0.8) 60%, rgba(255,255,255,0) 100%);
             animation: wp-skeleton-shimmer 1.5s infinite;
@@ -114,15 +115,15 @@ OK !
         }
 
         /* Для темной темы делаем волну чуть светлее, но не слепящей */
-        .wp-skeleton.force-dark::after,
-        .dark .wp-skeleton::after {
+        .dark .wp-skeleton::after,
+        .wp-skeleton.force-dark::after {
             background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.05) 20%, rgba(255,255,255,0.1) 60%, rgba(255,255,255,0) 100%);
         }
     </style>
 @endonce
 
 @php
-    // Базовый класс теперь наш кастомный wp-skeleton + стандартный rounded для скругления углов, если разработчик не передал свой
+    // Базовый класс теперь наш кастомный wp-skeleton + стандартный rounded для скругления углов
     $classes = cn('wp-skeleton rounded-md', $class);
 @endphp
 

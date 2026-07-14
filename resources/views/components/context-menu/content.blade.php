@@ -14,7 +14,8 @@
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
         
-        class="fixed z-50 min-w-[12rem] bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-xl p-1.5 outline-none"
+        {{-- Design System: bg-popover text-popover-foreground border-border --}}
+        class="fixed z-50 min-w-[12rem] bg-popover text-popover-foreground rounded-lg border border-border shadow-xl p-1.5 outline-none"
         
         :style="`top: ${adjY}px; left: ${adjX}px`"
         

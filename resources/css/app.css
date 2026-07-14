@@ -10,46 +10,78 @@
 @source "../**/*.blade.php";
 @source "../**/*.js";
 
+
+@theme inline {  
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
 /* Оборачиваем базовые стили в слой base, чтобы они не перебивали утилиты */
 @layer base {
   :root {
-    /* Нейтральные цвета (Slate из Tailwind) */
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --background: 255 255 255;             /* white */
+    --foreground: 15 23 42;                /* slate-900 */
+    --card: 255 255 255;                   /* white */
+    --card-foreground: 15 23 42;           /* slate-900 */
+    --popover: 255 255 255;                /* white */
+    --popover-foreground: 15 23 42;        /* slate-900 */
+    --primary: 37 99 235;                  /* blue-600 */
+    --primary-foreground: 255 255 255;     /* white */
+    --secondary: 241 245 249;              /* slate-100 */
+    --secondary-foreground: 15 23 42;      /* slate-900 */
+    --accent: 241 245 249;                 /* slate-100 */
+    --accent-foreground: 15 23 42;         /* slate-900 */
+    --destructive: 220 38 38;              /* red-600 */
+    --destructive-foreground: 255 255 255; /* white */
+    --muted: 241 245 249;                  /* slate-100 */
+    --muted-foreground: 100 116 139;       /* slate-500 */
+    --border: 226 232 240;                 /* slate-200 */
+    --input: 226 232 240;                  /* slate-200 */
+    --ring: 37 99 235;                     /* blue-600 */
   }
 
+    .dark {
+    --background: 15 23 42;                /* slate-900 */
+    --foreground: 248 250 252;             /* slate-50 */
+    
+    --card: 30 41 59;                      /* slate-800 */
+    --card-foreground: 248 250 252;        /* slate-50 */
+    
+    --popover: 30 41 59;                   /* slate-800 */
+    --popover-foreground: 248 250 252;     /* slate-50 */
+    
+    --primary: 37 99 235;                  /* blue-600 */
+    --primary-foreground: 255 255 255;     /* white */
 
-  /* Применяем цвет бордера ко всем элементам */
+    --secondary: 51 65 85;                 /* slate-700 */
+    --secondary-foreground: 248 250 252;   /* slate-50 */
+    
+    --accent: 51 65 85;                    /* slate-700 */
+    --accent-foreground: 248 250 252;      /* slate-50 */
+    
+    --destructive: 220 38 38;              /* red-600 */
+    --destructive-foreground: 255 255 255; /* white */
+    
+    --muted: 51 65 85;                     /* slate-700 */
+    --muted-foreground: 148 163 184;       /* slate-400 */
+    
+    --border: 51 65 85;                    /* slate-700 */
+    --input: 51 65 85;                     /* slate-700 */
+    --ring: 37 99 235;                     /* blue-600 */
+  }
+
+ /* Применяем цвет бордера ко всем элементам по умолчанию */
   * {
     @apply border-border;
   }
 
   body {
-    @apply font-poppins border-r dark:border-gray-800 border-slate-200;
+    @apply bg-background text-foreground font-poppins border-r border-border;    
   }
-
 }

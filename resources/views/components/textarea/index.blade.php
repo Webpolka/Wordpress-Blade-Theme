@@ -187,12 +187,14 @@
     ];
     $resizeClass = $resizeClasses[$resize] ?? $resizeClasses['vertical'];
 
+    // Design System: Семантические классы
     $textareaClasses = cn(
-        'w-full rounded-md border px-3 py-2 text-sm transition-colors bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400',
-        'focus:outline-none focus:ring-2 focus:ring-offset-1 dark:ring-offset-slate-900',
+        'w-full rounded-md border px-3 py-2 text-sm transition-colors',
+        'bg-background text-foreground placeholder:text-muted-foreground',
+        'focus:outline-none focus:ring-2 focus:ring-offset-1 ring-offset-background',
         $hasError
-            ? 'border-red-500 focus:ring-red-500'
-            : 'border-slate-300 dark:border-slate-600 focus:ring-blue-500',
+            ? 'border-destructive focus:ring-destructive'
+            : 'border-input focus:ring-ring',
         $disabled ? 'opacity-50 cursor-not-allowed' : '',
         $resizeClass,
         $class,
@@ -211,11 +213,11 @@
     @if ($label)
         <label
             for="{{ $id }}"
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            class="block text-sm font-medium text-foreground mb-1"
         >
             {{ $label }}
             @if ($required || isset($validation['required']))
-                <span class="text-red-500">*</span>
+                <span class="text-destructive">*</span>
             @endif
         </label>
     @endif
@@ -237,7 +239,7 @@
         @input="handleInput($event)"
         @if($maxlength) maxlength="{{ $maxlength }}" @endif
         class="{{ $textareaClasses }}"
-        :class="[{ 'border-red-500 focus:ring-red-500': validationError || serverError }]"
+        :class="[{ 'border-destructive focus:ring-destructive': validationError || serverError }]"
         {{ $attributes->except(['class', 'wrapperClass', 'name', 'id', 'value', 'label', 'placeholder', 'error', 'required', 'disabled', 'autofocus', 'rows', 'validation', 'validationMode', 'messages', 'onInput', 'onBlur', 'counter', 'maxlength', 'resize']) }}
     >{{ $value }}</textarea>
 
@@ -247,9 +249,9 @@
             <span
                 class="text-xs"
                 :class="{
-                    'text-slate-500': charCount < {{ $maxlength }} * 0.8,
-                    'text-orange-500': charCount >= {{ $maxlength }} * 0.8 && charCount < {{ $maxlength }},
-                    'text-red-500': charCount >= {{ $maxlength }}
+                    'text-muted-foreground': charCount < {{ $maxlength }} * 0.8,
+                    'text-amber-500': charCount >= {{ $maxlength }} * 0.8 && charCount < {{ $maxlength }},
+                    'text-destructive': charCount >= {{ $maxlength }}
                 }"
                 x-text="`${charCount} / {{ $maxlength }}`"
             ></span>
@@ -259,7 +261,7 @@
     {{-- Ошибка --}}
     <div class="h-5 mt-1 relative">
         <p
-            class="absolute inset-0 text-sm text-red-500 truncate"
+            class="absolute inset-0 text-sm text-destructive truncate"
             :id="'{{ $id }}-error'"
             role="alert"
             aria-live="polite"

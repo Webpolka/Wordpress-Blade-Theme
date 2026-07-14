@@ -227,7 +227,7 @@
     $maxLengthAttr = $validation['maxlength'] ?? null;
     $hasMask = !empty($mask);
 
-    // Нормализация булевых пропсов (защита от строковых значений)
+    // Нормализация булевых пропсов
     $showError = filter_var($showError, FILTER_VALIDATE_BOOLEAN);
     $required = filter_var($required, FILTER_VALIDATE_BOOLEAN);
     $disabled = filter_var($disabled, FILTER_VALIDATE_BOOLEAN);
@@ -248,20 +248,21 @@
         'onBlurCallback'     => $onBlur,
         'onInputCallback'    => $onInput,
         'serverError'        => $hasError,
-        // НОВОЕ: Передаем переводы для Alpine JS
         'labelShowPassword'  => __('Show password', 'weblegko'),
         'labelHidePassword'  => __('Hide password', 'weblegko'),
     ];
 
+    // Design System: Семантические классы для инпута
     $inputClasses = cn(
-        'w-full rounded-md border px-3 py-3 text-sm transition-colors bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100',
-        'focus:outline-none focus:ring-2 focus:ring-offset-1 dark:ring-offset-slate-900 placeholder:text-slate-400',
+        'w-full rounded-md border px-3 py-3 text-sm transition-colors',
+        'bg-background text-foreground placeholder:text-muted-foreground',
+        'focus:outline-none focus:ring-2 focus:ring-offset-1 ring-offset-background',
         $type === 'search' ? 'search-cancel-none' : '',
         $hasIconLeft ? 'pl-12' : '',
         $hasIconRight ? 'pr-12' : '',
         $hasError || !empty($error)
-            ? 'border-red-500 focus:ring-red-500'
-            : 'border-slate-300 dark:border-slate-600 focus:ring-blue-500',
+            ? 'border-destructive focus:ring-destructive'
+            : 'border-input focus:ring-ring',
         $disabled ? 'opacity-50 cursor-not-allowed' : '',
         $class,
     );
@@ -279,11 +280,11 @@
     @if ($label)
         <label
             for="{{ $id }}"
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            class="block text-sm font-medium text-foreground mb-1"
         >
             {{ $label }}
             @if ($required || isset($validation['required']))
-                <span class="text-red-500">*</span>
+                <span class="text-destructive">*</span>
             @endif
         </label>
     @endif
@@ -291,7 +292,7 @@
     <div class="relative">
         {{-- Иконка слева --}}
         @if ($hasIconLeft)
-            <div class="absolute top-1/2 -translate-y-1/2 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+            <div class="absolute top-1/2 -translate-y-1/2 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
                 {!! $iconLeft !!}
             </div>
         @endif
@@ -315,21 +316,22 @@
             mask="{{ $mask }}"
             @if($autocomplete) autocomplete="on" @else autocomplete="off" @endif
             class="{{ $inputClasses }}"
-            :class="[{ 'border-red-500 focus:ring-red-500': validationError || serverError }]"
-            :style="hasMask && !isMaskFilled ? 'color: #94a3b8;' : ''"
+            :class="[{ 'border-destructive focus:ring-destructive': validationError || serverError }]"
+            {{-- Design System: Используем переменную для цвета незаполненной маски --}}
+            :style="hasMask && !isMaskFilled ? 'color: rgb(var(--muted-foreground));' : ''"
             @if($maxLengthAttr) maxlength="{{ $maxLengthAttr }}" @endif
             {{ $attributes->except(['class', 'wrapperClass', 'name', 'id', 'value', 'label', 'placeholder', 'error', 'required', 'disabled', 'autofocus', 'iconLeft', 'iconRight', 'clearable', 'validation', 'validationMode', 'messages', 'togglePassword', 'onInput', 'onBlur', 'type', 'mask', 'autocomplete']) }}
         />
 
         {{-- Иконки справа --}}
         @if ($hasIconRight)
-            <div class="absolute inset-y-0 right-0 flex items-center pr-3 space-x-1 text-slate-400">
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 space-x-1 text-muted-foreground">
                 {{-- Глазик для пароля --}}
                 @if ($showPasswordToggle)
                     <button
                         type="button"
                         @click="togglePasswordVisibility()"
-                        class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-md"
+                        class="text-muted-foreground hover:text-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-md"
                         :aria-label="showPassword ? labelHidePassword : labelShowPassword"
                     >
                         <svg x-show="!showPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -352,7 +354,7 @@
                         x-show="value !== null && value !== '' && value !== undefined"
                         x-cloak
                         @click="clear()"
-                        class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-md"
+                        class="text-muted-foreground hover:text-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-md"
                         aria-label="{{ __('Clear input', 'weblegko') }}"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -374,7 +376,7 @@
     @if ($showError)
         <div class="h-5 mt-1 relative">
             <p
-                class="absolute inset-0 text-sm text-red-500 truncate"
+                class="absolute inset-0 text-sm text-destructive truncate"
                 :id="'{{ $id }}-error'"
                 role="alert"
                 aria-live="polite"
