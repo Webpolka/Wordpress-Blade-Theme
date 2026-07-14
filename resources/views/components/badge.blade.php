@@ -260,6 +260,7 @@
     - Слот принимает любой контент (текст, иконки, другие компоненты).
     - Pulsedot использует animate-pulse для эффекта пульсации.
 --}}
+
 @props([
     'variant'     => 'default',
     'size'        => 'md',
@@ -270,39 +271,41 @@
 ])
 
 @php
+    // Базовые стили (Добавили leading-none для идеального выравнивания)
     $baseClasses = cn(
         'inline-flex items-center gap-1 rounded-full font-medium leading-none',
         'transition-colors whitespace-nowrap',
     );
 
-    // Design System: Полупрозрачные фоны (shadcn style)
+    // Варианты цветов
     $variants = [
-        'default'   => 'bg-secondary text-secondary-foreground',
-        'primary'   => 'bg-primary/15 text-primary',
-        'secondary' => 'bg-orange-500/15 text-orange-600 dark:text-orange-400',
-        'success'   => 'bg-green-500/15 text-green-600 dark:text-green-400',
-        'warning'   => 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400',
-        'danger'    => 'bg-destructive/15 text-destructive',
-        'info'      => 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400',
-        'outline'   => 'border border-input text-foreground',
+        'default'   => 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
+        'primary'   => 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+        'secondary' => 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300',
+        'success'   => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+        'warning'   => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+        'danger'    => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+        'info'      => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300',
+        'outline'   => 'border border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300',
     ];
 
+    // Размеры
     $sizes = [
         'sm' => 'px-2 py-0.5 text-xs',
         'md' => 'px-2.5 py-0.5 text-xs',
         'lg' => 'px-3 py-1 text-sm',
     ];
 
-    // Цвет точки по варианту (семантические)
+    // Цвет точки по варианту
     $dotColors = [
-        'default'   => 'bg-muted-foreground',
-        'primary'   => 'bg-primary',
+        'default'   => 'bg-gray-500',
+        'primary'   => 'bg-blue-500',
         'secondary' => 'bg-orange-500',
         'success'   => 'bg-green-500',
         'warning'   => 'bg-yellow-500',
-        'danger'    => 'bg-destructive',
+        'danger'    => 'bg-red-500',
         'info'      => 'bg-cyan-500',
-        'outline'   => 'bg-muted-foreground',
+        'outline'   => 'bg-gray-500',
     ];
 
     $finalClasses = cn(
@@ -316,12 +319,12 @@
 @endphp
 
 <span class="{{ $finalClasses }}" {{ $attributes }}>
-    {{-- Обычная точка-индикатор --}}
+    {{-- Обычная точка-индикатор (Добавили shrink-0) --}}
     @if ($dot)
         <span class="shrink-0 inline-block w-1.5 h-1.5 rounded-full {{ $dotClass }}"></span>
     @endif
 
-    {{-- Пульсирующая точка-индикатор --}}
+    {{-- Пульсирующая точка-индикатор (Добавили shrink-0) --}}
     @if ($pulsedot)
         <span class="relative shrink-0 inline-flex">
             <span class="absolute inline-flex h-full w-full rounded-full {{ $dotClass }} opacity-75 animate-ping"></span>
@@ -337,7 +340,7 @@
         <button
             type="button"
             @click="$dispatch('remove')"
-            class="ml-0.5 shrink-0 inline-flex items-center justify-center rounded-full hover:bg-foreground/10 transition-colors"
+            class="ml-0.5 shrink-0 inline-flex items-center justify-center rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
             aria-label="{{ __('Remove', 'weblegko') }}"
         >
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

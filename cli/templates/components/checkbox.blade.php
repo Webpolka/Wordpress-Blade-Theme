@@ -173,28 +173,22 @@
     $isMultiple = is_array($checked);
     $isChecked = $isMultiple ? in_array($value, $checked ?? []) : (bool)$checked;
 
-    // Design System: Привязка к семантическим переменным
+    // Единая цветовая схема (Стандартизация)
     $colorClasses = [
         'transparent' => [
-            'box' => 'peer-checked:bg-transparent peer-checked:border-primary',
-            'icon' => 'text-primary'
+            'box' => 'peer-checked:bg-transparent peer-checked:border-blue-600 dark:peer-checked:border-blue-400',
+            'icon' => 'text-blue-600 dark:text-blue-400'
         ],
         'blue'        => [
-            'box' => 'peer-checked:bg-primary peer-checked:border-primary',
-            'icon' => 'text-primary-foreground'
+            'box' => 'peer-checked:bg-blue-600 peer-checked:border-blue-600',
+            'icon' => 'text-white'
         ],
-        'red'         => [
-            'box' => 'peer-checked:bg-destructive peer-checked:border-destructive',
-            'icon' => 'text-destructive-foreground'
-        ],
-        'slate'       => [
-            'box' => 'peer-checked:bg-secondary peer-checked:border-secondary',
-            'icon' => 'text-secondary-foreground'
-        ],
-        
-        // Дополнительные цвета (оставляем Tailwind)
         'green'       => [
             'box' => 'peer-checked:bg-green-600 peer-checked:border-green-600',
+            'icon' => 'text-white'
+        ],
+        'red'         => [
+            'box' => 'peer-checked:bg-red-600 peer-checked:border-red-600',
             'icon' => 'text-white'
         ],
         'purple'      => [
@@ -209,8 +203,14 @@
             'box' => 'peer-checked:bg-pink-600 peer-checked:border-pink-600',
             'icon' => 'text-white'
         ],
+        // НОВОЕ: Добавили slate для единообразия с кнопками
+        'slate'       => [
+            'box' => 'peer-checked:bg-slate-700 peer-checked:border-slate-700 dark:peer-checked:bg-slate-600 dark:peer-checked:border-slate-600',
+            'icon' => 'text-white'
+        ],
     ];
     
+    // Безопасное извлечение массива
     $currentColors = $colorClasses[$color] ?? $colorClasses['transparent'];
 
     $sizeClasses = [
@@ -222,6 +222,7 @@
 @endphp
 
 <div class="inline-flex" {{ $attributes->except(['class']) }}>
+    {{-- Нативный checkbox (скрыт через sr-only) --}}
     <input
         type="checkbox"
         id="{{ $id }}"
@@ -235,6 +236,7 @@
         class="peer sr-only"
     />
 
+    {{-- Кастомный box --}}
     <span
         class="
             {{ $currentSize['box'] }}
@@ -242,20 +244,22 @@
             border-2 rounded
             transition-all duration-200
             
-            bg-background border-input
+            bg-white dark:bg-gray-800
+            border-gray-300 dark:border-gray-600
             
             {{ $currentColors['box'] }}
             
-            peer-not-checked:hover:border-foreground/40
-            peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-background
+            peer-not-checked:hover:border-gray-400 dark:peer-not-checked:hover:border-gray-500
+            peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-500 dark:peer-focus-visible:ring-offset-slate-900
             peer-disabled:opacity-50 peer-disabled:cursor-not-allowed
             peer-checked:[&>svg]:opacity-100 peer-checked:[&>svg]:scale-100
             
-            @if($hasError) border-destructive @endif
+            @if($hasError) border-red-500 dark:border-red-500 @endif
             {{ $disabled ? 'cursor-not-allowed' : 'cursor-pointer' }}
             {{ $class ?? '' }}
         "
     >
+        {{-- Галочка (Цвет берется из логики currentColors['icon']) --}}
         <svg
             class="
                 {{ $currentSize['icon'] }}

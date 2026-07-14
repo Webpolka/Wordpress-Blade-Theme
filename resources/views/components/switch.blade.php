@@ -191,20 +191,19 @@
     $isMultiple = is_array($checked);
     $isChecked = $isMultiple ? in_array($value, $checked ?? []) : (bool)$checked;
 
-    // Design System: Привязка к семантическим переменным
+    // Единая цветовая схема (Стандартизация: gray заменен на slate)
     $checkedColors = [
-        'blue'   => 'peer-checked:bg-primary',
-        'red'    => 'peer-checked:bg-destructive',
-        'slate'  => 'peer-checked:bg-secondary',
-        
-        // Дополнительные цвета (оставляем Tailwind)
+        'blue'   => 'peer-checked:bg-blue-600',
         'green'  => 'peer-checked:bg-green-600',
+        'red'    => 'peer-checked:bg-red-600',
         'purple' => 'peer-checked:bg-purple-600',
         'orange' => 'peer-checked:bg-orange-600',
         'pink'   => 'peer-checked:bg-pink-600',
+        'slate'  => 'peer-checked:bg-slate-700 dark:peer-checked:bg-slate-600',
     ];
     $currentColor = $checkedColors[$color] ?? $checkedColors['blue'];
 
+    // Размеры: [track, thumb]
     $sizeClasses = [
         'sm' => ['track' => 'w-8 h-4', 'thumb' => 'w-3 h-3'],
         'md' => ['track' => 'w-11 h-6', 'thumb' => 'w-5 h-5'],
@@ -219,11 +218,11 @@
         'rounded-full',
         'transition-colors duration-200',
         
-        // Unchecked состояние (Semantic)
-        'bg-input',
+        // Unchecked состояние
+        'bg-gray-300 dark:bg-gray-600',
         
-        // Hover только если не выбран (Semantic)
-        'peer-not-checked:hover:bg-foreground/20',
+        // НОВОЕ: Hover только если не выбран (peer-not-checked)
+        'peer-not-checked:hover:bg-gray-400 dark:peer-not-checked:hover:bg-gray-500',
         
         // Checked состояние (цвет)
         $currentColor,
@@ -232,14 +231,14 @@
         'peer-checked:[&>span]:left-[calc(100%-0.125rem)]',
         'peer-checked:[&>span]:-translate-x-full',
         
-        // Focus (Semantic)
-        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-background',
+        // Focus (Добавлен dark:ring-offset-slate-900)
+        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-500 dark:peer-focus-visible:ring-offset-slate-900',
         
         // Disabled
         'peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
         
-        // Error (Semantic)
-        $hasError ? 'ring-2 ring-destructive' : '',
+        // Error (Добавлен dark:ring-red-500)
+        $hasError ? 'ring-2 ring-red-500 dark:ring-red-500' : '',
         
         // Cursor
         $disabled ? 'cursor-not-allowed' : 'cursor-pointer',
@@ -250,17 +249,18 @@
 
     $thumbClasses = cn(
         $currentSize['thumb'],
-        'bg-background', // Семантический цвет фона (белый в светлой, темно-серый в темной)
+        'bg-white',
         'rounded-full',
         'shadow',
         'absolute',
         'top-1/2 -translate-y-1/2',
-        'left-0.5',
+        'left-0.5', // Отступ 2px слева
         'transition-all duration-200',
     );
 @endphp
 
 <div class="inline-flex" {{ $attributes->except(['class']) }}>
+    {{-- Нативный checkbox (скрыт через sr-only) --}}
     <input
         type="checkbox"
         id="{{ $id }}"
@@ -274,7 +274,9 @@
         class="peer sr-only"
     />
 
+    {{-- НОВОЕ: Изменили span на label for=id, чтобы клик по треку работал --}}
     <label for="{{ $id }}" class="{{ $trackClasses }}">
+        {{-- Ползунок --}}
         <span class="{{ $thumbClasses }}"></span>
     </label>
 </div>

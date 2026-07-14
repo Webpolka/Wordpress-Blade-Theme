@@ -38,7 +38,6 @@
 
   <x-theme-toggle />
 --}}
-
 @props([
     'class' => null,
 ])
@@ -56,12 +55,8 @@
     @click="toggle()"
     :aria-label="currentLabel"
     :title="currentLabel"
-    class="{{ cn(
-        'relative inline-flex items-center justify-center w-10 h-10 rounded-full transition-colors',
-        'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
-        'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background',
-        $class,
-    ) }}">
+    class="{{ cn('relative inline-flex items-center justify-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 transition-colors', $class) }}"
+>
     {{-- Иконка Солнца (показывается в темной теме) --}}
     <svg x-show="isDark" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 rotate-90 scale-50" x-transition:enter-end="opacity-100 rotate-0 scale-100">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />

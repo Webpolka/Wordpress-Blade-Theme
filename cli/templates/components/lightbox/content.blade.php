@@ -12,11 +12,11 @@
         @mouseup.window="stopDrag()"
         x-transition.opacity
     >
-        <button @click="close()" class="absolute top-4 right-4 md:right-8 z-50 w-12 h-12 bg-background/80 backdrop-blur border border-border rounded-full flex items-center justify-center text-muted-foreground hover:bg-background hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-black/95">
+        <button @click="close()" class="absolute top-4 right-4 md:right-8 z-50 w-12 h-12 bg-accent/50 hover:bg-accent/70 backdrop-blur text-white rounded-full flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
 
-         <div x-show="items.length > 1" class="absolute top-4 left-1/2 -translate-x-1/2 z-50 text-foreground text-sm bg-foreground/10 backdrop-blur px-4 py-1.5 rounded-full">
+         <div x-show="items.length > 1" class="absolute top-4 left-1/2 -translate-x-1/2 z-50 text-white text-sm bg-white/10 backdrop-blur px-4 py-1.5 rounded-full">
             <span x-text="activeIndex + 1"></span> / <span x-text="items.length"></span>
         </div>
 
@@ -41,12 +41,13 @@
                             >
                         </template>                        
 
-                        {{-- 2. iframe (YouTube, Vimeo, и т.д.) + Скелетон --}}                                             
+                        {{-- 2. iframe (YouTube, Vimeo, и т.д.) --}}                                             
                         <template x-if="item.type === 'iframe'">
-                            <div class="relative w-full max-w-5xl aspect-video max-h-[80vh] shadow-2xl rounded-lg overflow-hidden">                                                                                
+                            <div class="relative w-full max-w-5xl aspect-video max-h-[80vh] shadow-2xl rounded-lg overflow-hidden">                                                   
+                              
                                 <iframe 
-                                    :src="isOpen && activeIndex === index ? item.src : ''"                              
-                                    class="relative z-10 w-full h-full transition-opacity duration-300"                                     
+                                    :src="isOpen && activeIndex === index ? item.src : ''" 
+                                    class="relative z-10 w-full h-full wp-skeleton force-dark" 
                                     frameborder="0" 
                                     allow="autoplay; fullscreen; picture-in-picture" 
                                     >
@@ -56,13 +57,13 @@
                         
                         {{-- 3. HTML5 Video (MP4) + Скелетон --}}
                         <template x-if="item.type === 'html5'">
-                            <div class="relative max-w-full max-h-[80vh] rounded-lg overflow-hidden">
+                            <div class="relative max-w-full max-h-[80vh] rounded-lg overflow-hidden">                                                                
                                 <video 
                                     :src="isOpen && activeIndex === index ? item.src : ''"
-                                    :poster="item.poster"                                    
+                                    :poster="item.poster"
                                     controls 
                                     autoplay
-                                    class="relative z-10 max-w-full max-h-[80vh] rounded-lg shadow-2xl transition-opacity duration-300"                                  
+                                    class="relative z-10 max-w-full max-h-[80vh] rounded-lg shadow-2xl "
                                 ></video>
                             </div>
                         </template>
@@ -75,11 +76,11 @@
                 </template>
             </div>
 
-            {{-- Кастомные кнопки навигации --}}
-            <div x-show="items.length > 1" class="lightbox-prev absolute left-0 md:left-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 bg-background/80 backdrop-blur border border-border rounded-full flex items-center justify-center cursor-pointer text-muted-foreground hover:bg-background hover:text-primary transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-black/95">
+            {{-- Кастомные кнопки (БЕЗ Alpine :class, Swiper сам добавит swiper-button-disabled) --}}
+            <div x-show="items.length > 1" class="lightbox-prev absolute left-0 md:left-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 bg-accent/50 backdrop-blur text-white rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-accent/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             </div>
-            <div x-show="items.length > 1" class="lightbox-next absolute right-0 md:right-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 bg-background/80 backdrop-blur border border-border rounded-full flex items-center justify-center cursor-pointer text-muted-foreground hover:bg-background hover:text-primary transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-black/95">
+            <div x-show="items.length > 1" class="lightbox-next absolute right-0 md:right-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 bg-accent/50 backdrop-blur text-white rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-accent/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </div>
         </div>

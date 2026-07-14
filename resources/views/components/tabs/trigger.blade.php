@@ -28,10 +28,10 @@
     @keydown.arrow-right.prevent="$el.nextElementSibling?.focus() || $el.parentElement.firstElementChild.focus()"
     @keydown.arrow-left.prevent="$el.previousElementSibling?.focus() || $el.parentElement.lastElementChild.focus()"
     
-    class="{{ cn('inline-flex items-center justify-center whitespace-nowrap py-3 text-sm font-medium border-b-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-t-md', $class) }}"
+    class="{{ cn('inline-flex items-center justify-center whitespace-nowrap py-3 text-sm font-medium border-b-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 rounded-t-md', $class) }}"
     :class="activeTab === '{{ $value }}' 
-        ? 'border-primary text-primary' 
-        : 'border-transparent text-muted-foreground hover:text-foreground'"
+        ? 'border-blue-500 text-blue-600 dark:text-blue-400' 
+        : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'"
 >
     {{ $slot }}
 </button>

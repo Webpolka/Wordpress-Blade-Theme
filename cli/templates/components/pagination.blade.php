@@ -81,11 +81,11 @@
         $links[] = ['type' => 'next', 'url' => get_pagenum_link($current + 1)];
     }
 
-    // Design System: Семантические классы для кнопок
-    $btnBase = 'inline-flex shrink-0 items-center justify-center w-10 h-10 text-sm font-medium rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 dark:ring-offset-background';
-    $btnNormal = 'text-foreground hover:bg-accent hover:text-accent-foreground';
-    $btnActive = 'bg-primary text-primary-foreground shadow-sm pointer-events-none';
-    $btnDots = 'text-muted-foreground pointer-events-none';
+    // Классы кнопок (Добавлен dark:ring-offset-slate-900 и shrink-0)
+    $btnBase = 'inline-flex shrink-0 items-center justify-center w-10 h-10 text-sm font-medium rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900';
+    $btnNormal = 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800';
+    $btnActive = 'bg-blue-600 text-white shadow-sm pointer-events-none';
+    $btnDots = 'text-gray-400 pointer-events-none';
 @endphp
 
 <nav class="{{ cn('flex items-center justify-center gap-1.5', $class) }}" role="navigation" aria-label="{{ __('Pagination', 'weblegko') }}">

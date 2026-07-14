@@ -50,6 +50,7 @@
         <x-avatar alt="Петр" class="ring-2 ring-white" />
     </div>
 --}}
+
 @props([
     'src'    => null,
     'alt'    => 'User',
@@ -93,13 +94,13 @@
     ];
 
     // ========================================================================
-    // Цвета для фона инициалов (декоративные)
+    // Цвета для фона инициалов (стабильный выбор по CRC32 хешу имени)
     // ========================================================================
     $colors = [
         ['bg' => 'bg-blue-500',   'text' => 'text-white'],
         ['bg' => 'bg-green-500',  'text' => 'text-white'],
         ['bg' => 'bg-red-500',    'text' => 'text-white'],
-        ['bg' => 'bg-amber-500',  'text' => 'text-white'],
+        ['bg' => 'bg-amber-500',  'text' => 'text-white'],     // ← amber вместо yellow
         ['bg' => 'bg-purple-500', 'text' => 'text-white'],
         ['bg' => 'bg-pink-500',   'text' => 'text-white'],
         ['bg' => 'bg-indigo-500', 'text' => 'text-white'],
@@ -115,15 +116,16 @@
     $shapeClass = $shapes[$shape] ?? $shapes['circle'];
 
     // ========================================================================
-    // Статус (Design System)
+    // Статус
     // ========================================================================
     $statusColors = [
         'online'  => 'bg-green-500',
-        'offline' => 'bg-muted-foreground', // Семантический серый
+        'offline' => 'bg-gray-400',
         'away'    => 'bg-yellow-500',
-        'busy'    => 'bg-destructive',      // Семантический красный
+        'busy'    => 'bg-red-500',
     ];
 
+    // Размеры статусов (адаптивные под размер аватара)
     $statusSizes = [
         'xs' => 'h-1.5 w-1.5 border',
         'sm' => 'h-2 w-2 border',
@@ -134,7 +136,7 @@
 
     $statusClass = '';
     if (array_key_exists($status, $statusColors)) {
-        $statusClass = $statusColors[$status] . ' ' . ($statusSizes[$size] ?? $statusSizes['md']) . ' border-background'; // Семантическая рамка
+        $statusClass = $statusColors[$status] . ' ' . ($statusSizes[$size] ?? $statusSizes['md']) . ' border-white dark:border-gray-900';
     }
 
     // ========================================================================
@@ -165,8 +167,7 @@
             imgError: false, 
             hasSrc: {{ $src ? 'true' : 'false' }} 
         }"
-        {{-- Design System: bg-muted вместо bg-gray-100 dark:bg-gray-800 --}}
-        :class="(imgError || !hasSrc) ? '{{ $bgColor }} {{ $textColor }}' : 'bg-muted'"
+        :class="(imgError || !hasSrc) ? '{{ $bgColor }} {{ $textColor }}' : 'bg-gray-100 dark:bg-gray-800'"
     >
         @if($src)
             <img 

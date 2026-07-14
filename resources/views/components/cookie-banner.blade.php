@@ -121,19 +121,15 @@ window.addEventListener('cookie-consent-declined', () => {
     x-transition:leave-end="opacity-0 translate-y-8"
     class="{{ $wrapperClasses }}"
 >
-    {{-- Design System: bg-card, border-border --}}
-    <div class="min-w-[16rem] bg-card border border-border shadow-2xl rounded-2xl p-5 flex flex-col gap-4">
+    <div class="min-w-[16rem] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl rounded-2xl p-5 flex flex-col gap-4">
         
         <div class="flex items-start gap-3">
             <div class="flex-1">
-                {{-- Design System: text-card-foreground --}}
-                <h3 class="font-semibold text-card-foreground">{{ $title }}</h3>
-                {{-- Design System: text-muted-foreground --}}
-                <p class="mt-1 text-sm text-muted-foreground leading-relaxed">
+                <h3 class="font-semibold text-gray-900 dark:text-white">{{ $title }}</h3>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
                     {{ $description }}
                     @if($privacyUrl)                        
-                        {{-- Design System: text-primary --}}
-                        <a href="{{ $privacyUrl }}" class="text-primary font-medium hover:underline">{{ __('Learn more', 'weblegko') }}</a>
+                        <a href="{{ $privacyUrl }}" class="text-blue-600 dark:text-blue-400 font-medium hover:underline">{{ __('Learn more', 'weblegko') }}</a>
                     @endif
                 </p>
             </div>

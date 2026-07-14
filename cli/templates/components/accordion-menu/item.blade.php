@@ -56,19 +56,19 @@
     $padding = $compact ? 'px-2.5 py-1.5' : 'px-3 py-2.5';
     $fontSize = $compact ? 'text-xs' : 'text-sm';
     
-    // Design System: Формируем классы ховера
+    // Формируем классы ховера в зависимости от настроек родителя
     $hoverClasses = $hoverHighlight 
-        ? 'hover:bg-accent hover:text-accent-foreground' 
-        : 'hover:text-foreground'; // Без фона, только меняем текст
+        ? 'hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white' 
+        : 'hover:text-gray-900 dark:hover:text-white'; // Без фона, только меняем текст
     
     $classes = cn([
         'flex items-center gap-3 rounded-md font-medium transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900', // НОВОЕ: Кольцо фокуса
         $padding,
         $fontSize,
-        'text-foreground' => !$isActive,
+        'text-gray-700 dark:text-gray-300' => !$isActive,
         $hoverClasses => !$isActive, // Применяем ховеры только к неактивным
-        'bg-primary/10 text-primary' => $isActive, // Аккуратная подсветка активного пункта
+        'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' => $isActive,
         $class,
     ]);
 @endphp

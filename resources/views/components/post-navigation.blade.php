@@ -48,6 +48,7 @@
     - aria-label на <nav>
 
 --}}
+
 @props([
     'mode'        => 'flow',
     'showTitle'   => true,
@@ -63,10 +64,12 @@
     $prevPost = get_previous_post();
     $nextPost = get_next_post();
 
+    // Если нет ни одного поста — не рендерим ничего
     if (!$prevPost && !$nextPost) {
         return;
     }
 
+    // Хелпер для сборки данных о посте
     $getPostData = function ($post) {
         if (!$post) return null;
         
@@ -92,6 +95,7 @@
     if ($mode === 'flow') {
         $wrapperClasses = 'grid grid-cols-1 md:grid-cols-2 gap-3';
     } elseif ($mode === 'fixed') {
+        // Fixed режим работает только на desktop (md+)
         $wrapperClasses = 'flex fixed inset-0 z-40 pointer-events-none items-center justify-between';
     } else {
         $wrapperClasses = 'grid grid-cols-1 md:grid-cols-2 gap-3';
@@ -100,24 +104,30 @@
     $wrapperClasses = cn($wrapperClasses, $class);
 
     // ========================================================================
-    // Визуальные классы карточек (Design System)
+    // Визуальные классы карточек (Стандартизировано под bg-gray-800)
     // ========================================================================
     $flowCardClasses = cn(
         'gap-5 p-2 sm:p-4 rounded-xl border',
-        'border-border bg-card text-card-foreground', // Семантика!
+        'border-gray-200 dark:border-gray-700',
+        'bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100',
         'shadow-sm transition-all duration-300',
         'hover:shadow-lg hover:-translate-y-1 hover:no-underline',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background'
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900'
     );
 
+    // Для fixed: 3.5rem = 56px (ширина стрелки + padding)
     $fixedCardClasses = cn(
         'gap-3 p-2 md:p-4 border',
-        'border-border bg-card text-card-foreground', // Семантика!
+        'border-gray-200 dark:border-gray-700',
+        'bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100',
         'shadow-lg transition-transform duration-300 ease-out hover:no-underline',
         'pointer-events-auto'
     );
 
+    // Ограничение ширины для fixed
     $fixedCardWidth = 'max-w-64 lg:max-w-80';
+
+    // Если доступен только один пост — растягиваем на 2 колонки (только flow)
     $isAlone = (!$prev || !$next);
     $spanClass = ($mode === 'flow' && $isAlone) ? 'md:col-span-2' : '';
 @endphp
@@ -139,21 +149,40 @@
                     class="group flex flex-1 items-center min-w-0 {{ $spanClass }} {{ $flowCardClasses }}"
                     aria-label="{{ __('Previous article:', 'weblegko') }} {{ $prev['title'] }}"
                 >
-                    <div class="hidden sm:block flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    {{-- Стрелка --}}
+                    <div class="hidden sm:block flex-shrink-0 text-gray-400 group-hover:text-blue-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
                     </div>
 
+                    {{-- Thumbnail --}}
                     @if ($showThumb && $prev['thumb'])
-                        <img src="{{ $prev['thumb'] }}" alt="" loading="lazy" class="{{ ($showExcerpt && $prev['excerpt']) ? 'w-16 h-16' : 'w-12 h-12' }} rounded-lg object-cover flex-shrink-0">
+                        <img 
+                            src="{{ $prev['thumb'] }}" 
+                            alt=""
+                            loading="lazy"
+                            class="{{ ($showExcerpt && $prev['excerpt']) ? 'w-16 h-16' : 'w-12 h-12' }} rounded-lg object-cover flex-shrink-0"
+                        >
                     @endif
 
+                    {{-- Текст --}}              
                     <div class="flex-1 min-w-0 flex flex-col gap-1">
-                        <span class="text-xs font-medium text-muted-foreground">{{ __('Previous article', 'weblegko') }}</span>
+                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                            {{ __('Previous article', 'weblegko') }} 
+                        </span>
+                        
                         @if ($showTitle)
-                            <span class="font-semibold text-card-foreground line-clamp-1 truncate group-hover:text-primary transition-colors">{{ $prev['title'] }}</span>
+                            <span class="font-semibold text-gray-900 dark:text-white line-clamp-1 truncate group-hover:text-blue-600 transition-colors">
+                                {{ $prev['title'] }}
+                            </span>
                         @endif
+                        
+                        {{-- МАГИЯ FIX: Исправлена опечатка (было $next['excerpt']) --}}
                         @if ($showExcerpt && $prev['excerpt'])
-                            <span class="text-sm text-muted-foreground line-clamp-1 truncate">{{ $prev['excerpt'] }}</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400 line-clamp-1 truncate">
+                                {{ $prev['excerpt'] }}
+                            </span>
                         @endif
                     </div>
                 </a>
@@ -167,21 +196,39 @@
                     class="group flex flex-1 items-center min-w-0 flex-row-reverse text-right {{ $spanClass }} {{ $flowCardClasses }}"
                     aria-label="{{ __('Next article:', 'weblegko') }} {{ $next['title'] }}"
                 >
-                    <div class="hidden sm:block flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    {{-- Стрелка --}}
+                    <div class="hidden sm:block flex-shrink-0 text-gray-400 group-hover:text-blue-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
                     </div>
 
+                    {{-- Thumbnail --}}
                     @if ($showThumb && $next['thumb'])
-                        <img src="{{ $next['thumb'] }}" alt="" loading="lazy" class="{{ ($showExcerpt && $next['excerpt']) ? 'w-16 h-16' : 'w-12 h-12' }} rounded-lg object-cover flex-shrink-0">
+                        <img 
+                            src="{{ $next['thumb'] }}" 
+                            alt=""
+                            loading="lazy"
+                            class="{{ ($showExcerpt && $next['excerpt']) ? 'w-16 h-16' : 'w-12 h-12' }} rounded-lg object-cover flex-shrink-0"
+                        >
                     @endif
                   
+                    {{-- Текст --}}
                     <div class="flex-1 min-w-0 flex flex-col gap-1">
-                        <span class="text-xs font-medium text-muted-foreground">{{ __('Next article', 'weblegko') }}</span>
+                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                            {{ __('Next article', 'weblegko') }}
+                        </span>
+                        
                         @if ($showTitle)
-                            <span class="font-semibold text-card-foreground line-clamp-1 truncate group-hover:text-primary transition-colors">{{ $next['title'] }}</span>
+                            <span class="font-semibold text-gray-900 dark:text-white line-clamp-1 truncate group-hover:text-blue-600 transition-colors">
+                                {{ $next['title'] }}
+                            </span>
                         @endif
+                        
                         @if ($showExcerpt && $next['excerpt'])
-                            <span class="text-sm text-muted-foreground line-clamp-1 truncate">{{ $next['excerpt'] }}</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400 line-clamp-1 truncate">
+                                {{ $next['excerpt'] }}
+                            </span>
                         @endif
                     </div>
                 </a>
@@ -192,6 +239,15 @@
     {{-- FIXED РЕЖИМ (плавающая навигация по бокам) --}}
     {{-- ================================================================ --}}
     @elseif ($mode === 'fixed')
+
+        {{-- 
+            МАГИЯ: 
+            1. leftOpen/rightOpen хранят состояние плашек.
+            2. lastOpened помнит, кто открылся последним (для z-index).
+            3. @click.self закрывает обе плашки при клике на пустой фон.
+            4. :class включает pointer-events-auto только если хоть одна открыта, 
+               чтобы не блокировать клики по сайту, когда они закрыты.
+        --}}
         <nav 
             x-data="{ leftOpen: false, rightOpen: false, lastOpened: null }"
             @click.self="leftOpen = false; rightOpen = false"
@@ -201,27 +257,64 @@
 
         {{-- ПРЕДЫДУЩАЯ СТАТЬЯ (Слева) --}}
         @if ($prev)
-            <div x-cloak class="absolute left-0 top-1/2 -translate-y-1/2 group transition-all duration-300" :class="leftOpen && lastOpened === 'left' ? 'z-50' : 'z-40'">
-                <div class="{{ $fixedCardClasses }} flex items-center rounded-r-xl border-l-0 transition-all duration-300 ease-out" :class="leftOpen ? 'translate-x-0' : '-translate-x-[calc(100%-2rem)] md:-translate-x-[calc(100%-3.5rem)] md:group-hover:translate-x-0'">
-                    <div class="{{ $fixedCardWidth }} flex items-center gap-3 opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 ease-out" :class="leftOpen ? '!opacity-100' : ''">
-                        <a href="{{ $prev['url'] }}" rel="prev" class="flex items-center gap-3 flex-1 min-w-0 hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-lg" aria-label="{{ __('Previous article:', 'weblegko') }} {{ $prev['title'] }}">
+            <div 
+                x-cloak
+                class="absolute left-0 top-1/2 -translate-y-1/2 group transition-all duration-300"
+                {{-- МАГИЯ Z-INDEX: Повышаем z-index только если открыта последней --}}
+                :class="leftOpen && lastOpened === 'left' ? 'z-50' : 'z-40'"
+            >
+                {{-- Контейнер плашки --}}
+                <div 
+                    class="{{ $fixedCardClasses }} flex items-center rounded-r-xl border-l-0 transition-all duration-300 ease-out"
+                    :class="leftOpen ? 'translate-x-0' : '-translate-x-[calc(100%-2rem)] md:-translate-x-[calc(100%-3.5rem)] md:group-hover:translate-x-0'"
+                >
+                    {{-- Контент (ссылка) --}}
+                    <div class="{{ $fixedCardWidth }} flex items-center gap-3 opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 ease-out"
+                         :class="leftOpen ? '!opacity-100' : ''"
+                    >
+                        <a 
+                            href="{{ $prev['url'] }}" 
+                            rel="prev"
+                            class="flex items-center gap-3 flex-1 min-w-0 hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-lg"
+                            aria-label="{{ __('Previous article:', 'weblegko') }} {{ $prev['title'] }}"
+                        >
                             @if ($showThumb && $prev['thumb'])
-                                <img src="{{ $prev['thumb'] }}" alt="" loading="lazy" class="{{ ($showExcerpt && $prev['excerpt']) ? 'w-16 h-16' : 'w-12 h-12' }} rounded-lg object-cover flex-shrink-0">
+                                <img 
+                                    src="{{ $prev['thumb'] }}" 
+                                    alt=""
+                                    loading="lazy"
+                                    class="{{ ($showExcerpt && $prev['excerpt']) ? 'w-16 h-16' : 'w-12 h-12' }} rounded-lg object-cover flex-shrink-0"
+                                >
                             @endif
                             <div class="flex-1 min-w-0 text-left whitespace-nowrap flex flex-col gap-1">
-                                <span class="text-xs font-medium text-muted-foreground">{{ __('Previous article', 'weblegko') }}</span>
+                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                                    {{ __('Previous article', 'weblegko') }}
+                                </span>
                                 @if ($showTitle)
-                                    <span class="font-semibold text-card-foreground truncate group-hover:text-primary transition-colors">{{ $prev['title'] }}</span>
+                                    <span class="font-semibold text-gray-900 dark:text-white truncate group-hover:text-blue-600 transition-colors">
+                                        {{ $prev['title'] }}
+                                    </span>
                                 @endif
                                 @if ($showExcerpt && $prev['excerpt'])
-                                    <span class="text-sm text-muted-foreground line-clamp-1 truncate">{{ $prev['excerpt'] }}</span>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400 line-clamp-1 truncate">
+                                        {{ $prev['excerpt'] }}
+                                    </span>
                                 @endif
                             </div>
                         </a>
                     </div>
 
-                    <button type="button" @click="leftOpen = !leftOpen; if(leftOpen) lastOpened = 'left'" class="flex-shrink-0 text-muted-foreground hover:text-primary transition-colors w-6 md:w-8 h-8 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-md" aria-label="{{ __('Show previous article', 'weblegko') }}">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    {{-- Стрелка (кнопка для выезда) --}}
+                    <button 
+                        type="button"
+                        {{-- МАГИЯ: При клике меняем состояние и записываем, что левая открылась последней --}}
+                        @click="leftOpen = !leftOpen; if(leftOpen) lastOpened = 'left'"
+                        class="flex-shrink-0 text-gray-400 hover:text-blue-600 transition-colors w-6 md:w-8 h-8 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-md"
+                        aria-label="{{ __('Show previous article', 'weblegko') }}"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -229,25 +322,62 @@
 
         {{-- СЛЕДУЮЩАЯ СТАТЬЯ (Справа) --}}
         @if ($next)
-            <div x-cloak class="absolute right-0 top-1/2 -translate-y-1/2 group transition-all duration-300" :class="rightOpen && lastOpened === 'right' ? 'z-50' : 'z-40'">
-                <div class="{{ $fixedCardClasses }} flex items-center rounded-l-xl border-r-0 transition-all duration-300 ease-out" :class="rightOpen ? 'translate-x-0' : 'translate-x-[calc(100%-2rem)] md:translate-x-[calc(100%-3.5rem)] md:group-hover:translate-x-0'">
-                    <button type="button" @click="rightOpen = !rightOpen; if(rightOpen) lastOpened = 'right'" class="flex-shrink-0 text-muted-foreground hover:text-primary transition-colors w-6 md:w-8 h-8 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-md" aria-label="{{ __('Show next article', 'weblegko') }}">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            <div 
+                x-cloak
+                class="absolute right-0 top-1/2 -translate-y-1/2 group transition-all duration-300"
+                {{-- МАГИЯ Z-INDEX: Повышаем z-index только если открыта последней --}}
+                :class="rightOpen && lastOpened === 'right' ? 'z-50' : 'z-40'"
+            >
+                {{-- Контейнер плашки --}}
+                <div 
+                    class="{{ $fixedCardClasses }} flex items-center rounded-l-xl border-r-0 transition-all duration-300 ease-out"
+                    :class="rightOpen ? 'translate-x-0' : 'translate-x-[calc(100%-2rem)] md:translate-x-[calc(100%-3.5rem)] md:group-hover:translate-x-0'"
+                >
+                    {{-- Стрелка (кнопка для выезда) --}}
+                    <button 
+                        type="button"
+                        {{-- МАГИЯ: При клике меняем состояние и записываем, что правая открылась последней --}}
+                        @click="rightOpen = !rightOpen; if(rightOpen) lastOpened = 'right'"
+                        class="flex-shrink-0 text-gray-400 hover:text-blue-600 transition-colors w-6 md:w-8 h-8 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-md"
+                        aria-label="{{ __('Show next article', 'weblegko') }}"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
                     </button>
 
-                    <div class="{{ $fixedCardWidth }} flex items-center gap-3 opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 ease-out" :class="rightOpen ? '!opacity-100' : ''">
-                        <a href="{{ $next['url'] }}" rel="next" class="flex items-center gap-3 flex-1 min-w-0 hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background rounded-lg" aria-label="{{ __('Next article:', 'weblegko') }} {{ $next['title'] }}">
+                    {{-- Контент (ссылка) --}}
+                    <div class="{{ $fixedCardWidth }} flex items-center gap-3 opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 ease-out"
+                         :class="rightOpen ? '!opacity-100' : ''"
+                    >
+                        <a 
+                            href="{{ $next['url'] }}" 
+                            rel="next"
+                            class="flex items-center gap-3 flex-1 min-w-0 hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900 rounded-lg"
+                            aria-label="{{ __('Next article:', 'weblegko') }} {{ $next['title'] }}"
+                        >
                             <div class="flex-1 min-w-0 text-right whitespace-nowrap flex flex-col gap-1">
-                                <span class="text-xs font-medium text-muted-foreground">{{ __('Next article', 'weblegko') }}</span>
+                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                                    {{ __('Next article', 'weblegko') }}
+                                </span>
                                 @if ($showTitle)
-                                    <span class="font-semibold text-card-foreground truncate group-hover:text-primary transition-colors">{{ $next['title'] }}</span>
+                                    <span class="font-semibold text-gray-900 dark:text-white truncate group-hover:text-blue-600 transition-colors">
+                                        {{ $next['title'] }}
+                                    </span>
                                 @endif
                                 @if ($showExcerpt && $next['excerpt'])
-                                    <span class="text-sm text-muted-foreground line-clamp-1 truncate">{{ $next['excerpt'] }}</span>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400 line-clamp-1 truncate">
+                                        {{ $next['excerpt'] }}
+                                    </span>
                                 @endif
                             </div>
                             @if ($showThumb && $next['thumb'])
-                                <img src="{{ $next['thumb'] }}" alt="" loading="lazy" class="{{ ($showExcerpt && $next['excerpt']) ? 'w-16 h-16' : 'w-12 h-12' }} rounded-lg object-cover flex-shrink-0">
+                                <img 
+                                    src="{{ $next['thumb'] }}" 
+                                    alt=""
+                                    loading="lazy"
+                                    class="{{ ($showExcerpt && $next['excerpt']) ? 'w-16 h-16' : 'w-12 h-12' }} rounded-lg object-cover flex-shrink-0"
+                                >
                             @endif
                         </a>
                     </div>

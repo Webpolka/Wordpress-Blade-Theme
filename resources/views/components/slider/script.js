@@ -9,52 +9,47 @@ import 'swiper/css/pagination';
  * Предустановленные рендереры кастомных буллетов
  * ВАЖНО: Используем ! для Tailwind (это !important)
  */
-/**
- * Предустановленные рендереры кастомных буллетов
- * ВАЖНО: Используем ! для Tailwind (это !important)
- * Design System: Привязка к семантическим переменным
- */
 export const customBulletRenderers = {
     /**
      * Буллеты с номерами (1, 2, 3...)
      */
     numbered: (index, className) => {
-        return `<span class="${className} !flex !items-center !justify-center !w-8 !h-8 !rounded-full !bg-accent !text-accent-foreground !text-sm !font-medium !cursor-pointer !transition-colors">${index + 1}</span>`;
+        return `<span class="${className} !flex !items-center !justify-center !w-8 !h-8 !rounded-full !bg-slate-200 dark:!bg-slate-700 !text-sm !font-medium !cursor-pointer !transition-colors !text-slate-700 dark:!text-slate-200">${index + 1}</span>`;
     },
 
     /**
      * Буллеты с номерами и hover эффектом
      */
     numberedActive: (index, className) => {
-        return `<span class="${className} !flex !items-center !justify-center !w-8 !h-8 !rounded-full !bg-accent !text-accent-foreground !text-sm !font-medium !cursor-pointer !transition-all hover:!bg-accent/80">${index + 1}</span>`;
+        return `<span class="${className} !flex !items-center !justify-center !w-8 !h-8 !rounded-full !bg-slate-200 dark:!bg-slate-700 !text-sm !font-medium !cursor-pointer !transition-all hover:!bg-slate-300 dark:hover:!bg-slate-600 !text-slate-700 dark:!text-slate-200">${index + 1}</span>`;
     },
 
     /**
      * Буллеты в виде линий
      */
     lines: (index, className) => {
-        return `<span class="${className} !w-8 !h-1 !bg-muted-foreground/40 !rounded !cursor-pointer !transition-all"></span>`;
+        return `<span class="${className} !w-8 !h-1 !bg-slate-300 dark:!bg-slate-600 !rounded !cursor-pointer !transition-all"></span>`;
     },
 
     /**
      * Буллеты в виде точек с анимацией
      */
     dots: (index, className) => {
-        return `<span class="${className} !w-2 !h-2 !rounded-full !bg-muted-foreground !cursor-pointer !transition-all hover:!scale-125"></span>`;
+        return `<span class="${className} !w-2 !h-2 !rounded-full !bg-slate-400 dark:!bg-slate-500 !cursor-pointer !transition-all hover:!scale-125"></span>`;
     },
 
     /**
      * Буллеты в виде квадратов
      */
     squares: (index, className) => {
-        return `<span class="${className} !w-3 !h-3 !bg-muted-foreground/40 !cursor-pointer !transition-all !rounded-none"></span>`;
+        return `<span class="${className} !w-3 !h-3 !bg-slate-300 dark:!bg-slate-600 !cursor-pointer !transition-all !rounded-none"></span>`;
     },
 
     /**
      * Буллеты в виде ромбов
      */
     diamonds: (index, className) => {
-        return `<span class="${className} !w-3 !h-3 !bg-muted-foreground/40 !rotate-45 !cursor-pointer !transition-all !rounded-none"></span>`;
+        return `<span class="${className} !w-3 !h-3 !bg-slate-300 dark:!bg-slate-600 !rotate-45 !cursor-pointer !transition-all !rounded-none"></span>`;
     },
 };
 

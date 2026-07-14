@@ -10,9 +10,9 @@
     // pt-2 вместо mt-2 создает невидимый "мост", чтобы мышка не теряла фокус при переходе!
     $wrapperClasses = cn('absolute z-50 top-full pt-2', $posClass, $width);
     
-    // Design System: Семантические классы для плашки
+    // Стандартизировано: gray заменен на slate
     $innerClasses = cn(
-        'rounded-xl border border-border bg-popover text-popover-foreground shadow-lg overflow-hidden',
+        'rounded-xl border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800 overflow-hidden',
         $class
     );
 @endphp

@@ -56,14 +56,14 @@
     $padding = $compact ? 'px-2.5 py-1.5' : 'px-3 py-2.5';
     $fontSize = $compact ? 'text-xs' : 'text-sm';
     
-    // Design System: Формируем классы ховера
+    // Формируем классы ховера
     $hoverClasses = $hoverHighlight 
-        ? 'hover:bg-accent hover:text-accent-foreground' 
-        : 'hover:text-foreground';
+        ? 'hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white' 
+        : 'hover:text-gray-900 dark:hover:text-white';
     
     $buttonClasses = cn(
-        'flex items-center gap-3 w-full rounded-md font-medium text-foreground transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background',
+        'flex items-center gap-3 w-full rounded-md font-medium text-gray-700 dark:text-gray-300 transition-colors',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900', // НОВОЕ: Кольцо фокуса
         $padding,
         $fontSize,
         $hoverClasses

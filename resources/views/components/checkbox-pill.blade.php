@@ -200,20 +200,19 @@
     $isMultiple = is_array($checked);
     $isChecked = $isMultiple ? in_array($value, $checked ?? []) : (bool)$checked;
 
-    // Design System: Привязка к семантическим переменным
+    // Полные классы для checked состояния каждого цвета (Стандартизировано под 600)
     $checkedColors = [
-        'blue'   => 'peer-checked:bg-primary peer-checked:text-primary-foreground peer-checked:border-primary',
-        'red'    => 'peer-checked:bg-destructive peer-checked:text-destructive-foreground peer-checked:border-destructive',
-        'slate'  => 'peer-checked:bg-secondary peer-checked:text-secondary-foreground peer-checked:border-secondary',
-        
-        // Дополнительные цвета (оставляем Tailwind, так как для них нет отдельных переменных)
+        'blue'   => 'peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600',
         'green'  => 'peer-checked:bg-green-600 peer-checked:text-white peer-checked:border-green-600',
+        'red'    => 'peer-checked:bg-red-600 peer-checked:text-white peer-checked:border-red-600',
         'purple' => 'peer-checked:bg-purple-600 peer-checked:text-white peer-checked:border-purple-600',
         'orange' => 'peer-checked:bg-orange-600 peer-checked:text-white peer-checked:border-orange-600',
-        'pink'   => 'peer-checked:bg-pink-600 peer-checked:text-white peer-checked:border-pink-600',
+        'pink'   => 'peer-checked:bg-pink-600 peer-checked:text-white peer-checked:border-pink-600',        
+        'slate'  => 'peer-checked:bg-slate-700 peer-checked:text-white peer-checked:border-slate-700 dark:peer-checked:bg-slate-600 dark:peer-checked:border-slate-600',
     ];
     $currentColor = $checkedColors[$color] ?? $checkedColors['blue'];
 
+    // Размеры
     $sizeClasses = [
         'sm' => 'px-3 py-1 text-xs',
         'md' => 'px-4 py-1.5 text-sm',
@@ -229,23 +228,26 @@
         'font-medium',
         'transition-all duration-200',
         
-        // Unchecked состояние (Semantic)
-        'bg-background text-foreground border-input',
+        // Unchecked состояние
+        'bg-white dark:bg-gray-800',
+        'text-gray-700 dark:text-gray-300',
+        'border-gray-300 dark:border-gray-600',
         
-        // Hover только если не выбран (Semantic)
-        'peer-not-checked:hover:bg-accent peer-not-checked:hover:border-input/50',
+        // МАГИЯ FIX: Ховер срабатывает ТОЛЬКО если чекбокс НЕ выбран (peer-not-checked)
+        'peer-not-checked:hover:bg-gray-50 dark:peer-not-checked:hover:bg-gray-700/50',
+        'peer-not-checked:hover:border-gray-400 dark:peer-not-checked:hover:border-gray-500',
         
         // Checked состояние (цвет)
         $currentColor,
         
-        // Focus (Semantic)
-        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-background',
+        // Focus (Добавлен dark:ring-offset-slate-900)
+        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-500 dark:peer-focus-visible:ring-offset-slate-900',
         
         // Disabled
         'peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
         
-        // Error (Semantic)
-        $hasError ? 'border-destructive text-destructive' : '',
+        // Error
+        $hasError ? 'border-red-500 text-red-500 dark:border-red-500 dark:text-red-500' : '',
         
         // Cursor
         $disabled ? 'cursor-not-allowed' : 'cursor-pointer select-none',
@@ -256,6 +258,7 @@
 @endphp
 
 <div class="inline-flex" {{ $attributes->except(['class']) }}>
+    {{-- Нативный checkbox (скрыт через sr-only) --}}
     <input
         type="checkbox"
         id="{{ $id }}"
@@ -269,6 +272,7 @@
         class="peer sr-only"
     />
 
+    {{-- НОВОЕ: Изменили span на label for=id, чтобы клик по тексту работал --}}
     <label for="{{ $id }}" class="{{ $pillClasses }}">
         {{ $slot }}
     </label>
