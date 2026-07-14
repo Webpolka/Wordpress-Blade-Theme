@@ -209,7 +209,6 @@
     - Стилизация реализована через peer-классы + arbitrary variants.
     - Компонент не требует JavaScript — работает на чистом HTML/CSS.
 --}}
-
 @props([
     'name'      => null,
     'id'        => null,
@@ -228,9 +227,6 @@
     $hasError = !empty($error);
     
     // Определяем isChecked:
-    // - Если checked это массив — проверяем наличие value в массиве
-    // - Если checked это строка/число — сравниваем с value
-    // - Если checked это bool — используем как есть
     if (is_array($checked)) {
         $isChecked = in_array($value, $checked);
     } elseif (is_bool($checked) || is_null($checked)) {
@@ -239,36 +235,37 @@
         $isChecked = (string) $checked === (string) $value;
     }
 
-    // Единая цветовая схема (Стандартизация: gray заменен на slate)
+    // Design System: Привязка к семантическим переменным
     $colorClasses = [
         'blue'   => [
-            'unchecked' => 'border-gray-300 dark:border-gray-600',
-            'checked'   => 'peer-checked:border-blue-600 peer-checked:[&>span]:bg-blue-600 peer-checked:[&>span]:scale-100',
-        ],
-        'green'  => [
-            'unchecked' => 'border-gray-300 dark:border-gray-600',
-            'checked'   => 'peer-checked:border-green-600 peer-checked:[&>span]:bg-green-600 peer-checked:[&>span]:scale-100',
+            'unchecked' => 'border-input',
+            'checked'   => 'peer-checked:border-primary peer-checked:[&>span]:bg-primary peer-checked:[&>span]:scale-100',
         ],
         'red'    => [
-            'unchecked' => 'border-gray-300 dark:border-gray-600',
-            'checked'   => 'peer-checked:border-red-600 peer-checked:[&>span]:bg-red-600 peer-checked:[&>span]:scale-100',
+            'unchecked' => 'border-input',
+            'checked'   => 'peer-checked:border-destructive peer-checked:[&>span]:bg-destructive peer-checked:[&>span]:scale-100',
+        ],
+        'slate'  => [
+            'unchecked' => 'border-input',
+            'checked'   => 'peer-checked:border-secondary peer-checked:[&>span]:bg-secondary peer-checked:[&>span]:scale-100',
+        ],
+        
+        // Дополнительные цвета (оставляем Tailwind)
+        'green'  => [
+            'unchecked' => 'border-input',
+            'checked'   => 'peer-checked:border-green-600 peer-checked:[&>span]:bg-green-600 peer-checked:[&>span]:scale-100',
         ],
         'purple' => [
-            'unchecked' => 'border-gray-300 dark:border-gray-600',
+            'unchecked' => 'border-input',
             'checked'   => 'peer-checked:border-purple-600 peer-checked:[&>span]:bg-purple-600 peer-checked:[&>span]:scale-100',
         ],
         'orange' => [
-            'unchecked' => 'border-gray-300 dark:border-gray-600',
+            'unchecked' => 'border-input',
             'checked'   => 'peer-checked:border-orange-600 peer-checked:[&>span]:bg-orange-600 peer-checked:[&>span]:scale-100',
         ],
         'pink'   => [
-            'unchecked' => 'border-gray-300 dark:border-gray-600',
+            'unchecked' => 'border-input',
             'checked'   => 'peer-checked:border-pink-600 peer-checked:[&>span]:bg-pink-600 peer-checked:[&>span]:scale-100',
-        ],
-        // НОВОЕ: Заменили gray на slate
-        'slate'  => [
-            'unchecked' => 'border-gray-300 dark:border-gray-600',
-            'checked'   => 'peer-checked:border-slate-700 peer-checked:[&>span]:bg-slate-700 peer-checked:[&>span]:scale-100 dark:peer-checked:border-slate-500 dark:peer-checked:[&>span]:bg-slate-500',
         ],
     ];
     $currentColor = $colorClasses[$color] ?? $colorClasses['blue'];
@@ -286,26 +283,26 @@
         $currentSize['box'],
         'inline-flex items-center justify-center',
         'rounded-full border-2',
-        'bg-white dark:bg-gray-800',
+        'bg-background', // Semantic
         'transition-all duration-200',
         
         // Unchecked состояние
         $currentColor['unchecked'],
         
-        // НОВОЕ: Hover только если не выбран (peer-not-checked)
-        'peer-not-checked:hover:border-gray-400 dark:peer-not-checked:hover:border-gray-500',
+        // Hover только если не выбран (Semantic)
+        'peer-not-checked:hover:border-foreground/40',
         
         // Checked состояние (цвет)
         $currentColor['checked'],
         
-        // Focus (Добавлен dark:ring-offset-slate-900)
-        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-500 dark:peer-focus-visible:ring-offset-slate-900',
+        // Focus (Semantic)
+        'peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-background',
         
         // Disabled
         'peer-disabled:opacity-50 peer-disabled:cursor-not-allowed',
         
-        // Error (Добавлен dark:border-red-500)
-        $hasError ? 'border-red-500 dark:border-red-500' : '',
+        // Error (Semantic)
+        $hasError ? 'border-destructive' : '',
         
         // Cursor
         $disabled ? 'cursor-not-allowed' : 'cursor-pointer select-none',
@@ -314,7 +311,6 @@
         $class ?? '',
     );
 
-    // НОВОЕ: Убрали absolute, так как родительский блок уже flex и отцентрует точку
     $dotClasses = cn(
         $currentSize['dot'],
         'rounded-full',
@@ -324,7 +320,6 @@
 @endphp
 
 <div class="inline-flex" {{ $attributes->except(['class']) }}>
-    {{-- Нативный radio (скрыт через sr-only) --}}
     <input
         type="radio"
         id="{{ $id }}"
@@ -338,9 +333,7 @@
         class="peer sr-only"
     />
 
-    {{-- НОВОЕ: Изменили span на label for=id, чтобы клик по кружку работал --}}
     <label for="{{ $id }}" class="{{ $outerClasses }}">
-        {{-- Внутренняя точка --}}
         <span class="{{ $dotClasses }}"></span>
     </label>
 </div>

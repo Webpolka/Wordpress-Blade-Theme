@@ -222,7 +222,7 @@ class TooltipFixedManager {
   // Публичные методы
   // ============================================================================
 
- show(trigger) {
+  show(trigger) {
     if (!trigger?.dataset?.tooltip) return;
 
     // Проверяем видимость триггера
@@ -235,14 +235,14 @@ class TooltipFixedManager {
 
     clearTimeout(this.showTimer);
 
-    //  Строгая проверка delay, чтобы 0 тоже работал
+    // Строгая проверка delay, чтобы 0 тоже работал
     const delayAttr = trigger.dataset.tooltipDelay;
     const delay = (delayAttr !== undefined && !isNaN(parseInt(delayAttr))) 
       ? parseInt(delayAttr) 
       : 200;
 
     this.showTimer = setTimeout(() => {
-      //  Повторная проверка перед созданием (мог успеть прокрутиться)
+      // Повторная проверка перед созданием (мог успеть прокрутиться)
       if (!this.isElementVisible(trigger)) return;
 
       this.removeTooltip();
@@ -258,7 +258,6 @@ class TooltipFixedManager {
       });
     }, delay);
   }
-
 
   hide(trigger) {
     if (!trigger || this.currentTrigger !== trigger) return;
@@ -324,7 +323,7 @@ class TooltipFixedManager {
     const theme = trigger.dataset.tooltipTheme || 'dark';
     const color = trigger.dataset.tooltipColor || null;
     
-    // МАГИЯ FIX: Строгая проверка distance, чтобы 0 тоже работал
+    // Строгая проверка distance, чтобы 0 тоже работал
     const distanceAttr = trigger.dataset.tooltipDistance;
     const distanceRem = (distanceAttr !== undefined && !isNaN(parseFloat(distanceAttr))) 
       ? parseFloat(distanceAttr) 
@@ -332,12 +331,12 @@ class TooltipFixedManager {
       
     const arrow = trigger.dataset.tooltipArrow !== 'false';
 
-    // НОВОЕ: Заменили gray на slate
-    let themeClass = 'bg-slate-800 text-white';
+    // Design System: Привязка к семантическим переменным
+    let themeClass = 'bg-foreground text-background';
     if (color) {
       themeClass = color;
     } else if (theme === 'light') {
-      themeClass = 'bg-white text-slate-800 border border-slate-200 shadow-lg';
+      themeClass = 'bg-popover text-popover-foreground border border-border shadow-lg';
     }
 
     let arrowClass = '';
@@ -355,7 +354,7 @@ class TooltipFixedManager {
         if (fromHex && toHex) {
           arrowBgColor = TooltipFixedManager.mixColors(fromHex, toHex, 0.5);
         } else {
-          arrowClass = 'bg-slate-800';
+          arrowClass = 'bg-foreground';
         }
       } else if (fromMatch) {
         arrowClass = `bg-${fromMatch[1]}-${fromMatch[2]}`;
@@ -364,12 +363,12 @@ class TooltipFixedManager {
       } else if (bgMatch) {
         arrowClass = `bg-${bgMatch[1]}-${bgMatch[2]}`;
       } else {
-        arrowClass = 'bg-slate-800';
+        arrowClass = 'bg-foreground';
       }
     } else if (theme === 'light') {
-      arrowClass = 'bg-white border-t border-l border-slate-200';
+      arrowClass = 'bg-popover border-t border-l border-border';
     } else {
-      arrowClass = 'bg-slate-800';
+      arrowClass = 'bg-foreground';
     }
 
     const el = document.createElement('div');
@@ -463,7 +462,7 @@ class TooltipFixedManager {
   }
 }
 
-// МАГИЯ FIX: Безопасная инициализация Singleton
+// Безопасная инициализация Singleton
 if (typeof window !== 'undefined') {
   if (!window.tooltipFixedManager) {
     if (document.readyState === 'loading') {

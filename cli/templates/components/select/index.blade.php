@@ -247,12 +247,13 @@
         'noResultsText'      => $labelNoResults,
     ];
 
+    // Design System: Триггер
     $classes = cn(
-        'w-full rounded-md border px-3 py-3 text-sm transition-colors bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100',
-        'focus:outline-none focus:ring-2 focus:ring-offset-1 dark:ring-offset-slate-900 placeholder:text-slate-400',
+        'w-full rounded-md border px-3 py-3 text-sm transition-colors bg-background text-foreground',
+        'focus:outline-none focus:ring-2 focus:ring-offset-1 ring-offset-background placeholder:text-muted-foreground',
         $hasError || !empty($error)
-            ? 'border-red-500 focus:ring-red-500'
-            : 'border-slate-300 dark:border-slate-600 focus:ring-blue-500',
+            ? 'border-destructive focus:ring-destructive'
+            : 'border-input focus:ring-ring',
         $disabled ? 'opacity-50 cursor-not-allowed' : '',
         $class ?? '',
     );
@@ -274,11 +275,11 @@
     @if ($label)
         <span
             id="{{ $id }}-label"
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+            class="block text-sm font-medium text-foreground mb-1"
         >
             {{ $label }}
             @if ($required || isset($validation['required']))
-                <span class="text-red-500">*</span>
+                <span class="text-destructive">*</span>
             @endif
         </span>
     @endif
@@ -329,13 +330,13 @@
                     <template x-for="(opt, index) in selectedOptions" :key="opt.value">
                         <span
                             x-show="index < maxChips"
-                            class="inline-flex items-center gap-1 bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded text-xs whitespace-nowrap shrink-0"
+                            class="inline-flex items-center gap-1 bg-secondary text-secondary-foreground px-2 py-0.5 rounded text-xs whitespace-nowrap shrink-0"
                         >
                             <span x-text="opt.label"></span>
                             <button
                                 type="button"
                                 @click.stop="removeOption(opt.value)"
-                                class="hover:text-red-500 leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded"
+                                class="hover:text-destructive leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive rounded"
                             >×</button>
                         </span>
                     </template>
@@ -344,21 +345,21 @@
                     <span
                         x-show="selectedOptions.length > maxChips"
                         x-text="`+${selectedOptions.length - maxChips}`"
-                        class="text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap shrink-0"
+                        class="text-sm text-muted-foreground whitespace-nowrap shrink-0"
                     ></span>
 
                     {{-- Плейсхолдер --}}
                     <span
                         x-show="selectedOptions.length === 0"
                         x-text="placeholder"
-                        class="text-slate-400 whitespace-nowrap shrink-0"
+                        class="text-muted-foreground whitespace-nowrap shrink-0"
                     ></span>
                 @else
                     {{-- Одиночный выбор --}}
                     <span
                         x-show="!value"
                         x-text="placeholder"
-                        class="text-slate-400"
+                        class="text-muted-foreground"
                     ></span>
                     <span
                         x-show="value"
@@ -375,7 +376,7 @@
                         type="button"
                         x-show="value"
                         @click.stop="clear()"
-                        class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
+                        class="text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
                         aria-label="{{ __('Clear', 'weblegko') }}"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -385,7 +386,7 @@
                     </button>
                 @endif
                 <svg
-                    class="w-4 h-4 shrink-0 transition-transform duration-200 text-slate-400"
+                    class="w-4 h-4 shrink-0 transition-transform duration-200 text-muted-foreground"
                     :class="isOpen ? 'rotate-180' : ''"
                     fill="none"
                     stroke="currentColor"
@@ -408,21 +409,21 @@
             x-transition:leave="transition ease-in duration-150"
             x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
-            class="absolute z-50 mt-1 w-full max-h-60 overflow-y-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md shadow-lg"
+            class="absolute z-50 mt-1 w-full max-h-60 overflow-y-auto bg-popover text-popover-foreground border border-border rounded-md shadow-lg"
             role="listbox"
             id="{{ $id }}-listbox"
             :aria-multiselectable="{{ $isMultiple ? 'true' : 'false' }}"
         >
             {{-- Поиск --}}
             @if ($isSearchable)
-                <div class="sticky top-0 bg-white dark:bg-slate-800 p-2 border-b border-slate-200 dark:border-slate-700 z-10">
+                <div class="sticky top-0 bg-popover p-2 border-b border-border z-10">
                     <input
                         x-ref="searchInput"
                         id="{{ $id }}-searchInput"
                         type="text"
                         x-model="searchQuery"
                         :placeholder="placeholderSearch"
-                        class="w-full px-3 py-1 text-sm border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:ring-offset-slate-800"
+                        class="w-full px-3 py-1 text-sm border border-input rounded bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 ring-offset-background"
                     />
                 </div>
             @endif
@@ -432,8 +433,8 @@
                 <div
                     @click="selectOption(opt)"
                     @mouseenter="highlightedIndex = index"
-                    class="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700"
-                    :class="{ 'bg-slate-100 dark:bg-slate-700': highlightedIndex === index }"
+                    class="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-accent"
+                    :class="{ 'bg-accent': highlightedIndex === index }"
                     role="option"
                     :aria-selected="isSelected(opt)"
                 >
@@ -441,12 +442,12 @@
                     <span x-show="opt.icon" x-text="opt.icon" class="text-lg"></span>
 
                     {{-- Лейбл --}}
-                    <span class="flex-1 text-slate-900 dark:text-slate-100" x-text="opt.label"></span>
+                    <span class="flex-1" x-text="opt.label"></span>
 
                     {{-- Галочка --}}
                     <svg
                         x-show="isSelected(opt)"
-                        class="w-4 h-4 text-blue-600 dark:text-blue-400"
+                        class="w-4 h-4 text-primary"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -458,7 +459,7 @@
             </template>
 
             {{-- Нет результатов --}}
-            <div x-show="filteredOptions.length === 0" class="px-3 py-4 text-center text-slate-500 dark:text-slate-400 text-sm">
+            <div x-show="filteredOptions.length === 0" class="px-3 py-4 text-center text-muted-foreground text-sm">
                 <span x-text="noResultsText"></span>
             </div>
         </div>
@@ -468,7 +469,7 @@
     <div class="h-5 mt-1 relative">
         <p
             x-show="validationError || '{{ $error }}'"
-            class="absolute inset-0 text-sm text-red-500 truncate"
+            class="absolute inset-0 text-sm text-destructive truncate"
             x-text="validationError || '{{ $error }}'"
         ></p>
     </div>

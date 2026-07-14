@@ -5,12 +5,13 @@
 ])
 
 @php
+    // Design System: Семантические классы для пунктов меню
     $classes = cn(
         'flex items-center gap-2 w-full px-3 py-1.5 text-sm rounded-md transition-colors text-left',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-800', // НОВОЕ: Фокус для клавиатуры
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background',
         $variant === 'destructive' 
-            ? 'text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20' 
-            : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700', // НОВОЕ: gray заменен на slate
+            ? 'text-destructive hover:bg-destructive/10' 
+            : 'text-foreground hover:bg-accent hover:text-accent-foreground',
         $class
     );
 @endphp

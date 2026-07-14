@@ -67,13 +67,13 @@
             class="pointer-events-auto w-full rounded-lg border p-4 shadow-lg backdrop-blur-sm flex items-center justify-between gap-3"
             :class="{
                 'border-green-600 bg-green-600 text-white': msg.type === 'success',
-                'border-red-600 bg-red-600 text-white': msg.type === 'error',
-                'border-orange-500 bg-orange-500 text-white': msg.type === 'warning',
-                'bg-slate-800 text-white border-slate-800': msg.type === 'default' || !msg.type,
+                'border-destructive bg-destructive text-destructive-foreground': msg.type === 'error',
+                'border-amber-500 bg-amber-500 text-white': msg.type === 'warning',
+                'border-border bg-popover text-popover-foreground': msg.type === 'default' || !msg.type,
             }">
             <p class="text-sm font-medium" x-text="msg.message"></p>
             <button @click="$store.toast.remove(msg.id)"
-                class="shrink-0 rounded-md p-1 opacity-70 hover:opacity-100 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-800"
+                class="shrink-0 rounded-md p-1 opacity-70 hover:opacity-100 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
                 aria-label="{{ __('Close', 'weblegko') }}">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />

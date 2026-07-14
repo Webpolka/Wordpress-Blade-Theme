@@ -45,10 +45,8 @@
         $title = is_array($item) ? $item['title'] ?? '' : '';
         $type = 'image';
 
-        // Красивый SVG плейсхолдер (серый фон + иконка Play)
         $placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f0f4f8'/%3E%3Crect x='0' y='0' width='200' height='150' fill='%23f87171'/%3E%3Crect x='200' y='0' width='200' height='150' fill='%23fbbf24'/%3E%3Crect x='400' y='0' width='200' height='150' fill='%2334d399'/%3E%3Crect x='600' y='0' width='200' height='150' fill='%2360a5fa'/%3E%3Crect x='0' y='150' width='400' height='300' fill='%23e5e7eb'/%3E%3Crect x='400' y='150' width='400' height='300' fill='%23d1d5db'/%3E%3Crect x='0' y='450' width='800' height='150' fill='%239ca3af'/%3E%3Ctext x='400' y='320' font-family='Arial' font-size='48' fill='%234b5563' text-anchor='middle' font-weight='bold'%3EPLACEHOLDER%3C/text%3E%3Ctext x='400' y='370' font-family='Arial' font-size='20' fill='%236b7280' text-anchor='middle'%3E800 x 600%3C/text%3E%3C/svg%3E";
 
-        // Автоматическое получение превью для видео
         if (preg_match('/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/', $src, $m) || preg_match('/youtu\.be\/([a-zA-Z0-9_-]+)/', $src, $m)) {
             $type = 'video';
             $videoId = $m[1];
@@ -62,7 +60,6 @@
         } elseif (preg_match('/rutube\.ru\/(?:video|play\/embed|shorts)\/([a-zA-Z0-9_-]+)/', $src, $m)) {
             $type = 'video';
             $src = 'https://rutube.ru/play/embed/' . $m[1] . '?autoplay=1';
-            // НОВОЕ: Не пытаемся угадать превью Rutube, сразу ставим плейсхолдер
             if (empty($thumb)) $thumb = $placeholder;
         } elseif (preg_match('/vk\.com\/video(-?[0-9]+)_([0-9]+)/', $src, $m)) {
             $type = 'video';
@@ -78,7 +75,6 @@
             if (empty($thumb)) $thumb = $placeholder;
         }
 
-        // Если это картинка и нет thumb - берем основной src
         if ($type === 'image' && empty($thumb)) {
             $thumb = $src;
         }
@@ -91,10 +87,10 @@
 
     <style>    
         .product-gallery-vertical-thumbs .swiper-slide:not(.swiper-slide-thumb-active) img:hover {
-            border-color: orange;
+            border-color: rgb(var(--border));
         }
         .product-gallery-vertical-thumbs .swiper-slide-thumb-active img {
-            border-color: #3b82f6;
+            border-color: rgb(var(--primary));
         }
     </style>
 
@@ -107,7 +103,7 @@
                     <div class="h-full">
                         <div class="flex flex-col w-full flex-shrink-0 h-full transition-opacity duration-300" x-ref="thumbsWrapper" style="opacity: 0;">
                             @if($thumbArrows)
-                            <div x-ref="thumbPrev" class="mx-auto w-10 h-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur rounded-full shadow-md flex items-center justify-center cursor-pointer text-slate-700 dark:text-slate-200 hover:bg-white hover:text-blue-600 dark:hover:bg-slate-700 dark:hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900">
+                            <div x-ref="thumbPrev" class="mx-auto w-10 h-10 bg-background/80 backdrop-blur rounded-full shadow-md border border-border flex items-center justify-center cursor-pointer text-muted-foreground hover:bg-background hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
                             </div>
                             @endif
@@ -130,7 +126,7 @@
                             </div>
 
                             @if($thumbArrows)
-                            <div x-ref="thumbNext" class="mx-auto w-10 h-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur rounded-full shadow-md flex items-center justify-center cursor-pointer text-slate-700 dark:text-slate-200 hover:bg-white hover:text-blue-600 dark:hover:bg-slate-700 dark:hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900">
+                            <div x-ref="thumbNext" class="mx-auto w-10 h-10 bg-background/80 backdrop-blur rounded-full shadow-md border border-border flex items-center justify-center cursor-pointer text-muted-foreground hover:bg-background hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                             </div>
                             @endif
@@ -139,7 +135,8 @@
                 @endif
 
                 <div class="relative flex-1 min-w-0 h-full">
-                    <div x-ref="mainRef" style="opacity: 0; aspect-ratio: 1/1;" class="swiper h-[inherit] absolute inset-0 overflow-hidden transition-opacity duration-300 rounded-md" @if($parallax) @mousemove="moveParallax($event)" @mouseleave="resetParallax()" @endif>
+                    {{-- Убран инлайн aspect-ratio, чтобы пропс $aspect работал! --}}
+                    <div x-ref="mainRef" style="opacity: 0;" class="swiper h-[inherit] absolute inset-0 overflow-hidden transition-opacity duration-300 rounded-md" @if($parallax) @mousemove="moveParallax($event)" @mouseleave="resetParallax()" @endif>
                         <div class="swiper-wrapper">
                             @foreach ($parsedItems as $index => $item)
                                 <div class="swiper-slide overflow-hidden">
@@ -155,10 +152,10 @@
                         </div>
 
                         @if($mainArrows)
-                        <div x-ref="mainPrev" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur rounded-full shadow-md flex items-center justify-center cursor-pointer text-slate-700 dark:text-slate-200 hover:bg-white hover:text-blue-600 dark:hover:bg-slate-700 dark:hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900">
+                        <div x-ref="mainPrev" class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-background/80 backdrop-blur rounded-full shadow-md border border-border flex items-center justify-center cursor-pointer text-muted-foreground hover:bg-background hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                         </div>
-                        <div x-ref="mainNext" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur rounded-full shadow-md flex items-center justify-center cursor-pointer text-slate-700 dark:text-slate-200 hover:bg-white hover:text-blue-600 dark:hover:bg-slate-700 dark:hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900">
+                        <div x-ref="mainNext" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-background/80 backdrop-blur rounded-full shadow-md border border-border flex items-center justify-center cursor-pointer text-muted-foreground hover:bg-background hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         </div>
                         @endif

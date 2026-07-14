@@ -4,9 +4,9 @@
 }
 .product-gallery-horizontal-thumbs .swiper-slide:not(.swiper-slide-thumb-active) img:hover,
 .product-gallery-vertical-thumbs .swiper-slide:not(.swiper-slide-thumb-active) img:hover {
-  border-color: #94a3b8; /* slate-400 при ховере */
+  border-color: orange !important;
 }
 .product-gallery-horizontal-thumbs .swiper-slide-thumb-active img,
 .product-gallery-vertical-thumbs .swiper-slide-thumb-active img {
-  border-color: #3b82f6; /* blue-500 для активного */
+  border-color: rgb(var(--primary)) !important;
 }

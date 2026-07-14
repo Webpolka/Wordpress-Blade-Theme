@@ -30,11 +30,11 @@
 ])
 
 @php
-    // Стили самой плашечки (оставил hover:scale-[1.01] вместо 101% для чистоты Tailwind)
+    // Design System: bg-card text-card-foreground border-border
     $itemClasses = cn(
         $flush 
             ? '' // В режиме flush ничего не добавляем
-            : 'transition-all duration-300 shadow-sm hover:scale-[1.01] hover:shadow-md rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden',
+            : 'transition-all duration-300 shadow-sm hover:scale-[1.01] hover:shadow-md rounded-xl border border-border bg-card text-card-foreground overflow-hidden',
         $class
     );
 @endphp
@@ -50,7 +50,7 @@
             @click="toggle(id)"
             :aria-expanded="isOpen(id)"
             :aria-controls="'panel-' + id"
-            class="group flex w-full items-center justify-between gap-4 py-4 px-5 text-left font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900"
+            class="group flex w-full items-center justify-between gap-4 py-4 px-5 text-left font-medium text-card-foreground hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background"
         >
             <span class="flex-1">
                 @isset($question)
@@ -62,7 +62,7 @@
 
             {{-- ПЛЮСИК, ПОВОРАЧИВАЮЩИЙСЯ НА 45 ГРАДУСОВ (СТАНОВИТСЯ КРЕСТИКОМ) --}}
             <svg
-                class="h-5 w-5 flex-shrink-0 transition-transform duration-200 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400"
+                class="h-5 w-5 flex-shrink-0 transition-transform duration-200 text-muted-foreground group-hover:text-primary"
                 :class="{ 'rotate-45': isOpen(id) }"
                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
             >
@@ -81,7 +81,7 @@
         class="overflow-hidden"
     >
         {{-- А ОТСТУПЫ ДЕЛАЕМ У ВНУТРЕННЕГО БЛОКА --}}
-        <div class="px-5 pb-5 text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+        <div class="px-5 pb-5 text-muted-foreground text-sm leading-relaxed">
             {{ $slot }}
         </div>
     </div>

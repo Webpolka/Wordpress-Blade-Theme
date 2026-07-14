@@ -107,12 +107,12 @@ class TooltipComponent {
       return '';
     }
 
-    // НОВОЕ: Заменили gray на slate
+    // Design System: Привязка к семантическим переменным
     if (this.theme === 'light') {
-      return 'bg-white border-t border-l border-slate-200';
+      return 'bg-popover border-t border-l border-border';
     }
 
-    return 'bg-slate-800';
+    return 'bg-foreground';
   }
 
   get arrowBgStyle() {
@@ -152,10 +152,10 @@ class TooltipComponent {
       return this.color;
     }
 
-    // НОВОЕ: Заменили gray на slate
+    // Design System: Инверсия цветов для темной темы, поповер для светлой
     const themes = {
-      dark: 'bg-slate-800 text-white',
-      light: 'bg-white text-slate-800 border border-slate-200 shadow-lg',
+      dark: 'bg-foreground text-background',
+      light: 'bg-popover text-popover-foreground border border-border shadow-lg',
     };
     return themes[this.theme] || themes.dark;
   }

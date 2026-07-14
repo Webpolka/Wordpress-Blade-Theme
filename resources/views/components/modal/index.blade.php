@@ -296,6 +296,7 @@
       transform: scale(1) translateY(0) !important;
     }
 --}}
+
 @props([
     'name'            => null,
     'title'           => null,
@@ -327,8 +328,9 @@
     $titleId = "modal-title-{$name}";
     $descId = "modal-desc-{$name}";
 
+    // Design System: Семантические классы для модалки
     $modalClasses = cn(
-        'relative bg-white dark:bg-slate-800 rounded-lg shadow-xl',
+        'relative bg-card text-card-foreground rounded-lg shadow-xl',
         'w-full',
         $currentSize,
         'max-h-[90vh] flex flex-col',
@@ -359,16 +361,16 @@
     >
         {{-- Header --}}
         @if ($hasHeader)
-            <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 shrink-0 relative">
+            <div class="px-6 py-4 border-b border-border shrink-0 relative">
                 @if (isset($header))
                     {{ $header }}
                 @elseif ($title)
                     <div class="pr-8">
-                        <h3 id="{{ $titleId }}" class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                        <h3 id="{{ $titleId }}" class="text-lg font-semibold text-card-foreground">
                             {{ $title }}
                         </h3>
                         @if ($description)
-                            <p id="{{ $descId }}" class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            <p id="{{ $descId }}" class="mt-1 text-sm text-muted-foreground">
                                 {{ $description }}
                             </p>
                         @endif
@@ -379,7 +381,7 @@
                     <button
                         type="button"
                         data-modal-close
-                        class="absolute top-4 right-4 rounded-md text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-800"
+                        class="absolute top-4 right-4 rounded-md text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background"
                         aria-label="{{ __('Close', 'weblegko') }}"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -397,7 +399,7 @@
 
         {{-- Footer --}}
         @if (isset($footer))
-            <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 shrink-0">
+            <div class="px-6 py-4 border-t border-border shrink-0">
                 <div class="flex justify-end gap-2">
                     {{ $footer }}
                 </div>

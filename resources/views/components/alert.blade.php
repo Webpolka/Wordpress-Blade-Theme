@@ -223,7 +223,6 @@
     - Слот actions позиционируется справа (на десктопе) или снизу (на мобильных).
 --}}
 
-
 @props([
     'variant'     => 'info',
     'title'       => null,
@@ -233,30 +232,30 @@
 ])
 
 @php
-    // Варианты стилей
+    // Design System: Полупрозрачные фоны (shadcn style)
     $variants = [
         'info' => [
-            'container' => 'bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-950/50 dark:border-blue-800 dark:text-blue-100',
-            'icon'      => 'text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300',
-            'title'     => 'text-blue-900 dark:text-blue-100',
+            'container' => 'bg-primary/10 border-primary/30 text-foreground',
+            'icon'      => 'text-primary',
+            'title'     => 'text-primary',
             'defaultIcon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
         ],
         'success' => [
-            'container' => 'bg-green-50 border-green-200 text-green-900 dark:bg-green-950/50 dark:border-green-800 dark:text-green-100',
-            'icon'      => 'text-green-500 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300',
-            'title'     => 'text-green-900 dark:text-green-100',
+            'container' => 'bg-green-500/10 border-green-500/30 text-foreground',
+            'icon'      => 'text-green-600 dark:text-green-400',
+            'title'     => 'text-green-600 dark:text-green-400',
             'defaultIcon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
         ],
         'warning' => [
-            'container' => 'bg-yellow-50 border-yellow-200 text-yellow-900 dark:bg-yellow-950/50 dark:border-yellow-800 dark:text-yellow-100',
-            'icon'      => 'text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300',
-            'title'     => 'text-yellow-900 dark:text-yellow-100',
+            'container' => 'bg-amber-500/10 border-amber-500/30 text-foreground',
+            'icon'      => 'text-amber-600 dark:text-amber-400',
+            'title'     => 'text-amber-600 dark:text-amber-400',
             'defaultIcon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>',
         ],
         'error' => [
-            'container' => 'bg-red-50 border-red-200 text-red-900 dark:bg-red-950/50 dark:border-red-800 dark:text-red-100',
-            'icon'      => 'text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300',
-            'title'     => 'text-red-900 dark:text-red-100',
+            'container' => 'bg-destructive/10 border-destructive/30 text-foreground',
+            'icon'      => 'text-destructive',
+            'title'     => 'text-destructive',
             'defaultIcon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
         ],
     ];
@@ -287,7 +286,7 @@
 
         {{-- Контент --}}
         <div class="flex-1 min-w-0">
-            {{-- Заголовок (Упростил логику) --}}
+            {{-- Заголовок --}}
             @if ($title)
                 <div class="font-semibold {{ $currentVariant['title'] }} mb-1">
                     {{ $title }}
@@ -313,7 +312,7 @@
             <button
                 type="button"
                 @click="$dispatch('dismiss')"
-                class="-m-1.5 p-3 rounded-md inline-flex items-start justify-center transition-colors cursor-pointer {{ $currentVariant['icon'] }}"
+                class="-m-1.5 p-3 rounded-md inline-flex items-start justify-center transition-colors cursor-pointer {{ $currentVariant['icon'] }} hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background"
                 aria-label="{{ __('Close', 'weblegko') }}"
             >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

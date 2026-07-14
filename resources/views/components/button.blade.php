@@ -1,6 +1,4 @@
-{{--
-  OK !  
-
+{{--  
   Компонент: Button
   Описание: Универсальная кнопка или ссылка с оформлением в стиле shadcn/ui.
              Если передан проп `href` – рендерится тег <a>, иначе <button>.
@@ -423,7 +421,7 @@
     'size'     => 'default',
     'href'     => null,
     'disabled' => false,
-    'class'    => null, // НОВОЕ: Добавили class в props для чистоты
+    'class'    => null,
 ])
 
 @php
@@ -433,19 +431,19 @@
         'rounded-md text-sm font-medium',
         'transition-colors',
         'cursor-pointer select-none whitespace-nowrap',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:ring-offset-slate-900',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 dark:ring-offset-background',
         'disabled:pointer-events-none disabled:opacity-50',
     );
 
-    // Единая цветовая схема (Стандартизация под shadcn/Tailwind UI)
+    // Единая цветовая схема через CSS-переменные (Design System)
     $variants = [
-        'primary'     => 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700',
-        'secondary'   => 'bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700',
-        'default'     => 'bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-200',
-        'destructive' => 'bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700',
-        'outline'     => 'border border-slate-300 bg-transparent hover:bg-slate-100 text-slate-900 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800',
-        'ghost'       => 'hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-100',
-        'link'        => 'text-blue-600 dark:text-blue-400 underline-offset-4 hover:underline',
+        'primary'     => 'bg-primary text-primary-foreground hover:bg-primary/90',
+        'secondary'   => 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        'default'     => 'bg-foreground text-background hover:bg-foreground/90',
+        'destructive' => 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        'outline'     => 'border border-input bg-transparent hover:bg-accent hover:text-accent-foreground',
+        'ghost'       => 'hover:bg-accent hover:text-accent-foreground',
+        'link'        => 'text-primary underline-offset-4 hover:underline',
     ];
 
     // Размеры

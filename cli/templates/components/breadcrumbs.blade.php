@@ -98,7 +98,6 @@ OK !
         } elseif (is_page()) {
             $crumbs[] = ['title' => get_the_title(), 'url' => ''];
         } elseif (is_search()) {
-            // НОВОЕ: Перевод "Поиск:"
             $crumbs[] = ['title' => __('Search:', 'weblegko') . ' ' . get_search_query(), 'url' => ''];
         } elseif (is_404()) {
             $crumbs[] = ['title' => '404', 'url' => ''];
@@ -110,21 +109,21 @@ OK !
 @endphp
 
 <nav aria-label="{{ __('Breadcrumbs', 'weblegko') }}" class="{{ cn('w-full', $class) }}">
-    <ol class="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 overflow-x-auto whitespace-nowrap scrollbar-none">
+    <ol class="flex items-center gap-1.5 text-sm text-muted-foreground overflow-x-auto whitespace-nowrap scrollbar-none">
         @foreach ($crumbs as $i => $crumb)
             @php $isLast = $i === array_key_last($crumbs); @endphp
             
             <li class="flex items-center gap-1.5 shrink-0">
                 @if (!$isLast && !empty($crumb['url']))
-                    <a href="{{ $crumb['url'] }}" class="hover:text-blue-500 no-underline dark:hover:text-gray-100 transition-colors">
+                    <a href="{{ $crumb['url'] }}" class="hover:text-foreground no-underline transition-colors">
                         {{ $crumb['title'] }}
                     </a>
                     {{-- Разделитель (Шеврон) --}}
-                    <svg class="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-0 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-muted-foreground/40 flex-shrink-0 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                 @else
-                    <span class="font-medium text-gray-700 dark:text-gray-300" aria-current="page">
+                    <span class="font-medium text-foreground" aria-current="page">
                         {{ $crumb['title'] }}
                     </span>
                 @endif

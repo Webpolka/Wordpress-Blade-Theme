@@ -16,8 +16,9 @@
 
     $posClass = $placements[$placement] ?? $placements['bottom-start'];
 
+    // Design System: Семантические классы для плашки
     $panelClasses = cn(
-        'absolute z-50 rounded-xl border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800',
+        'absolute z-50 rounded-xl border border-border bg-popover text-popover-foreground shadow-lg',
         $width,
         $posClass,
         $class

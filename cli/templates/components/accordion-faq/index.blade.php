@@ -80,8 +80,6 @@
     </x-accordion-faq>
 --}}
 
-
-
 @props([
     'multiple'  => false,
     'firstOpen' => false,
@@ -90,8 +88,9 @@
 ])
 
 @php
+    // Design System: Заменили gray на border
     $wrapperClasses = cn(
-        $flush ? 'divide-y divide-gray-200 dark:divide-gray-700' : 'space-y-4',
+        $flush ? 'divide-y divide-border' : 'space-y-4',
         $class
     );
 @endphp

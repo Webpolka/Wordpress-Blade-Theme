@@ -52,7 +52,7 @@
   Базовый пример с Alpine.js:
     <x-button
         x-data="{ loading: false }"
-        :disabled="loading"
+        x-bind:disabled="loading"
         @click="loading = true; setTimeout(() => loading = false, 2000)"
     >
         <template x-if="loading">
@@ -65,7 +65,7 @@
   С заменой текста:
     <x-button
         x-data="{ loading: false }"
-        :disabled="loading"
+        x-bind:disabled="loading"
         @click="loading = true; setTimeout(() => loading = false, 2000)"
     >
         <span x-text="loading ? 'Загрузка...' : 'Загрузить'"></span>
@@ -77,7 +77,7 @@
   С формой:
     <form x-data="{ submitting: false }" @submit.prevent="submitting = true; $el.submit()">
         <x-input name="email" label="Email" />
-        <x-button type="submit" :disabled="submitting">
+        <x-button type="submit" x-bind:disabled="submitting">
             <template x-if="submitting">
                 <x-spinner size="sm" />
             </template>
@@ -92,7 +92,6 @@
     - Цвет 'current' наследует color от родителя (currentColor).
     - По умолчанию спиннер белый — для использования на цветных кнопках.
 --}}
-
 @props([
     'size'  => 'md',
     'color' => 'blue',
@@ -109,12 +108,12 @@
     ];
     $currentSize = $sizeClasses[$size] ?? $sizeClasses['md'];
 
-    // Стандартизировано под нашу цветовую схему (slate вместо gray, 600 вместо 500)
+    // Design System: Привязка к семантическим переменным
     $colorClasses = [
-        'blue'    => 'text-blue-600 dark:text-blue-400',
-        'slate'   => 'text-slate-600 dark:text-slate-400',
-        'white'   => 'text-white',
-        'current' => 'text-current',
+        'blue'    => 'text-primary',                 // Основной бренд-цвет (синий)
+        'slate'   => 'text-muted-foreground',        // Приглушенный серый
+        'white'   => 'text-primary-foreground',      // Текст на основной кнопке (белый)
+        'current' => 'text-current',                 // Наследует цвет текста родителя
     ];
     $currentColor = $colorClasses[$color] ?? $colorClasses['blue'];
 
